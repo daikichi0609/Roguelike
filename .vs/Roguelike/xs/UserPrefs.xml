@@ -1,20 +1,19 @@
-﻿<Properties StartupConfiguration="{3B4D7A7B-B193-C7B8-731F-3F701A73DF6D}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Script/MapGenerator.cs">
+﻿<Properties>
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Script/DeployDungeon.cs">
     <Files>
       <File FileName="Assets/Script/Character.cs" Line="142" Column="32" />
-      <File FileName="Assets/Script/GameManager.cs" Line="15" Column="27" />
       <File FileName="Assets/Script/CharaDataManager.cs" Line="33" Column="1" />
-      <File FileName="Assets/Script/DeployDungeon.cs" Line="38" Column="1" />
-      <File FileName="Assets/Script/Player.cs" Line="36" Column="3" />
+      <File FileName="Assets/Script/DeployDungeon.cs" Line="74" Column="1" />
       <File FileName="Assets/Script/Enemy.cs" Line="16" Column="1" />
       <File FileName="Assets/Script/Singleton.cs" Line="28" Column="8" />
       <File FileName="Assets/Resources/TestJson.json" Line="1" Column="1" />
-      <File FileName="Assets/Script/MapGenerator.cs" Line="82" Column="22" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <DisabledProjects>
+    <String>Assembly-CSharp.csproj</String>
+  </DisabledProjects>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="add402b8-b2b0-4cb2-8fc0-8e3448911155" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
