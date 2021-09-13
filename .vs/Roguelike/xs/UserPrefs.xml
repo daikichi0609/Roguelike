@@ -1,19 +1,39 @@
-﻿<Properties>
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Script/DeployDungeon.cs">
+﻿<Properties StartupConfiguration="{3B4D7A7B-B193-C7B8-731F-3F701A73DF6D}|">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Script/DungeonContents.cs">
     <Files>
-      <File FileName="Assets/Script/Character.cs" Line="142" Column="32" />
-      <File FileName="Assets/Script/CharaDataManager.cs" Line="33" Column="1" />
-      <File FileName="Assets/Script/DeployDungeon.cs" Line="74" Column="1" />
-      <File FileName="Assets/Script/Enemy.cs" Line="16" Column="1" />
-      <File FileName="Assets/Script/Singleton.cs" Line="28" Column="8" />
-      <File FileName="Assets/Resources/TestJson.json" Line="1" Column="1" />
+      <File FileName="Assets/Script/PositionManager.cs" Line="17" Column="29" />
+      <File FileName="Assets/Script/DungeonTerrain.cs" Line="124" Column="6" />
+      <File FileName="Assets/Script/Player.cs" Line="67" Column="10" />
+      <File FileName="Assets/Script/GameManager.cs" Line="30" Column="1" />
+      <File FileName="Assets/Script/DungeonContents.cs" Line="29" Column="49" />
     </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="Roguelike" expanded="True">
+            <Node name="Assembly-CSharp" expanded="True">
+              <Node name="Assets" expanded="True">
+                <Node name="Script" expanded="True">
+                  <Node name="DungeonContents.cs" selected="True" />
+                </Node>
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State />
+      </Pad>
+      <Pad Id="MonoDevelop.UnitTesting.TestPad">
+        <State name="__root__">
+          <Node name="Unity" expanded="True" selected="True" />
+        </State>
+      </Pad>
+    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <DisabledProjects>
-    <String>Assembly-CSharp.csproj</String>
-  </DisabledProjects>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="3d1f869a-99a2-4d6c-aeef-4f38cf32bf4f" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

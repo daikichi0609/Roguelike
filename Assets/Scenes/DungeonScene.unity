@@ -131,7 +131,7 @@ GameObject:
   - component: {fileID: 549901749}
   - component: {fileID: 549901750}
   m_Layer: 0
-  m_Name: DeployDungeon
+  m_Name: DungeonTerrain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -149,7 +149,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1184686337}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &549901750
 MonoBehaviour:
@@ -345,7 +345,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1f4474b806494cf494e219d3e0fc739, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_FileName: Assets/TestJson
   m_PlayerObject: {fileID: 5822574833789872094, guid: ff9911e517ad14aae988d59179926b86,
     type: 3}
 --- !u!1 &1184686336
@@ -379,6 +378,7 @@ Transform:
   - {fileID: 777512217}
   - {fileID: 1890611263}
   - {fileID: 1811913516}
+  - {fileID: 2134539999}
   - {fileID: 549901749}
   m_Father: {fileID: 0}
   m_RootOrder: 1
@@ -469,3 +469,50 @@ Transform:
   m_Father: {fileID: 1184686337}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2134539998
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2134539999}
+  - component: {fileID: 2134540000}
+  m_Layer: 0
+  m_Name: DungeonContents
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2134539999
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2134539998}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1184686337}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2134540000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2134539998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3a8d542fbc064006957e9c2c6409e64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Stairs: {fileID: 5549339677088328992, guid: f77c361fbeffa4cc5ac24e43b4f73013,
+    type: 3}
+  m_PlayerObject: {fileID: 5822574833789872094, guid: ff9911e517ad14aae988d59179926b86,
+    type: 3}

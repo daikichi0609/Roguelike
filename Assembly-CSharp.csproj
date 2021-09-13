@@ -47,7 +47,7 @@
   <PropertyGroup>
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <UnityProjectGenerator>Unity/VSTU</UnityProjectGenerator>
-    <UnityProjectGeneratorVersion>2.9.3.0</UnityProjectGeneratorVersion>
+    <UnityProjectGeneratorVersion>2.10.2.0</UnityProjectGeneratorVersion>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneOSX:2</UnityBuildTarget>
     <UnityVersion>2019.1.14f1</UnityVersion>
@@ -67,12 +67,14 @@
     <Compile Include="Assets\Script\BattleManager.cs" />
     <Compile Include="Assets\Script\BattleParameter.cs" />
     <Compile Include="Assets\Script\CharaDataManager.cs" />
-    <Compile Include="Assets\Script\DeployDungeon.cs" />
+    <Compile Include="Assets\Script\DungeonContents.cs" />
+    <Compile Include="Assets\Script\DungeonTerrain.cs" />
     <Compile Include="Assets\Script\Enemy.cs" />
-    <Compile Include="Assets\Script\EnemyDataAsset.cs" />
     <Compile Include="Assets\Script\GameManager.cs" />
+    <Compile Include="Assets\Script\LabelAttribute.cs" />
     <Compile Include="Assets\Script\MapGenerator.cs" />
     <Compile Include="Assets\Script\Player.cs" />
+    <Compile Include="Assets\Script\PositionManager.cs" />
     <Compile Include="Assets\Script\Singleton.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>/Users/daikichi/Desktop/UnityProjects/Roguelike/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>

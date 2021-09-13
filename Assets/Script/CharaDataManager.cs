@@ -41,7 +41,6 @@ public class CharaDataManager : SingletonMonoBehaviour<CharaDataManager>
 		playerData.Gender = BattleParameter.GENDER.MALE;
 		playerData.Race = BattleParameter.RACE.HUMAN;
 
-		playerData.Lv = 1;
 		playerData.Hp = 20;
 		playerData.Atk = 10;
 		playerData.Def = 5;
@@ -51,8 +50,6 @@ public class CharaDataManager : SingletonMonoBehaviour<CharaDataManager>
 		playerData.CriticalRate = 1f;
 		playerData.Res = 0.1f;
 
-		playerData.Ex = 0;
-		playerData.Satiety = 100f;
 		playerData.Luk = 0.1f;
 	}
 }
