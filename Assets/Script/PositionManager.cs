@@ -12,6 +12,14 @@ public class PositionManager :SingletonMonoBehaviour<PositionManager>
         int direction_x = (int)direction.x;
         int direction_z = (int)direction.z;
 
+        if (direction_x != 0 && direction_z != 0) //斜め移動の場合、壁が邪魔になっていないかどうかチェックする
+        {
+            if(DungeonTerrain.Instance.IsPossibleToMoveDiagonal(map, pos_x, pos_z, direction_x, direction_z) == false)
+            {
+                return false;
+            }
+        }
+
         int num = DungeonTerrain.Instance.DestinationGridInfo(map, pos_x, pos_z, direction_x, direction_z);
 
         if(num == 1 || num == 2 || num == 3 || num == 4)

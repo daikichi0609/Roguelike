@@ -17,12 +17,12 @@ public class DungeonTerrain: SingletonMonoBehaviour<DungeonTerrain>
         m_Map[i, j] = value;
     }
 
-    public void SetObjectInListInstead(GameObject @object, int i, int j)
+    public void SetObjectInListInstead(GameObject @object, int x, int z)
     {
-        GameObject removeObject = m_TerrainList[i][j];
-        m_TerrainList[i].RemoveAt(j);
+        GameObject removeObject = m_TerrainList[x][z];
+        m_TerrainList[x].RemoveAt(z);
         Destroy(removeObject);
-        m_TerrainList[i].Insert(j, @object);
+        m_TerrainList[x].Insert(z, @object);
     }
 
     private int m_MapSizeX = 32;
@@ -35,12 +35,12 @@ public class DungeonTerrain: SingletonMonoBehaviour<DungeonTerrain>
     [SerializeField] private GameObject m_Gate;
 
     /*
-    0 == 壁
-    1 == 通路
-    2 == 部屋
-    3 == 出入り口
-    4 == 階段
-    -1 == ダンジョン外
+    0 -> 壁
+    1 -> 通路
+    2 -> 部屋
+    3 -> 出入り口
+    4 -> 階段
+    -1 -> ダンジョン外
 
     ↑
     ↑
@@ -61,8 +61,8 @@ public class DungeonTerrain: SingletonMonoBehaviour<DungeonTerrain>
                 switch (num)
                 {
                     case 0:
-                        GameObject @object = Instantiate(m_Wall, new Vector3(i, 0, j), Quaternion.identity);
                         m_TerrainList.Add(new List<GameObject>());
+                        GameObject @object = Instantiate(m_Wall, new Vector3(i, 0, j), Quaternion.identity);
                         m_TerrainList[i].Add(@object);
                         break;
 
@@ -88,11 +88,9 @@ public class DungeonTerrain: SingletonMonoBehaviour<DungeonTerrain>
                 }
             }
         }
-
-
     }
 
-    public AroundGrid CheckAroundGrid(int[,] map, int x, int z) //
+    public AroundGrid CheckAroundGrid(int[,] map, int x, int z)
     {
         return new AroundGrid(map, x, z);
     }
@@ -121,6 +119,15 @@ public class DungeonTerrain: SingletonMonoBehaviour<DungeonTerrain>
     public int DestinationGridInfo(int[,] map, int pos_x, int pos_z, int direction_x, int direction_z)
     {
         return map[pos_x + direction_x, pos_z + direction_z];
+    }
+
+    public bool IsPossibleToMoveDiagonal(int[,] map, int pos_x, int pos_z, int direction_x, int direction_z)
+    {
+        if(map[pos_x + direction_x, pos_z] == 0 || map[pos_x, pos_z + direction_z] == 0)
+        {
+            return false;
+        }
+        return true;
     }
 }
 
