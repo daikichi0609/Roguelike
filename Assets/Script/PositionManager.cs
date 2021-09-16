@@ -20,9 +20,9 @@ public class PositionManager :SingletonMonoBehaviour<PositionManager>
             }
         }
 
-        int num = DungeonTerrain.Instance.DestinationGridInfo(map, pos_x, pos_z, direction_x, direction_z);
+        int id = DungeonTerrain.Instance.DestinationGridID(map, pos_x, pos_z, direction_x, direction_z);
 
-        if(num == 1 || num == 2 || num == 3 || num == 4)
+        if(id == (int)DungeonTerrain.GRID_ID.PATH_WAY || id == (int)DungeonTerrain.GRID_ID.ROOM || id == (int)DungeonTerrain.GRID_ID.GATE || id == (int)DungeonTerrain.GRID_ID.STAIRS)
         {
             return true;
         }

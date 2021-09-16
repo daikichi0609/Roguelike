@@ -16,7 +16,7 @@ public class CharaDataManager : SingletonMonoBehaviour<CharaDataManager>
 	}
 
 	//セーブのメソッド
-	public void SaveTest(PlayerData data)
+	public void SaveTest(PlayerStatus data)
 	{
 		string jsonstr = JsonUtility.ToJson(data);//受け取ったPlayerDataをJSONに変換
 		StreamWriter writer = new StreamWriter(m_Datapath, false);//初めに指定したデータの保存先を開く
@@ -35,21 +35,19 @@ public class CharaDataManager : SingletonMonoBehaviour<CharaDataManager>
 	}
 
 
-	public void InitializePlayerData(PlayerData playerData)
+	public void InitializePlayerData(PlayerStatus playerStatus)
 	{
-		playerData.Name = "Louge";
-		playerData.Gender = BattleParameter.GENDER.MALE;
-		playerData.Race = BattleParameter.RACE.HUMAN;
+		playerStatus.Name = "Louge";
 
-		playerData.Hp = 20;
-		playerData.Atk = 10;
-		playerData.Def = 5;
-		playerData.Agi = 1;
-		playerData.Dex = 1f;
-		playerData.Eva = 1f;
-		playerData.CriticalRate = 1f;
-		playerData.Res = 0.1f;
+		playerStatus.Hp = 20;
+		playerStatus.Atk = 10;
+		playerStatus.Def = 5;
+		playerStatus.Agi = 1;
+		playerStatus.Dex = 1f;
+		playerStatus.Eva = 1f;
+		playerStatus.CriticalRate = 1f;
+		playerStatus.Res = 0.1f;
 
-		playerData.Luk = 0.1f;
+		playerStatus.Luk = 0.1f;
 	}
 }

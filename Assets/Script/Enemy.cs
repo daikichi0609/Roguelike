@@ -2,14 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour, ICommand
+public class Enemy : MonoBehaviour
 {
-	private EnemyData m_EnemyData;
-
-	public Enemy(EnemyData data)
-    {
-		m_EnemyData = data;
-    }
+	private EnemyStatus m_EnemyStatus;
 
 	public void OnAttack()
 	{

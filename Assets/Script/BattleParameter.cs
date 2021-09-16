@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-public abstract class BattleParameter: ScriptableObject //キャラ共通で必要なパラメタまとめ
+public abstract class BattleStatus: ScriptableObject //キャラ共通で必要なパラメタまとめ
 {
 	// 名前
 	[SerializeField, Label("名前")] private string m_GivenName;
@@ -96,17 +96,9 @@ public abstract class BattleParameter: ScriptableObject //キャラ共通で必�
     }
 }
 
-interface ICommand //キャラ共通で必要なメソッドまとめ
-{
-	// 攻撃
-	void OnAttack();
-	//移動
-	void Move(Vector3 vector3);
-}
-
-[CreateAssetMenu(menuName = "MyScriptable/Create PlayerData")]
+[CreateAssetMenu(menuName = "MyScriptable/Create PlayerStatus")]
 [System.Serializable] //定義したクラスをJSONデータに変換できるようにする
-public class PlayerData: BattleParameter
+public class PlayerStatus: BattleStatus
 {
 	//運
 	[SerializeField, Label("運")] private float m_Luk;
@@ -118,7 +110,7 @@ public class PlayerData: BattleParameter
 }
 
 [CreateAssetMenu(menuName = "MyScriptable/Create EnemyData")]
-public class EnemyData : BattleParameter
+public class EnemyStatus : BattleStatus
 {
 	//倒されるともらえる経験値
 	[SerializeField, Label("倒すともらえる経験値")] private int m_Ex;

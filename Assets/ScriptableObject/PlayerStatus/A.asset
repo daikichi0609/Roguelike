@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 0}
-  m_Name: D
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerData
+  m_Name: A
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerStatus
   m_GivenName: 
   m_Gender: 0
   m_Race: 0

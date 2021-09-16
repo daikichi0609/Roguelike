@@ -5,10 +5,6 @@ using System.IO;
 
 public class GameManager : SingletonMonoBehaviour<GameManager>
 {
-    private int[,] m_Map;
-    private int m_InitX;
-    private int m_InitZ;
-
     private bool m_PlayerTurn;
     public bool PlayerTurn
     {

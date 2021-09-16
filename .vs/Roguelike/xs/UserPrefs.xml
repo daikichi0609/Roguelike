@@ -1,39 +1,30 @@
 ﻿<Properties StartupConfiguration="{3B4D7A7B-B193-C7B8-731F-3F701A73DF6D}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Script/DungeonContents.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Script/PlayerBattle.cs">
     <Files>
-      <File FileName="Assets/Script/PositionManager.cs" Line="17" Column="29" />
-      <File FileName="Assets/Script/DungeonTerrain.cs" Line="124" Column="6" />
-      <File FileName="Assets/Script/Player.cs" Line="67" Column="10" />
-      <File FileName="Assets/Script/GameManager.cs" Line="30" Column="1" />
-      <File FileName="Assets/Script/DungeonContents.cs" Line="29" Column="49" />
+      <File FileName="Assets/Script/BattleParameter.cs" Line="101" Column="1" />
+      <File FileName="Assets/Script/PlayerMove.cs" />
+      <File FileName="Assets/Script/PlayerBattle.cs" Line="7" Column="25" />
+      <File FileName="Assets/Script/Enemy.cs" />
+      <File FileName="Assets/Script/CharaDataManager.cs" />
+      <File FileName="Assets/Script/BattleManager.cs" />
+      <File FileName="Assets/Script/DungeonContents.cs" />
+      <File FileName="Assets/Script/DungeonTerrain.cs" />
+      <File FileName="Assets/Script/GameManager.cs" />
+      <File FileName="Assets/Script/LabelAttribute.cs" />
+      <File FileName="Assets/Script/PositionManager.cs" />
+      <File FileName="Assets/Script/Singleton.cs" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
-          <Node name="Roguelike" expanded="True">
-            <Node name="Assembly-CSharp" expanded="True">
-              <Node name="Assets" expanded="True">
-                <Node name="Script" expanded="True">
-                  <Node name="DungeonContents.cs" selected="True" />
-                </Node>
-              </Node>
-            </Node>
-          </Node>
-        </State>
-      </Pad>
-      <Pad Id="MonoDevelop.Debugger.WatchPad">
-        <State />
-      </Pad>
-      <Pad Id="MonoDevelop.UnitTesting.TestPad">
-        <State name="__root__">
-          <Node name="Unity" expanded="True" selected="True" />
+          <Node name="Roguelike" expanded="True" selected="True" />
         </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="3d1f869a-99a2-4d6c-aeef-4f38cf32bf4f" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="085bb435-ed39-4445-be7f-814ab80d677c" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

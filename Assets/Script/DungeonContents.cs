@@ -18,7 +18,7 @@ public class DungeonContents : SingletonMonoBehaviour<DungeonContents>
     {
         int[,] map = DungeonTerrain.Instance.Map;
         int[] coord = ChooseRandamRoomGrid(map);
-        DungeonTerrain.Instance.SetValueInList(4, coord[0], coord[1]);
+        DungeonTerrain.Instance.SetValueInList((int)DungeonTerrain.GRID_ID.STAIRS, coord[0], coord[1]);
         GameObject @object = Instantiate(m_Stairs, new Vector3(coord[0], 0, coord[1]), Quaternion.identity);
         DungeonTerrain.Instance.SetObjectInListInstead(@object, coord[0], coord[1]);
     }

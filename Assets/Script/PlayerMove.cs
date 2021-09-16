@@ -1,20 +1,12 @@
 ﻿using UnityEngine;
 
-public class Player : MonoBehaviour, ICommand
+public class PlayerMove : MonoBehaviour
 {
-	private PlayerData m_Data;
-
 	private Vector3 m_PlayerPos;
 	public Vector3 PlayerPos
     {
 		get { return m_PlayerPos; }
     }
-
-    private void Start()
-    {
-		m_Data = new PlayerData();
-		JsonUtility.FromJsonOverwrite(CharaDataManager.Instance.LoadTest(CharaDataManager.Instance.Datapath), m_Data);
-	}
 
     private void Update()
 	{
@@ -55,23 +47,14 @@ public class Player : MonoBehaviour, ICommand
 		}
 	}
 
-	public void OnAttack()
-	{
-		
-	}
 	public void Move(Vector3 vector3)
 	{
-		if (GameManager.Instance.PlayerTurn == false)
-        {
-			//return;
-        }
-
 		if(PositionManager.Instance.IsPossibleToMove(m_PlayerPos, vector3) == false)
         {
 			return;
         }
 
 		transform.position += vector3;
-		GameManager.Instance.SwitchTurn();
+		//GameManager.Instance.SwitchTurn();
 	}
 }

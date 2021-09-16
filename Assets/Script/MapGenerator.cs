@@ -105,7 +105,7 @@ public class MapGenerator : SingletonMonoBehaviour<MapGenerator>
 			{
 				for (int y = pass.Start.Y; y <= pass.End.Y; y++)
 				{
-					map[x, y] = 1;
+					map[x, y] = (int)DungeonTerrain.GRID_ID.PATH_WAY;
 				}
 			}
 		}
@@ -115,7 +115,7 @@ public class MapGenerator : SingletonMonoBehaviour<MapGenerator>
 			{
 				for (int y = roomPass.Start.Y; y <= roomPass.End.Y; y++)
 				{
-					map[x, y] = 1;
+					map[x, y] = (int)DungeonTerrain.GRID_ID.PATH_WAY;
 				}
 			}
 		}
@@ -125,7 +125,7 @@ public class MapGenerator : SingletonMonoBehaviour<MapGenerator>
 			{
 				for (int y = room.Start.Y; y <= room.End.Y; y++)
 				{
-					map[x, y] = 2;
+					map[x, y] = (int)DungeonTerrain.GRID_ID.ROOM;
 				}
 			}
 		}

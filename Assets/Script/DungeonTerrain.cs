@@ -34,6 +34,16 @@ public class DungeonTerrain: SingletonMonoBehaviour<DungeonTerrain>
     [SerializeField] private GameObject m_Room;
     [SerializeField] private GameObject m_Gate;
 
+    public enum GRID_ID
+    {
+        WALL = 0,
+        PATH_WAY = 1,
+        ROOM = 2,
+        GATE = 3,
+        STAIRS = 4,
+        NONE = -1
+    }
+
     /*
     0 -> 壁
     1 -> 通路
@@ -57,25 +67,25 @@ public class DungeonTerrain: SingletonMonoBehaviour<DungeonTerrain>
         {
             for (int j = 0; j < m_Map.GetLength(1) - 1; j++)
             {
-                int num = m_Map[i, j];
-                switch (num)
+                int id = m_Map[i, j];
+                switch (id)
                 {
-                    case 0:
+                    case (int)GRID_ID.WALL: //0
                         m_TerrainList.Add(new List<GameObject>());
                         GameObject @object = Instantiate(m_Wall, new Vector3(i, 0, j), Quaternion.identity);
                         m_TerrainList[i].Add(@object);
                         break;
 
-                    case 1:
+                    case (int)GRID_ID.PATH_WAY: //1
                         @object = Instantiate(m_PathWay, new Vector3(i, 0, j), Quaternion.identity);
                         m_TerrainList[i].Add(@object);
                         break;
 
-                    case 2:
-                        AroundGrid aroundGrid = CheckAroundGrid(m_Map, i, j);
+                    case (int)GRID_ID.ROOM: //2
+                        AroundGridID aroundGrid = CheckAroundGrid(m_Map, i, j);
                         if (CheckGateWay(aroundGrid) == true)
                         {
-                            m_Map[i, j] = 3;
+                            m_Map[i, j] = (int)GRID_ID.GATE; //3
                             @object = Instantiate(m_Gate, new Vector3(i, 0, j), Quaternion.identity);
                             m_TerrainList[i].Add(@object);
                         }
@@ -90,40 +100,40 @@ public class DungeonTerrain: SingletonMonoBehaviour<DungeonTerrain>
         }
     }
 
-    public AroundGrid CheckAroundGrid(int[,] map, int x, int z)
+    public AroundGridID CheckAroundGrid(int[,] map, int x, int z)
     {
-        return new AroundGrid(map, x, z);
+        return new AroundGridID(map, x, z);
     }
 
-    private bool CheckGateWay(AroundGrid aroundGrid)
+    private bool CheckGateWay(AroundGridID aroundGrid)
     {
-        if(aroundGrid.m_UpGrid == 1)
+        if (aroundGrid.m_UpGrid == 1)
         {
             return true;
         }
-        if(aroundGrid.m_UnderGrid == 1)
+        if (aroundGrid.m_UnderGrid == 1)
         {
             return true;
         }
-        if(aroundGrid.m_LeftGrid == 1)
+        if (aroundGrid.m_LeftGrid == 1)
         {
             return true;
         }
-        if(aroundGrid.m_RightGrid == 1)
+        if (aroundGrid.m_RightGrid == 1)
         {
             return true;
         }
         return false;
     }
 
-    public int DestinationGridInfo(int[,] map, int pos_x, int pos_z, int direction_x, int direction_z)
+    public int DestinationGridID(int[,] map, int pos_x, int pos_z, int direction_x, int direction_z)
     {
         return map[pos_x + direction_x, pos_z + direction_z];
     }
 
     public bool IsPossibleToMoveDiagonal(int[,] map, int pos_x, int pos_z, int direction_x, int direction_z)
     {
-        if(map[pos_x + direction_x, pos_z] == 0 || map[pos_x, pos_z + direction_z] == 0)
+        if (map[pos_x + direction_x, pos_z] == (int)GRID_ID.WALL || map[pos_x, pos_z + direction_z] == (int)GRID_ID.WALL)
         {
             return false;
         }
@@ -131,7 +141,7 @@ public class DungeonTerrain: SingletonMonoBehaviour<DungeonTerrain>
     }
 }
 
-public struct AroundGrid
+public struct AroundGridID
 {
     public int m_UpGrid { get; } //上
     public int m_UnderGrid { get; } //下
@@ -143,7 +153,7 @@ public struct AroundGrid
     public int m_LowerLeft { get; } //左下
     public int m_LowerRight { get; } //右下
 
-    public AroundGrid(int[,] map, int x, int z)
+    public AroundGridID(int[,] map, int x, int z)
     {
         m_UpGrid = map[x, z + 1];
         m_UnderGrid = map[x, z - 1];

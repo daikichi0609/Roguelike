@@ -73,7 +73,8 @@
     <Compile Include="Assets\Script\GameManager.cs" />
     <Compile Include="Assets\Script\LabelAttribute.cs" />
     <Compile Include="Assets\Script\MapGenerator.cs" />
-    <Compile Include="Assets\Script\Player.cs" />
+    <Compile Include="Assets\Script\PlayerBattle.cs" />
+    <Compile Include="Assets\Script\PlayerMove.cs" />
     <Compile Include="Assets\Script\PositionManager.cs" />
     <Compile Include="Assets\Script\Singleton.cs" />
     <Reference Include="Unity.Timeline.Editor">
