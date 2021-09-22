@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PositionManager :SingletonMonoBehaviour<PositionManager>
 {
-    public bool IsPossibleToMove(Vector3 pos, Vector3 direction)
+    public bool IsPossibleToMoveGrid(Vector3 pos, Vector3 direction)
     {
         int[,] map = DungeonTerrain.Instance.Map;
         int pos_x = (int)pos.x;
@@ -27,5 +27,31 @@ public class PositionManager :SingletonMonoBehaviour<PositionManager>
             return true;
         }
         return false;
+    }
+
+    public bool EnemyIsOn(Vector3 pos)
+    {
+        int pos_x = (int)pos.x;
+        int pos_z = (int)pos.z;
+
+        GameObject grid = DungeonTerrain.Instance.GetListObject(pos_x, pos_z);
+        if (grid.GetComponent<Grid>().IsOnId == Grid.ISON_ID.ENEMY)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public void InformAttack(Vector3 attackPos, int power)
+    {
+        if(EnemyIsOn(attackPos) == false)
+        {
+            return;
+        }
+        int pos_x = (int)attackPos.x;
+        int pos_z = (int)attackPos.z;
+
+        Grid grid = DungeonTerrain.Instance.GetListObject(pos_x, pos_z).GetComponent<Grid>();
+        grid.InformAttack(power);
     }
 }

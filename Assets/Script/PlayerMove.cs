@@ -1,17 +1,58 @@
 ﻿using UnityEngine;
 
-public class PlayerMove : MonoBehaviour
+public abstract class CharaMove: MonoBehaviour
 {
-	private Vector3 m_PlayerPos;
-	public Vector3 PlayerPos
+	public Vector3 Position
+	{
+		get;
+		set;
+	}
+
+	public Vector3 Direction
+	{
+		get;
+		set;
+	}
+
+	public void InitializeBeforeMoveGrid()
     {
-		get { return m_PlayerPos; }
+		int pos_x = (int)Position.x;
+		int pos_z = (int)Position.z;
+		Grid grid = DungeonTerrain.Instance.GetListObject(pos_x, pos_z).GetComponent<Grid>();
+		grid.Initialize();
     }
+
+	protected void ReloadAfterMoveGrid(bool isplayer)
+    {
+		int pos_x = (int)Position.x;
+		int pos_z = (int)Position.z;
+		Grid grid = DungeonTerrain.Instance.GetListObject(pos_x, pos_z).GetComponent<Grid>();
+		grid.IsOnObject = this.gameObject;
+		switch(isplayer)
+        {
+			case true:
+				grid.IsOnId = Grid.ISON_ID.PLAYER;
+				break;
+
+			case false:
+				grid.IsOnId = Grid.ISON_ID.ENEMY;
+				break;
+        }
+	}
+}
+
+public class PlayerMove : CharaMove
+{
+    private void Start()
+    {
+		Direction = new Vector3(0, 0, -1);
+		Position = this.transform.position;
+		CameraManager.Instance.MainCamera.transform.position = Position + new Vector3(0, 5f, -1.5f);
+		CameraManager.Instance.MainCamera.transform.eulerAngles = new Vector3(70, 0, 0);
+	}
 
     private void Update()
 	{
-		m_PlayerPos = this.transform.position;
-
 		if (Input.GetKeyDown(KeyCode.W))
 		{
 			Move(new Vector3(0, 0, 1));
@@ -20,7 +61,7 @@ public class PlayerMove : MonoBehaviour
 		{
 			Move(new Vector3(-1, 0, 0));
 		}
-		if (Input.GetKeyDown(KeyCode.S))
+		if (Input.GetKeyDown(KeyCode.X))
 		{
 			Move(new Vector3(0, 0, -1));
 		}
@@ -47,14 +88,35 @@ public class PlayerMove : MonoBehaviour
 		}
 	}
 
-	public void Move(Vector3 vector3)
+	public void Move(Vector3 direction)
 	{
-		if(PositionManager.Instance.IsPossibleToMove(m_PlayerPos, vector3) == false)
+		Face(direction);
+		if (Input.GetKey(KeyCode.RightShift))
+		{
+			return;
+		}
+		if (PositionManager.Instance.IsPossibleToMoveGrid(Position, direction) == false)
+        {
+			return;
+        }
+		Vector3 destinationPos = Position + direction;
+		if(PositionManager.Instance.EnemyIsOn(destinationPos) == true)
         {
 			return;
         }
 
-		transform.position += vector3;
+		InitializeBeforeMoveGrid();
+		transform.position += direction;
+		Position = this.transform.position;
+		ReloadAfterMoveGrid(true);
+		CameraManager.Instance.MainCamera.transform.position += direction;
+
 		//GameManager.Instance.SwitchTurn();
+	}
+
+	public void Face(Vector3 direction)
+    {
+		Direction = direction;
+		transform.rotation = Quaternion.LookRotation(direction);
 	}
 }

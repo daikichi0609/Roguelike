@@ -10,11 +10,16 @@ public class DungeonTerrain: SingletonMonoBehaviour<DungeonTerrain>
     {
         get { return m_Map; }
     }
-    [SerializeField] private List<List<GameObject>> m_TerrainList = new List<List<GameObject>>();
+    private List<List<GameObject>> m_TerrainList = new List<List<GameObject>>();
 
-    public void SetValueInList(int value, int i, int j)
+    public GameObject GetListObject(int x, int z)
     {
-        m_Map[i, j] = value;
+        return m_TerrainList[x][z];
+    }
+
+    public void SetValueInList(int value, int x, int z)
+    {
+        m_Map[x, z] = value;
     }
 
     public void SetObjectInListInstead(GameObject @object, int x, int z)
@@ -28,11 +33,6 @@ public class DungeonTerrain: SingletonMonoBehaviour<DungeonTerrain>
     private int m_MapSizeX = 32;
     private int m_MapSizeZ = 32;
     private int m_MaxRoom = 8;
-
-    [SerializeField] private GameObject m_PathWay;
-    [SerializeField] private GameObject m_Wall;
-    [SerializeField] private GameObject m_Room;
-    [SerializeField] private GameObject m_Gate;
 
     public enum GRID_ID
     {
@@ -72,12 +72,12 @@ public class DungeonTerrain: SingletonMonoBehaviour<DungeonTerrain>
                 {
                     case (int)GRID_ID.WALL: //0
                         m_TerrainList.Add(new List<GameObject>());
-                        GameObject @object = Instantiate(m_Wall, new Vector3(i, 0, j), Quaternion.identity);
+                        GameObject @object = Instantiate(DungeonContentsHolder.Instance.Wall, new Vector3(i, 0, j), Quaternion.identity);
                         m_TerrainList[i].Add(@object);
                         break;
 
                     case (int)GRID_ID.PATH_WAY: //1
-                        @object = Instantiate(m_PathWay, new Vector3(i, 0, j), Quaternion.identity);
+                        @object = Instantiate(PathWayGrid(), new Vector3(i, 0, j), Quaternion.identity);
                         m_TerrainList[i].Add(@object);
                         break;
 
@@ -86,18 +86,56 @@ public class DungeonTerrain: SingletonMonoBehaviour<DungeonTerrain>
                         if (CheckGateWay(aroundGrid) == true)
                         {
                             m_Map[i, j] = (int)GRID_ID.GATE; //3
-                            @object = Instantiate(m_Gate, new Vector3(i, 0, j), Quaternion.identity);
+                            @object = Instantiate(RoomGrid(), new Vector3(i, 0, j), Quaternion.identity);
                             m_TerrainList[i].Add(@object);
                         }
                         else
                         {
-                            @object = Instantiate(m_Room, new Vector3(i, 0, j), Quaternion.identity);
+                            @object = Instantiate(RoomGrid(), new Vector3(i, 0, j), Quaternion.identity);
                             m_TerrainList[i].Add(@object);
                         }
                         break;
                 }
             }
         }
+    }
+
+    private GameObject PathWayGrid()
+    {
+        switch(GameManager.Instance.DungeonTheme)
+        {
+            case GameManager.DUNGEON_THEME.GRASS:
+                return DungeonContentsHolder.Instance.Grass_C;
+
+            case GameManager.DUNGEON_THEME.ROCK:
+                return DungeonContentsHolder.Instance.Rock_C;
+
+            case GameManager.DUNGEON_THEME.WHITE:
+                return DungeonContentsHolder.Instance.White_C;
+
+            case GameManager.DUNGEON_THEME.CRYSTAL:
+                return DungeonContentsHolder.Instance.CrystalRock_C;
+        }
+        return null;
+    }
+
+    private GameObject RoomGrid()
+    {
+        switch (GameManager.Instance.DungeonTheme)
+        {
+            case GameManager.DUNGEON_THEME.GRASS:
+                return DungeonContentsHolder.Instance.Grass_A;
+
+            case GameManager.DUNGEON_THEME.ROCK:
+                return DungeonContentsHolder.Instance.Rock_A;
+
+            case GameManager.DUNGEON_THEME.WHITE:
+                return DungeonContentsHolder.Instance.White_A;
+
+            case GameManager.DUNGEON_THEME.CRYSTAL:
+                return DungeonContentsHolder.Instance.CrystalRock_A;
+        }
+        return null;
     }
 
     public AroundGridID CheckAroundGrid(int[,] map, int x, int z)

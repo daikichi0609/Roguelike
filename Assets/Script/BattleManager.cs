@@ -2,15 +2,8 @@
 
 public class BattleManager : SingletonMonoBehaviour<BattleManager>
 {
-    // Start is called before the first frame update
-    void Start()
+    public int CalculatePower(int atk, float mag)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        return (int)(atk * mag);
     }
 }

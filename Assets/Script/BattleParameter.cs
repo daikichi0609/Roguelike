@@ -2,42 +2,23 @@
 public abstract class BattleStatus: ScriptableObject //キャラ共通で必要なパラメタまとめ
 {
 	// 名前
-	[SerializeField, Label("名前")] private string m_GivenName;
-	public string Name
+	public enum NAME
+    {
+		BOXMAN,
+		RAGON,
+		ICHIGO,
+		WIZARD,
+		ARCHER,
+
+		MASHROOM
+    }
+	[SerializeField, Label("名前")] private NAME m_GivenName;
+	public NAME Name
     {
 		get { return m_GivenName; }
 		set { m_GivenName = value; }
     }
-	// 性別enum
-	public enum GENDER
-    {
-		MALE,
-		FEMALE,
-		UNKNOWN
-    }
-	//性別
-	[SerializeField, Label("性別")] private GENDER m_Gender;
-	public GENDER Gender
-    {
-		get { return m_Gender; }
-		set { m_Gender = value; }
-    }
-	// 種族enum
-	public enum RACE
-    {
-		HUMAN,
-		ELF,
-		GOBLIN,
-		GOD,
-		UNKNOWN
-    }
-	//種族
-	[SerializeField, Label("種族")] private RACE m_Race;
-	public RACE Race
-    {
-		get { return m_Race; }
-		set { m_Race = value; }
-    }
+
 	// ヒットポイント
 	[SerializeField, Label("体力")] private int m_Hp;
 	public int Hp
@@ -81,11 +62,11 @@ public abstract class BattleStatus: ScriptableObject //キャラ共通で必要�
 		set { m_Eva = value; }
     }
 	// 会心率補正
-	[SerializeField, Label("会心率補正")] private float m_CriticalRate;
+	[SerializeField, Label("会心率補正")] private float m_CriticalRank;
 	public float CriticalRate
     {
-        get { return m_CriticalRate; }
-		set { m_CriticalRate = value; }
+        get { return m_CriticalRank; }
+		set { m_CriticalRank = value; }
     }
 	// 抵抗率
 	[SerializeField, Label("抵抗率")] private float m_Res;

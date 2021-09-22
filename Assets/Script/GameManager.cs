@@ -5,23 +5,44 @@ using System.IO;
 
 public class GameManager : SingletonMonoBehaviour<GameManager>
 {
+    public enum DUNGEON_THEME
+    {
+        CRYSTAL,
+        GRASS,
+        WHITE,
+        ROCK
+    }
+
+    [SerializeField] private DUNGEON_THEME m_DungeonTheme;
+    public DUNGEON_THEME DungeonTheme
+    {
+        get { return m_DungeonTheme; }
+        set { m_DungeonTheme = value; }
+    }
+
+    [SerializeField] private BattleStatus.NAME m_LeaderName;
+    public BattleStatus.NAME Name
+    {
+        get { return m_LeaderName; }
+    }
+
     private bool m_PlayerTurn;
     public bool PlayerTurn
     {
        get { return m_PlayerTurn; } 
     }
 
-    [SerializeField] private GameObject m_PlayerObject;
-
     private void Awake()
     {
+        m_LeaderName = BattleStatus.NAME.BOXMAN;
         DungeonTerrain.Instance.DeployDungeonTerrain();
+        DungeonContents.Instance.DeployDungeonContents();
     }
 
     // Start is called before the first frame update
     private void Start()
     {
-        DungeonContents.Instance.DeployDungeonContents();
+        
     }
 
     // Update is called once per frame

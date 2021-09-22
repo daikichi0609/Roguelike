@@ -66,17 +66,42 @@
   <ItemGroup>
     <Compile Include="Assets\Script\BattleManager.cs" />
     <Compile Include="Assets\Script\BattleParameter.cs" />
+    <Compile Include="Assets\Script\CameraManager.cs" />
+    <Compile Include="Assets\Script\CharaCondition.cs" />
+    <Compile Include="Assets\Script\CharaDataHolder.cs" />
     <Compile Include="Assets\Script\CharaDataManager.cs" />
     <Compile Include="Assets\Script\DungeonContents.cs" />
+    <Compile Include="Assets\Script\DungeonContentsHolder.cs" />
     <Compile Include="Assets\Script\DungeonTerrain.cs" />
-    <Compile Include="Assets\Script\Enemy.cs" />
+    <Compile Include="Assets\Script\EnemyBattle.cs" />
+    <Compile Include="Assets\Script\EnemyMove.cs" />
     <Compile Include="Assets\Script\GameManager.cs" />
+    <Compile Include="Assets\Script\Grid.cs" />
     <Compile Include="Assets\Script\LabelAttribute.cs" />
     <Compile Include="Assets\Script\MapGenerator.cs" />
     <Compile Include="Assets\Script\PlayerBattle.cs" />
     <Compile Include="Assets\Script\PlayerMove.cs" />
     <Compile Include="Assets\Script\PositionManager.cs" />
     <Compile Include="Assets\Script\Singleton.cs" />
+    <Compile Include="Assets\Script\StaticCharaMethod.cs" />
+    <Compile Include="Assets\SD_Project\Scripts\controller.cs" />
+    <Compile Include="Assets\SD_Project\Scripts\MecanimButton.cs" />
+    <Compile Include="Assets\SD_Project\Scripts\ThirdPersonCamera.cs" />
+    <None Include="Assets\SD_Project\UnityChanShader\Shader\Unitychan_chara_eye.shader" />
+    <None Include="Assets\SD_Project\UnityChanShader\Shader\Unitychan_chara_fuku.shader" />
+    <None Include="Assets\SD_Project\UnityChanShader\Shader\CharaMain.cginc" />
+    <None Include="Assets\SD_Project\UnityChanShader\Shader\Unitychan_chara_fuku_ds.shader" />
+    <None Include="Assets\SD_Project\UnityChanShader\Shader\CharaSkin.cginc" />
+    <None Include="Assets\SD_Project\UnityChanShader\Shader\Unitychan_chara_eye_blend.shader" />
+    <None Include="Assets\SD_Project\UnityChanShader\Shader\Unitychan_chara_hair_ds.shader" />
+    <None Include="Assets\SD_Project\UnityChanShader\Shader\Unitychan_chara_akarami_blend.shader" />
+    <None Include="Assets\SD_Project\UnityChanShader\Shader\Unitychan_chara_hair.shader" />
+    <None Include="Assets\SD_Project\UnityChanShader\Shader\Unitychan_chara_eyelash_blend.shader" />
+    <None Include="Assets\SD_Project\UnityChanShader\Shader\CharaOutline.cginc" />
+    <None Include="Assets\SD_Project\UnityChanShader\Shader\readme.txt" />
+    <None Include="Assets\SD_Project\UnityChanShader\Shader\Unitychan_chara_hada.shader" />
+    <None Include="Assets\SD_Project\UnityChanShader\Shader\Unitychan_chara_hada_blend.shader" />
+    <None Include="Assets\SD_Project\README.txt" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>/Users/daikichi/Desktop/UnityProjects/Roguelike/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
