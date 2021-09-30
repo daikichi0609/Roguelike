@@ -6,7 +6,6 @@ using System.Collections.Generic;
 
 public class Position
 {
-
 	public int X { get; set; }
 	public int Y { get; set; }
 
@@ -178,7 +177,7 @@ public class MapGenerator : SingletonMonoBehaviour<MapGenerator>
 
 			// 40％の確率で分割しない
 			// ただし、区画の数が1つの時は必ず分割する
-			if (rangeList.Count > 1 && RogueUtils.RandomJadge(0.4f))
+			if (rangeList.Count > 2 && RogueUtils.RandomJadge(0.4f))
 			{
 				continue;
 			}
@@ -249,6 +248,7 @@ public class MapGenerator : SingletonMonoBehaviour<MapGenerator>
 
 			// 部屋リストへ追加
 			Range room = new Range(startX, startY, endX, endY);
+			DungeonTerrain.Instance.RangeList.Add(room);
 			roomList.Add(room);
 
 			// 通路を作る

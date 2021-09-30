@@ -11,6 +11,12 @@ public class Grid : MonoBehaviour
         set { in_IsOnObject = value; }
     }
 
+    [SerializeField] private int m_RoomID;
+    public int RoomID
+    {
+        set { m_RoomID = value; }
+    }
+
     public enum ISON_ID
     {
         NOTHING = 0,
@@ -37,12 +43,17 @@ public class Grid : MonoBehaviour
     public void InformAttack(int power)
     {
         if (in_IsOnObject == null)
+        {
+            Debug.LogError("このマスには何もないです");
             return;
+        }
 
         CharaBattle chara = in_IsOnObject.GetComponent<CharaBattle>();
         if (chara == null)
-            return;
-
+        {
+            Debug.LogError("このマスにはキャラがいません");
+        }
+            
         chara.Damage(power);
     }
 }

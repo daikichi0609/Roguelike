@@ -10,4 +10,15 @@ public class CameraManager : SingletonMonoBehaviour<CameraManager>
         get { return m_MainCamera; }
         set { m_MainCamera = value; }
     }
+
+    [SerializeField] private Vector3 m_KeepPos = new Vector3(0, 5f, -3f);
+    public Vector3 KeepPos
+    {
+        get { return m_KeepPos; }
+    }
+    [SerializeField] private Vector3 m_Angle = new Vector3(60f, 0, 0);
+    public Vector3 Angle
+    {
+        get { return m_Angle; }
+    }
 }

@@ -1,19 +1,25 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public abstract class CharaBattle : MonoBehaviour
 {
     [SerializeField] protected BattleStatus.NAME m_CharaName;
+    public bool Turn
+    {
+        get;
+        set;
+    }
 
-    [SerializeField] private BattleStatus m_BattleStatus;
+    private BattleStatus m_BattleStatus;
     public BattleStatus BattleStatus
     {
         get { return m_BattleStatus; }
         set { m_BattleStatus = value; }
     }
 
-    [SerializeField] private CharaMove m_CharaMove;
+    private CharaMove m_CharaMove;
     protected CharaMove CharaMove
     {
         get { return m_CharaMove; }
@@ -34,13 +40,12 @@ public abstract class CharaBattle : MonoBehaviour
 
     public void Damage(int power)
     {
-        int damage = power - BattleStatus.Def;
-        if(damage <= 0)
-        {
-            damage = 1;
-        }
-        BattleStatus.Hp -= damage;
-        if (BattleStatus.Hp <= 0)
+        int damage = BattleManager.Instance.CalculateDamage(power, BattleStatus.Def);
+        BattleStatus.Hp = BattleManager.Instance.CalculateRemainingHp(BattleStatus.Hp, damage);
+
+        SoundManager.Instance.Damage_Small.Play();
+
+        if(BattleStatus.Hp <= 0)
         {
             Death();
         }
@@ -99,6 +104,10 @@ public class PlayerBattle : CharaBattle
 
     private void Attack()
     {
+        if(CharaMove.IsMoving == true)
+        {
+            return;
+        }
         if (Input.GetKey(KeyCode.RightShift))
         {
             Skill();
@@ -107,7 +116,12 @@ public class PlayerBattle : CharaBattle
         switch (m_CharaName)
         {
             case BattleStatus.NAME.BOXMAN:
-                BoxmanMethod.Attack(m_NormalAttackLv ,CharaMove.Position, CharaMove.Direction, BattleStatus.Atk);
+                CharaMove.CharaAnimator.SetBool("IsAttacking", true);
+                StartCoroutine(DelayCoroutine(0.4f, () =>
+                {
+                    BoxmanMethod.Attack(m_NormalAttackLv, CharaMove.Position, CharaMove.Direction, BattleStatus.Atk);
+                    CharaMove.CharaAnimator.SetBool("IsAttacking", false);
+                }));
                 break;
         }
     }
@@ -125,5 +139,11 @@ public class PlayerBattle : CharaBattle
     private void Ability()
     {
 
+    }
+
+    private IEnumerator DelayCoroutine(float seconds, Action action)
+    {
+        yield return new WaitForSeconds(seconds);
+        action?.Invoke();
     }
 }

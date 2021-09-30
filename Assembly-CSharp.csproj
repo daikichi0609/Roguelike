@@ -70,6 +70,7 @@
     <Compile Include="Assets\Script\CharaCondition.cs" />
     <Compile Include="Assets\Script\CharaDataHolder.cs" />
     <Compile Include="Assets\Script\CharaDataManager.cs" />
+    <Compile Include="Assets\Script\DeployDungeonContents.cs" />
     <Compile Include="Assets\Script\DungeonContents.cs" />
     <Compile Include="Assets\Script\DungeonContentsHolder.cs" />
     <Compile Include="Assets\Script\DungeonTerrain.cs" />
@@ -83,6 +84,7 @@
     <Compile Include="Assets\Script\PlayerMove.cs" />
     <Compile Include="Assets\Script\PositionManager.cs" />
     <Compile Include="Assets\Script\Singleton.cs" />
+    <Compile Include="Assets\Script\SoundManager.cs" />
     <Compile Include="Assets\Script\StaticCharaMethod.cs" />
     <Compile Include="Assets\SD_Project\Scripts\controller.cs" />
     <Compile Include="Assets\SD_Project\Scripts\MecanimButton.cs" />

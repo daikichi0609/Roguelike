@@ -19,3 +19,5 @@ Library/metadata/7c/7c44c5da186d9984fb790ab977a00274 filter=lfs diff=lfs merge=l
 Library/metadata/cc/cc57d1589d94c5440b76ea97dba40165 filter=lfs diff=lfs merge=lfs -text
 Library/metadata/9d/9dfc27711d0cb9648b637f43af9d4dd3 filter=lfs diff=lfs merge=lfs -text
 Library/metadata/5c/5ce62d7bd47bdbe46aafd815ac6bbbff filter=lfs diff=lfs merge=lfs -text
+*.resource filter=lfs diff=lfs merge=lfs -text
+*.mp3 filter=lfs diff=lfs merge=lfs -text

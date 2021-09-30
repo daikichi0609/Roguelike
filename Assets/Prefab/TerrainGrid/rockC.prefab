@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 481804317388224945}
   - component: {fileID: 133611536542897658}
   m_Layer: 0
-  m_Name: box
+  m_Name: rockC
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -50,7 +50,7 @@ MeshRenderer:
   m_GameObject: {fileID: 481804317386007907}
   m_Enabled: 1
   m_CastShadows: 1
-  m_ReceiveShadows: 1
+  m_ReceiveShadows: 0
   m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
@@ -90,4 +90,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73dce279f430c42e8b977e487ef9b2d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  in_IsOnObject: {fileID: 0}
   m_IsOnId: 0

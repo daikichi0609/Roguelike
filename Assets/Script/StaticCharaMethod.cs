@@ -33,7 +33,15 @@ static class BoxmanMethod
         mag = Calculator.CalculateNormalAttackMag(lv, mag);
         Vector3 attackPos = pos + direction;
         int power = BattleManager.Instance.CalculatePower(atk, mag);
-        PositionManager.Instance.InformAttack(attackPos, power);
+        bool isHit = PositionManager.Instance.InformEnemyOfAttacking(attackPos, power);
+        if(isHit == true)
+        {
+            SoundManager.Instance.Attack_Sword.Play();
+        }
+        else
+        {
+            SoundManager.Instance.Miss.Play();
+        }
     }
 
     static public void Skill(int Lv, ref CharaCondition condition)
@@ -41,7 +49,7 @@ static class BoxmanMethod
         condition.BoxmanSkillBuffTime = 3;
     }
 
-    static public void Ability(int Lv, ref CharaCondition condition)
+    static public void Ability(int Lv)
     {
 
     }

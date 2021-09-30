@@ -26,15 +26,14 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         get { return m_LeaderName; }
     }
 
-    private bool m_PlayerTurn;
-    public bool PlayerTurn
-    {
-       get { return m_PlayerTurn; } 
-    }
-
     private void Awake()
     {
         m_LeaderName = BattleStatus.NAME.BOXMAN;
+
+        SoundManager.Instance.NormalBGM.Play();
+        //SoundManager.Instance.BossBGM.Play();
+        //SoundManager.Instance.KD.Play();
+
         DungeonTerrain.Instance.DeployDungeonTerrain();
         DungeonContents.Instance.DeployDungeonContents();
     }
@@ -55,11 +54,5 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     {
         
     }
-
-    public void SwitchTurn()
-    {
-        m_PlayerTurn = !m_PlayerTurn;
-    }
-
 
 }

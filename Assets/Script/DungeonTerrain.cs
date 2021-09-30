@@ -12,22 +12,41 @@ public class DungeonTerrain: SingletonMonoBehaviour<DungeonTerrain>
     }
     private List<List<GameObject>> m_TerrainList = new List<List<GameObject>>();
 
-    public GameObject GetListObject(int x, int z)
+    public GameObject GetTerrainListObject(int x, int z)
     {
         return m_TerrainList[x][z];
     }
 
-    public void SetValueInList(int value, int x, int z)
+    public void SetValueInTerrainList(int value, int x, int z)
     {
         m_Map[x, z] = value;
     }
 
-    public void SetObjectInListInstead(GameObject @object, int x, int z)
+    public void SetObjectInTerrainListInstead(GameObject @object, int x, int z)
     {
         GameObject removeObject = m_TerrainList[x][z];
         m_TerrainList[x].RemoveAt(z);
         Destroy(removeObject);
         m_TerrainList[x].Insert(z, @object);
+    }
+
+    private List<List<GameObject>> m_RoomList = new List<List<GameObject>>();
+    public List<List<GameObject>> RoomList
+    {
+        get { return m_RoomList; }
+        set { m_RoomList = value; }
+    }
+
+    public GameObject GetRoomListObject(int id, int num)
+    {
+        return RoomList[id][num];
+    }
+
+    [SerializeField] private List<Range> m_RangeList = new List<Range>();
+    public List<Range> RangeList
+    {
+        get { return m_RangeList; }
+        set { m_RangeList = value; }
     }
 
     private int m_MapSizeX = 32;
@@ -96,6 +115,39 @@ public class DungeonTerrain: SingletonMonoBehaviour<DungeonTerrain>
                         }
                         break;
                 }
+            }
+        }
+
+        AddRoomObjectToList();
+        RegisterRoomID();
+    }
+
+    public void AddRoomObjectToList()
+    {
+        RoomList = new List<List<GameObject>>();
+        foreach (Range range in RangeList)
+        {
+            List<GameObject> list = new List<GameObject>();
+
+            for (int x = range.Start.X; x <= range.End.X; x++)
+            {
+                for(int z = range.Start.Y; z <= range.End.Y; z++)
+                {
+                    list.Add(GetTerrainListObject(x, z));
+                }
+            }
+            RoomList.Add(list);
+        }
+    }
+
+    public void RegisterRoomID()
+    {
+        for(int id = 0; id <= RoomList.Count - 1; id++)
+        {
+            for(int num = 0; num <= RoomList[id].Count - 1; num++)
+            {
+                Grid grid = GetRoomListObject(id, num).GetComponent<Grid>();
+                grid.RoomID = id + 1;
             }
         }
     }

@@ -34,7 +34,7 @@ public class PositionManager :SingletonMonoBehaviour<PositionManager>
         int pos_x = (int)pos.x;
         int pos_z = (int)pos.z;
 
-        GameObject grid = DungeonTerrain.Instance.GetListObject(pos_x, pos_z);
+        GameObject grid = DungeonTerrain.Instance.GetTerrainListObject(pos_x, pos_z);
         if (grid.GetComponent<Grid>().IsOnId == Grid.ISON_ID.ENEMY)
         {
             return true;
@@ -42,16 +42,18 @@ public class PositionManager :SingletonMonoBehaviour<PositionManager>
         return false;
     }
 
-    public void InformAttack(Vector3 attackPos, int power)
+    public bool InformEnemyOfAttacking(Vector3 attackPos, int power)
     {
         if(EnemyIsOn(attackPos) == false)
         {
-            return;
+            Debug.LogError("攻撃対象となる敵はいません");
+            return false;
         }
         int pos_x = (int)attackPos.x;
         int pos_z = (int)attackPos.z;
 
-        Grid grid = DungeonTerrain.Instance.GetListObject(pos_x, pos_z).GetComponent<Grid>();
+        Grid grid = DungeonTerrain.Instance.GetTerrainListObject(pos_x, pos_z).GetComponent<Grid>();
         grid.InformAttack(power);
+        return true;
     }
 }

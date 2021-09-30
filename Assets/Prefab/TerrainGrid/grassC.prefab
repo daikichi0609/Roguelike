@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2891358438854926932}
   - component: {fileID: 3410689102383844895}
   m_Layer: 0
-  m_Name: box
+  m_Name: grassC
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -90,4 +90,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73dce279f430c42e8b977e487ef9b2d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  in_IsOnObject: {fileID: 0}
   m_IsOnId: 0
