@@ -105,8 +105,8 @@ GameObject:
   - component: {fileID: 3135674774239238899}
   - component: {fileID: 3135674774231689225}
   - component: {fileID: 6280255290768603937}
-  - component: {fileID: 4500429876782079268}
-  - component: {fileID: 503992710029703166}
+  - component: {fileID: 2431376900803508528}
+  - component: {fileID: 6365759817544455909}
   m_Layer: 0
   m_Name: Mashroom
   m_TagString: Untagged
@@ -162,8 +162,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_CharaName: 5
-  m_Status: {fileID: 11400000, guid: fdd79717e71c94e3aa7f118533354e8f, type: 2}
---- !u!114 &4500429876782079268
+--- !u!114 &2431376900803508528
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -172,10 +171,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 3135674774238795827}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 39d09e9f55d2544cca890d6bf1abb32b, type: 3}
+  m_Script: {fileID: 11500000, guid: 00eeaf891829f4842aa302d57a42f197, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &503992710029703166
+  m_MoveObject: {fileID: 3135674774238795827}
+  m_CharaObject: {fileID: 3135674774238795827}
+--- !u!114 &6365759817544455909
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

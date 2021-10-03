@@ -11,7 +11,7 @@ public class EnemyBattle : CharaBattle
 
     private void Initialize()
     {
-        CharaMove = this.gameObject.GetComponent<EnemyMove>();
+        CharaMove = this.gameObject.GetComponent<CharaMove>();
         Condition = this.gameObject.GetComponent<CharaCondition>();
         BattleStatus = CharaDataManager.Instance.LoadEnemyScriptableObject(m_CharaName);
     }

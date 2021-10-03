@@ -47,7 +47,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     // Update is called once per frame
     private void Update()
     {
-
+        InputManager.Instance.DetectInput(ObjectManager.Instance.PlayerObject(0));
     }
 
     public void DeployAll()
