@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class CharaBattle : MonoBehaviour
-{
-    [SerializeField] protected BattleStatus.NAME m_CharaName;
-    public bool Turn
+{ 
+    private CharaMove m_CharaMove;
+    protected CharaMove CharaMove
     {
-        get;
-        set;
+        get { return m_CharaMove; }
+        set { m_CharaMove = value; }
     }
 
     private BattleStatus m_BattleStatus;
@@ -18,18 +18,17 @@ public abstract class CharaBattle : MonoBehaviour
         set { m_BattleStatus = value; }
     }
 
-    private CharaMove m_CharaMove;
-    protected CharaMove CharaMove
-    {
-        get { return m_CharaMove; }
-        set { m_CharaMove = value; }
-    }
-
     protected CharaCondition m_Condition;
     protected CharaCondition Condition
     {
         get { return m_Condition; }
         set { m_Condition = value; }
+    }
+
+    protected GameObject TargetObject
+    {
+        get;
+        set;
     }
 
     public bool IsAttacking
@@ -41,6 +40,12 @@ public abstract class CharaBattle : MonoBehaviour
     public int Lv
     {
         private get; set;
+    }
+
+    public virtual void Initialize()
+    {
+        CharaMove = this.gameObject.GetComponent<CharaMove>();
+        Condition = this.gameObject.GetComponent<CharaCondition>();
     }
 
     public void Damage(int power)
@@ -61,16 +66,6 @@ public abstract class CharaBattle : MonoBehaviour
         int num = ObjectManager.Instance.EnemyList.IndexOf(ObjectManager.Instance.SpecifiedPositionEnemyObject(CharaMove.Position));
         ObjectManager.Instance.EnemyList.RemoveAt(num);
         Destroy(this.gameObject);
-    }
-
-    virtual public void Attack()
-    {
-
-    }
-
-    virtual public void Skill()
-    {
-
     }
 
     protected void PlayAnimation(string name, float actFrame) //アニメーション一回流す
@@ -109,9 +104,29 @@ public abstract class CharaBattle : MonoBehaviour
             }));
         }
     }
+
+    protected void FinishTurn()
+    {
+        CharaMove.FinishTurn();
+    }
+
+    public virtual void DecideAndExcuteAction()
+    {
+
+    }
+
+    public virtual void Attack()
+    {
+        FinishTurn();
+    }
+
+    public virtual void Skill()
+    {
+        FinishTurn();
+    }
 }
 
-public class PlayerBattle : CharaBattle
+public abstract class PlayerBattle : CharaBattle
 {
     public int Ex
     {
@@ -131,18 +146,32 @@ public class PlayerBattle : CharaBattle
         protected get; set;
     }
 
-    private void Start()
+    public override void Initialize()
     {
-        CharaMove = this.gameObject.GetComponent<CharaMove>();
-        Condition = this.gameObject.GetComponent<CharaCondition>();
-        Initialize();
-    }
+        base.Initialize();
 
-    private void Initialize()
-    {
-        BattleStatus = CharaDataManager.Instance.LoadPlayerScriptableObject(m_CharaName);
         NormalAttackLv = 1;
         SkillLv = 1;
         AbilityLv = 1;
+    }
+
+    override public void Attack()
+    {
+        FinishTurn();
+    }
+
+    override public void Skill()
+    {
+        FinishTurn();
+    }
+
+    virtual protected void Chase()
+    {
+        FinishTurn();
+    }
+
+    virtual protected void Search()
+    {
+        FinishTurn();
     }
 }

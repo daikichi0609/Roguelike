@@ -14,6 +14,43 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
         return m_PlayerList[i];
     }
 
+    public GameObject SpecifiedPositionPlayerObject(Vector3 pos)
+    {
+        foreach (GameObject player in PlayerList)
+        {
+            Chara charaMove = player.GetComponent<Chara>();
+            if (charaMove.Position.x == pos.x && charaMove.Position.z == pos.z)
+            {
+                return player;
+            }
+        }
+        return null;
+    }
+
+    public List<GameObject> SpecifiedRoomPlayerObjectList(int roomId)
+    {
+        if(roomId <= 0)
+        {
+            return null;
+        }
+
+        List<GameObject> playerList = new List<GameObject>();
+        List<GameObject> roomList = DungeonTerrain.Instance.GetRoomList(roomId);
+        foreach (GameObject player in PlayerList)
+        {
+            Chara chara = player.GetComponent<Chara>();
+            foreach(GameObject grid in roomList)
+            {
+                if(chara.Position.x == grid.transform.position.x && chara.Position.z == grid.transform.position.z)
+                {
+                    playerList.Add(player);
+                }
+            }
+        }
+
+        return playerList;
+    }
+
     [SerializeField] private List<GameObject> m_EnemyList = new List<GameObject>();
     public List<GameObject> EnemyList
     {
@@ -25,12 +62,12 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
     }
     public GameObject SpecifiedPositionEnemyObject(Vector3 pos)
     {
-        foreach (GameObject gameObject in EnemyList)
+        foreach (GameObject enemy in EnemyList)
         {
-            CharaMove charaMove = gameObject.GetComponent<CharaMove>();
+            Chara charaMove = enemy.GetComponent<Chara>();
             if (charaMove.Position.x == pos.x && charaMove.Position.z == pos.z)
             {
-                return gameObject;
+                return enemy;
             }
         }
         return null;

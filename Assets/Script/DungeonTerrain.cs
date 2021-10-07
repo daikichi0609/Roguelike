@@ -9,6 +9,7 @@ public class DungeonTerrain: SingletonMonoBehaviour<DungeonTerrain>
     public int[,] Map
     {
         get { return m_Map; }
+        private set { m_Map = value; }
     }
     private List<List<GameObject>> m_TerrainList = new List<List<GameObject>>();
 
@@ -19,7 +20,7 @@ public class DungeonTerrain: SingletonMonoBehaviour<DungeonTerrain>
 
     public void SetValueInTerrainList(int value, int x, int z)
     {
-        m_Map[x, z] = value;
+        Map[x, z] = value;
     }
 
     public void SetObjectInTerrainListInstead(GameObject @object, int x, int z)
@@ -35,6 +36,11 @@ public class DungeonTerrain: SingletonMonoBehaviour<DungeonTerrain>
     {
         get { return m_RoomList; }
         set { m_RoomList = value; }
+    }
+
+    public List<GameObject> GetRoomList(int roomId)
+    {
+        return RoomList[roomId];
     }
 
     public GameObject GetRoomListObject(int id, int num)
@@ -80,13 +86,13 @@ public class DungeonTerrain: SingletonMonoBehaviour<DungeonTerrain>
 
     public void DeployDungeonTerrain()
     {
-        m_Map = MapGenerator.Instance.GenerateMap(m_MapSizeX, m_MapSizeZ, m_MaxRoom);
+        Map = MapGenerator.Instance.GenerateMap(m_MapSizeX, m_MapSizeZ, m_MaxRoom);
 
-        for (int i = 0; i < m_Map.GetLength(0) - 1; i++)
+        for (int i = 0; i < Map.GetLength(0) - 1; i++)
         {
-            for (int j = 0; j < m_Map.GetLength(1) - 1; j++)
+            for (int j = 0; j < Map.GetLength(1) - 1; j++)
             {
-                int id = m_Map[i, j];
+                int id = Map[i, j];
                 switch (id)
                 {
                     case (int)GRID_ID.WALL: //0
@@ -101,10 +107,10 @@ public class DungeonTerrain: SingletonMonoBehaviour<DungeonTerrain>
                         break;
 
                     case (int)GRID_ID.ROOM: //2
-                        AroundGridID aroundGrid = CheckAroundGrid(m_Map, i, j);
+                        AroundGridID aroundGrid = CreateAroundGrid(i, j);
                         if (CheckGateWay(aroundGrid) == true)
                         {
-                            m_Map[i, j] = (int)GRID_ID.GATE; //3
+                            Map[i, j] = (int)GRID_ID.GATE; //3
                             @object = Instantiate(RoomGrid(), new Vector3(i, 0, j), Quaternion.identity);
                             m_TerrainList[i].Add(@object);
                         }
@@ -190,9 +196,9 @@ public class DungeonTerrain: SingletonMonoBehaviour<DungeonTerrain>
         return null;
     }
 
-    public AroundGridID CheckAroundGrid(int[,] map, int x, int z)
+    public AroundGridID CreateAroundGrid(int x, int z)
     {
-        return new AroundGridID(map, x, z);
+        return new AroundGridID(Map, x, z);
     }
 
     private bool CheckGateWay(AroundGridID aroundGrid)
@@ -216,14 +222,14 @@ public class DungeonTerrain: SingletonMonoBehaviour<DungeonTerrain>
         return false;
     }
 
-    public int DestinationGridID(int[,] map, int pos_x, int pos_z, int direction_x, int direction_z)
+    public int DestinationGridID(int pos_x, int pos_z, int direction_x, int direction_z)
     {
-        return map[pos_x + direction_x, pos_z + direction_z];
+        return Map[pos_x + direction_x, pos_z + direction_z];
     }
 
-    public bool IsPossibleToMoveDiagonal(int[,] map, int pos_x, int pos_z, int direction_x, int direction_z)
+    public bool IsPossibleToMoveDiagonal(int pos_x, int pos_z, int direction_x, int direction_z)
     {
-        if (map[pos_x + direction_x, pos_z] == (int)GRID_ID.WALL || map[pos_x, pos_z + direction_z] == (int)GRID_ID.WALL)
+        if (Map[pos_x + direction_x, pos_z] == (int)GRID_ID.WALL || Map[pos_x, pos_z + direction_z] == (int)GRID_ID.WALL)
         {
             return false;
         }

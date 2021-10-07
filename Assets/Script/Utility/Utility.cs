@@ -3,6 +3,35 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+public class Utility
+{
+    public static Vector3 Direction(Vector3 direction)
+    {
+        int x = (int)direction.x;
+        int z = (int)direction.z;
+
+        if (x < 0)
+        {
+            x = -1;
+        }
+        else if (x > 0)
+        {
+            x = 1;
+        }
+
+        if (z < 0)
+        {
+            z = -1;
+        }
+        else if (z > 0)
+        {
+            z = 1;
+        }
+
+        return new Vector3(x, 0, z);
+    }
+}
+
 public class Calculator
 {
     public static float CalculateNormalAttackMag(int lv, float mag)

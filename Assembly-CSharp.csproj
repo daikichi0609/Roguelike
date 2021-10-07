@@ -67,7 +67,6 @@
     <Compile Include="Assets\Script\BattleManager.cs" />
     <Compile Include="Assets\Script\BattleParameter.cs" />
     <Compile Include="Assets\Script\CameraManager.cs" />
-    <Compile Include="Assets\Script\Chara\Boxman.cs" />
     <Compile Include="Assets\Script\CharaBattle.cs" />
     <Compile Include="Assets\Script\CharaCondition.cs" />
     <Compile Include="Assets\Script\CharaDataHolder.cs" />
@@ -77,6 +76,7 @@
     <Compile Include="Assets\Script\DungeonContents.cs" />
     <Compile Include="Assets\Script\DungeonContentsHolder.cs" />
     <Compile Include="Assets\Script\DungeonTerrain.cs" />
+    <Compile Include="Assets\Script\EnemuChara\Mashroom.cs" />
     <Compile Include="Assets\Script\EnemyBattle.cs" />
     <Compile Include="Assets\Script\GameManager.cs" />
     <Compile Include="Assets\Script\Grid.cs" />
@@ -84,9 +84,11 @@
     <Compile Include="Assets\Script\Manager\InputManager.cs" />
     <Compile Include="Assets\Script\Manager\ObjectManager.cs" />
     <Compile Include="Assets\Script\Manager\PositionManager.cs" />
+    <Compile Include="Assets\Script\Manager\SoundManager.cs" />
+    <Compile Include="Assets\Script\Manager\TurnManager.cs" />
     <Compile Include="Assets\Script\MapGenerator.cs" />
+    <Compile Include="Assets\Script\PlayerChara\Boxman.cs" />
     <Compile Include="Assets\Script\Singleton.cs" />
-    <Compile Include="Assets\Script\SoundManager.cs" />
     <Compile Include="Assets\Script\Utility\Utility.cs" />
     <Compile Include="Assets\SD_Project\Scripts\controller.cs" />
     <Compile Include="Assets\SD_Project\Scripts\MecanimButton.cs" />

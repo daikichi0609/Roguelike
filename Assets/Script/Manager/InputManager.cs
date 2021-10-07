@@ -26,7 +26,7 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
     {
 		CharaMove charaMove = chara.GetComponent<CharaMove>();
 		CharaBattle charaBattle = chara.GetComponent<CharaBattle>();
-
+		
 		if (charaMove.IsMoving == true)
         {
 			charaMove.CharaAnimator.SetBool("IsRunning", true);
@@ -46,22 +46,22 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
 
 		if (Input.GetKey(KeyCode.W))
 		{
-			Direction = new Vector3(0, 0, 1);
+			Direction = new Vector3(0f, 0f, 1);
 		}
 		if (Input.GetKey(KeyCode.A))
 		{
-			Direction = new Vector3(-1f, 0, 0);
+			Direction = new Vector3(-1f, 0f, 0f);
 		}
 		if (Input.GetKey(KeyCode.S))
 		{
-			Direction = new Vector3(0, 0, -1);
+			Direction = new Vector3(0f, 0f, -1);
 		}
 		if (Input.GetKey(KeyCode.D))
 		{
-			Direction = new Vector3(1f, 0, 0);
+			Direction = new Vector3(1f, 0f, 0f);
 		}
 
-		if(Direction != new Vector3(0, 0, 0))
+		if(Direction != new Vector3(0f, 0f, 0f))
         {
 			IsWaitingAddInput = true;
 			return;
@@ -84,19 +84,19 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
     {
 		if (Input.GetKey(KeyCode.W) && Direction.z == 0)
 		{
-			Direction += new Vector3(0, 0, 1);
+			Direction += new Vector3(0f, 0f, 1f);
 		}
 		if (Input.GetKey(KeyCode.A) && Direction.x == 0)
 		{
-			Direction += new Vector3(-1f, 0, 0);
+			Direction += new Vector3(-1f, 0f, 0f);
 		}
 		if (Input.GetKey(KeyCode.S) && Direction.z == 0)
 		{
-			Direction += new Vector3(0, 0, -1);
+			Direction += new Vector3(0f, 0f, -1);
 		}
 		if (Input.GetKey(KeyCode.D) && Direction.x == 0)
 		{
-			Direction += new Vector3(1f, 0, 0);
+			Direction += new Vector3(1f, 0f, 0f);
 		}
 
 		Timer += Time.deltaTime;
@@ -107,7 +107,7 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
             {
 				charaMove.CharaAnimator.SetBool("IsRunning", false);
 			}
-			Direction = new Vector3(0, 0, 0);
+			Direction = new Vector3(0f, 0f, 0f);
 			Timer = 0f;
 			IsWaitingAddInput = false;
 		}
@@ -115,19 +115,19 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
 
 	private bool JudgeDirectionDiagonal(Vector3 direction)
     {
-		if(direction == new Vector3(1f, 0, 1f))
+		if(direction == new Vector3(1f, 0f, 1f))
         {
 			return true;
         }
-		if (direction == new Vector3(1f, 0, -1f))
+		if (direction == new Vector3(1f, 0f, -1f))
 		{
 			return true;
 		}
-		if (direction == new Vector3(-1f, 0, 1f))
+		if (direction == new Vector3(-1f, 0f, 1f))
 		{
 			return true;
 		}
-		if (direction == new Vector3(-1f, 0, -1f))
+		if (direction == new Vector3(-1f, 0f, -1f))
 		{
 			return true;
 		}

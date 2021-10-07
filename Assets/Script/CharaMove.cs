@@ -1,15 +1,21 @@
 ﻿using UnityEngine;
 
-public class CharaMove: MonoBehaviour
+public abstract class Chara : MonoBehaviour
 {
+	public bool Turn
+	{
+		get;
+		set;
+	}
+
 	[SerializeField] private GameObject m_MoveObject;
-	public GameObject MoveObject
-    {
-        get { return m_MoveObject; }
-    }
+	protected GameObject MoveObject
+	{
+		get { return m_MoveObject; }
+	}
 
 	[SerializeField] private GameObject m_CharaObject;
-	public GameObject CharaObject
+	protected GameObject CharaObject
 	{
 		get { return m_CharaObject; }
 	}
@@ -26,27 +32,35 @@ public class CharaMove: MonoBehaviour
 		set;
 	}
 
-	protected Vector3 m_DestinationPos;
-
 	protected Animator m_CharaAnimator;
 	public Animator CharaAnimator
-    {
-        get { return m_CharaAnimator; }
-		private set { m_CharaAnimator = value; }
-    }
-
-	public bool IsMoving
-    {
-		get;
-		private set;
-    }
+	{
+		get { return m_CharaAnimator; }
+		protected set { m_CharaAnimator = value; }
+	}
 
 	public void Initialize()
 	{
 		CharaAnimator = CharaObject.GetComponent<Animator>();
 		Direction = new Vector3(0, 0, -1);
-		Position = m_MoveObject.transform.position;
+		Position = MoveObject.transform.position;
 	}
+
+	public void FinishTurn()
+    {
+		Turn = false;
+    }
+}
+
+public class CharaMove: Chara
+{
+	public Vector3 m_DestinationPos;
+
+	public bool IsMoving
+    {
+		get;
+	    set;
+    }
 
 	public bool Move(Vector3 direction)
 	{
@@ -64,6 +78,7 @@ public class CharaMove: MonoBehaviour
 
 		m_DestinationPos = Position + direction;
 		IsMoving = true;
+		FinishTurn();
 
 		return true;
 	}

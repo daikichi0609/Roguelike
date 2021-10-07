@@ -29,7 +29,8 @@ public class DungeonContents : SingletonMonoBehaviour<DungeonContents>
 
         GameObject player = Instantiate(PlayerObject(), new Vector3(coord[0], 0.51f, coord[1]), Quaternion.identity);
         ObjectManager.Instance.PlayerList.Add(player);
-        player.GetComponent<CharaMove>().Initialize();
+        player.GetComponent<Chara>().Initialize();
+        player.GetComponent<CharaBattle>().Initialize();
     }
 
     private GameObject PlayerObject()
@@ -54,7 +55,8 @@ public class DungeonContents : SingletonMonoBehaviour<DungeonContents>
             int[] coord = ChooseEmptyRandomRoomGrid(map);
             GameObject enemy = Instantiate(EnemyObject(), new Vector3(coord[0], 0.51f, coord[1]), Quaternion.identity);
             ObjectManager.Instance.EnemyList.Add(enemy);
-            enemy.GetComponent<CharaMove>().Initialize();
+            enemy.GetComponent<Chara>().Initialize();
+            enemy.GetComponent<CharaBattle>().Initialize();
         }
     }
 
