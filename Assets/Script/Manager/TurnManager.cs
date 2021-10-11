@@ -71,6 +71,20 @@ public class TurnManager : SingletonMonoBehaviour<TurnManager>
         }
     }
 
+    private void EnemyAct()
+    {
+        for (int i = 0; i <= ObjectManager.Instance.EnemyList.Count - 1; i++)
+        {
+            Chara chara = ObjectManager.Instance.EnemyObject(i).GetComponent<Chara>();
+            EnemyAI enemyAI = ObjectManager.Instance.EnemyObject(i).GetComponent<EnemyAI>();
+            if (chara.Turn == true)
+            {
+                enemyAI.DecideAndExcuteAction();
+                break;
+            }
+        }
+    }
+
     private void IsActingCheck()
     {
         foreach(GameObject player in ObjectManager.Instance.PlayerList)
@@ -93,21 +107,6 @@ public class TurnManager : SingletonMonoBehaviour<TurnManager>
             }
         }
         IsActing = false;
-    }
-
-    private void EnemyAct()
-    {
-        for (int i = 0; i <= ObjectManager.Instance.EnemyList.Count - 1; i++)
-        {
-            Chara chara = ObjectManager.Instance.EnemyObject(i).GetComponent<Chara>();
-            EnemyAI enemyAI = ObjectManager.Instance.EnemyObject(i).GetComponent<EnemyAI>();
-            if (chara.Turn == true)
-            {
-                Debug.Log(i);
-                enemyAI.DecideAndExcuteAction();
-                break;
-            }
-        }
     }
 
     public bool IsAllPlayerTurnOff()

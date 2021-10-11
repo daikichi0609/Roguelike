@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class CharaBattle : MonoBehaviour
 {
-    private const float DamageFrame = 0.01f;
+    private const float DamageFrame = 0.25f;
 
     public enum ACTION
     {
@@ -53,13 +53,18 @@ public abstract class CharaBattle : MonoBehaviour
 
     public void Damage(int power)
     {
+        CharaMove.IsActing = true;
         int damage = Calculator.CalculateDamage(power, BattleStatus.Def);
         BattleStatus.Hp = Calculator.CalculateRemainingHp(BattleStatus.Hp, damage);
 
         SoundManager.Instance.Damage_Small.Play();
         PlayAnimation("IsDamaging", DamageFrame);
+        StartCoroutine(Coroutine.DelayCoroutine(DamageFrame, () =>
+        {
+            CharaMove.IsActing = false;
+        }));
 
-        if(BattleStatus.Hp <= 0)
+        if (BattleStatus.Hp <= 0)
         {
             Death();
         }
@@ -148,8 +153,6 @@ public abstract class PlayerBattle : CharaBattle
 
     public void Act(ACTION action)
     {
-        Debug.Log("行動");
-        CharaMove.IsActing = true;
         switch (action)
         {
             case ACTION.ATTACK:
@@ -157,10 +160,12 @@ public abstract class PlayerBattle : CharaBattle
                 {
                     return;
                 }
+                CharaMove.IsActing = true;
                 Attack();
                 break;
 
             case ACTION.SKILL:
+                CharaMove.IsActing = true;
                 Skill();
                 break;
         }

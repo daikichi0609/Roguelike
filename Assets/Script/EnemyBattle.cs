@@ -6,6 +6,7 @@ public class EnemyAI : CharaBattle
 {
     public enum ENEMY_STATE
     {
+        NONE,
         SEARCHING,
         CHASING,
         ATTACKING
@@ -45,11 +46,13 @@ public class EnemyAI : CharaBattle
 
             case ENEMY_STATE.CHASING:
                 Chase(enemyActionAndTarget.TargetList);
-                FinishTurn(); //移動できなかった場合も考える
+                CurrentState = ENEMY_STATE.CHASING;
+                FinishTurn(); //暫定処置
                 break;
 
             case ENEMY_STATE.SEARCHING:
                 Search();
+                CurrentState = ENEMY_STATE.SEARCHING;
                 FinishTurn();
                 break;
         }
@@ -76,7 +79,10 @@ public class EnemyAI : CharaBattle
         Chara player = TargetObject.GetComponent<Chara>();
         Vector3 direction = player.Position - CharaMove.Position;
         direction = Utility.Direction(direction);
-        CharaMove.Move(direction);
+        if (CharaMove.Move(direction) == false)
+        {
+            //移動できなかった場合の処理
+        }
     }
 
     protected virtual void Search()
@@ -122,18 +128,15 @@ public class EnemyAI : CharaBattle
             }
 
             int num = Random.Range(0, directionList.Count);
-            myDirection = directionList[num];
-
-
-            if(CharaMove.Move(myDirection) == false)
+            if(CharaMove.Move(directionList[num]) == false)
             {
-                
+                //移動できなかった場合の処理
             }
             return;
         }
 
-        //新しくChasingステートになった場合、目標となる部屋の入り口を設定する
-        if (CurrentState != ENEMY_STATE.CHASING) 
+        //新しくSEARCHINGステートになった場合、目標となる部屋の入り口を設定する
+        if (CurrentState != ENEMY_STATE.SEARCHING) 
         {
             List<GameObject> gateWayObjectList = ObjectManager.Instance.GateWayObjectList(PositionManager.Instance.IsOnRoomID(CharaMove.Position));
             int num = Random.Range(0, gateWayObjectList.Count);
@@ -148,6 +151,7 @@ public class EnemyAI : CharaBattle
             AroundGridID aroundGridID = DungeonTerrain.Instance.CreateAroundGrid((int)CharaMove.Position.x, (int)CharaMove.Position.z);
             if(aroundGridID.UpGrid == (int)DungeonTerrain.GRID_ID.PATH_WAY)
             {
+
                 CharaMove.Move(new Vector3(0f, 0f, 1f));
                 return;
             }
@@ -173,7 +177,11 @@ public class EnemyAI : CharaBattle
         //通路出入り口へ向かう
         Vector3 direction = TargetObject.transform.position - CharaMove.Position;
         direction = Utility.Direction(direction);
-        CharaMove.Move(direction);
+        if (CharaMove.Move(direction) == false)
+        {
+            //移動できなかった場合の処理
+            Debug.Log("移動失敗");
+        }
         Debug.Log("目標へ進行");
     }
 
