@@ -41,15 +41,13 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     // Start is called before the first frame update
     private void Start()
     {
-        TurnManager.Instance.Initialize();
+        TurnManager.Instance.InitializeTurn();
     }
 
     // Update is called once per frame
     private void Update()
     {
-        Debug.Log(ObjectManager.Instance.EnemyObject(0).GetComponent<Chara>().Turn);
         TurnManager.Instance.UpdateTurn();
-
         InputManager.Instance.DetectInput(ObjectManager.Instance.PlayerObject(0));
     }
 }

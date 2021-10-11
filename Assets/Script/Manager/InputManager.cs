@@ -16,7 +16,7 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
 		set;
     }
 
-	private bool IsWaitingAddInput
+	private bool IsWaitingAdditionalInput
     {
 		get;
 		set;
@@ -24,21 +24,15 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
 
     public void DetectInput(GameObject chara)
     {
-		CharaMove charaMove = chara.GetComponent<CharaMove>();
-		CharaBattle charaBattle = chara.GetComponent<CharaBattle>();
-		
-		if (charaMove.IsMoving == true)
-        {
-			charaMove.CharaAnimator.SetBool("IsRunning", true);
-			return;
-        }
+		CharaMove playerMove = chara.GetComponent<CharaMove>();
+		PlayerBattle playerBattle = chara.GetComponent<PlayerBattle>();
 
-		if(charaBattle.IsAttacking == true)
+		if(playerMove.Turn == false || playerMove.IsActing == true)
         {
 			return;
         }
 
-		if (IsWaitingAddInput == true)
+		if (IsWaitingAdditionalInput == true)
         {
 			DetectAdditionalInput(chara);
 			return;
@@ -63,20 +57,18 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
 
 		if(Direction != new Vector3(0f, 0f, 0f))
         {
-			IsWaitingAddInput = true;
+			IsWaitingAdditionalInput = true;
 			return;
         }
 
-		charaMove.CharaAnimator.SetBool("IsRunning", false);
-
-		if (charaMove.CharaAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle") == false)
+		if (playerMove.CharaAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle") == false)
 		{
 			return;
 		}
 
 		if (Input.GetKeyDown(KeyCode.E))
 		{
-			charaBattle.Attack();
+			playerBattle.Act(CharaBattle.ACTION.ATTACK);
 		}		
 	}
 
@@ -102,14 +94,11 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
 		Timer += Time.deltaTime;
 		if(Timer >= 0.01f || JudgeDirectionDiagonal(Direction) == true)
         {
-			CharaMove charaMove = chara.GetComponent<CharaMove>();
-			if(charaMove.Move(Direction) == false)
-            {
-				charaMove.CharaAnimator.SetBool("IsRunning", false);
-			}
+			CharaMove playerMove = chara.GetComponent<CharaMove>();
+			playerMove.Move(Direction);
 			Direction = new Vector3(0f, 0f, 0f);
 			Timer = 0f;
-			IsWaitingAddInput = false;
+			IsWaitingAdditionalInput = false;
 		}
     }
 

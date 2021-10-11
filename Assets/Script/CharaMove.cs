@@ -8,6 +8,12 @@ public abstract class Chara : MonoBehaviour
 		set;
 	}
 
+	public bool IsActing
+    {
+		get;
+		set;
+    }
+
 	[SerializeField] private GameObject m_MoveObject;
 	protected GameObject MoveObject
 	{
@@ -54,7 +60,11 @@ public abstract class Chara : MonoBehaviour
 
 public class CharaMove: Chara
 {
-	public Vector3 m_DestinationPos;
+	public Vector3 DestinationPos
+    {
+		get;
+		private set;
+    }
 
 	public bool IsMoving
     {
@@ -76,10 +86,12 @@ public class CharaMove: Chara
 			return false;
 		}
 
-		m_DestinationPos = Position + direction;
+		DestinationPos = Position + direction;
+		Position = DestinationPos;
 		IsMoving = true;
+		IsActing = true;
+		CharaAnimator.SetBool("IsRunning", true);
 		FinishTurn();
-
 		return true;
 	}
 
@@ -95,14 +107,14 @@ public class CharaMove: Chara
         {
 			return;
         }
+		MoveObject.transform.position = Vector3.MoveTowards(MoveObject.transform.position, DestinationPos, Time.deltaTime * 3);
 
-		MoveObject.transform.position = Vector3.MoveTowards(MoveObject.transform.position, m_DestinationPos, Time.deltaTime * 3);
-
-		if((MoveObject.transform.position - m_DestinationPos).magnitude <= 0.01f)
+		if ((MoveObject.transform.position - DestinationPos).magnitude <= 0.01f)
         {
-			Position = m_DestinationPos;
-			MoveObject.transform.position = Position;
 			IsMoving = false;
+			IsActing = false;
+			CharaAnimator.SetBool("IsRunning", false);
+			MoveObject.transform.position = Position;
 		}
 	}
 

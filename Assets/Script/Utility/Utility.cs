@@ -30,6 +30,63 @@ public class Utility
 
         return new Vector3(x, 0, z);
     }
+
+    //敵AI
+
+    public static EnemyActionAndTarget CreateActionAndTarget(EnemyAI.ENEMY_STATE action, List<GameObject> targetList)
+    {
+        return new EnemyActionAndTarget(action, targetList);
+    }
+
+    public static EnemyActionAndTarget DecideActionAndTarget(List<Vector3> attackPosList, Vector3 pos)
+    {
+        List<GameObject> targetList = CreateTargetList_Attack(attackPosList);
+        if (targetList.Count >= 1)
+        {
+            return CreateActionAndTarget(EnemyAI.ENEMY_STATE.ATTACKING, targetList);
+        }
+
+        targetList = CreateTargetList_Chase(pos);
+        if (targetList.Count >= 1)
+        {
+            return CreateActionAndTarget(EnemyAI.ENEMY_STATE.CHASING, targetList);
+        }
+
+        targetList = CreateTargetList_Search();
+        return CreateActionAndTarget(EnemyAI.ENEMY_STATE.SEARCHING, targetList);
+    }
+
+    private static List<GameObject> CreateTargetList_Attack(List<Vector3> attackPosList)
+    {
+        List<GameObject> targetList = new List<GameObject>();
+        foreach (Vector3 attackPos in attackPosList)
+        {
+            GameObject player = ObjectManager.Instance.SpecifiedPositionPlayerObject(attackPos);
+            if (player != null)
+            {
+                targetList.Add(player);
+            }
+        }
+        return targetList;
+    }
+
+    private static List<GameObject> CreateTargetList_Chase(Vector3 pos)
+    {
+        List<GameObject> targetList = new List<GameObject>();
+        int roomId = PositionManager.Instance.IsOnRoomID(pos);
+        if (roomId == 0)
+        {
+            return targetList;
+        }
+        targetList = ObjectManager.Instance.SpecifiedRoomPlayerObjectList(roomId);
+
+        return targetList;
+    }
+
+    private static List<GameObject> CreateTargetList_Search()
+    {
+        return new List<GameObject>();
+    }
 }
 
 public class Calculator

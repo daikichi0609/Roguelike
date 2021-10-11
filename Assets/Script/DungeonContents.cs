@@ -6,19 +6,19 @@ public class DungeonContents : SingletonMonoBehaviour<DungeonContents>
 {
     public void DeployDungeonContents()
     {
-        DeployStairs();
         DeployPlayer();
         DeployEnemy(5);
     }
 
     // 4 -> 階段
-    private void DeployStairs() //階段配置
+    public void DeployStairs() //階段配置
     {
         int[,] map = DungeonTerrain.Instance.Map; //マップ取得
         int[] coord = ChooseEmptyRandomRoomGrid(map); //何もない部屋座標を取得
 
         DungeonTerrain.Instance.SetValueInTerrainList((int)DungeonTerrain.GRID_ID.STAIRS, coord[0], coord[1]); //マップに階段を登録
         GameObject gridObject = Instantiate(DungeonContentsHolder.Instance.Stairs, new Vector3(coord[0], 0, coord[1]), Quaternion.identity); //オブジェクト生成
+        gridObject.GetComponent<Grid>().GridID = DungeonTerrain.GRID_ID.ROOM;
         DungeonTerrain.Instance.SetObjectInTerrainListInstead(gridObject, coord[0], coord[1]); //既存のオブジェクトを破壊して代わりに代入
     }
 

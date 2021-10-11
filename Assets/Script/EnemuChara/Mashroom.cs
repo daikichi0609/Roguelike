@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class Mashroom : EnemyBattle
+public class Mashroom : EnemyAI
 {
     [SerializeField] private const float NormalAttackMag = 1.0f;
     private const float HitFrame = 0.4f;
@@ -13,34 +13,10 @@ public class Mashroom : EnemyBattle
         BattleStatus = CharaDataManager.Instance.LoadEnemyScriptableObject(BattleStatus.NAME.MASHROOM);
     }
 
-    public override void DecideAndExcuteAction()
-    {
-        List<Vector3> attackPosList = AttackPosList(CharaMove.Position);
-        EnemyActionAndTarget enemyActionAndTarget = base.DecideActionAndTarget(attackPosList);
-        switch (enemyActionAndTarget.ACTION)
-        {
-            case ENEMY_ACTION.ATTACKING:
-                Debug.Log("Attack");
-                Attack(enemyActionAndTarget.TargetList);
-                break;
-
-            case ENEMY_ACTION.CHASING:
-                Debug.Log("Chase");
-                Chase(enemyActionAndTarget.TargetList);
-                break;
-
-            case ENEMY_ACTION.SEARCHING:
-                Debug.Log("Search");
-                Search(enemyActionAndTarget.TargetList);
-                break;
-        }
-    }
-
-    public override void Attack(List<GameObject> targetList)
+    protected override void Attack(List<GameObject> targetList)
     {
         base.Attack(targetList);
-
-        CurrentAction = ENEMY_ACTION.ATTACKING;
+        FinishTurn();
 
         SwitchIsAttacking(ActFrame);
         PlayAnimation("IsAttacking", HitFrame);
@@ -78,33 +54,12 @@ public class Mashroom : EnemyBattle
         
     }
 
-    protected override void Chase(List<GameObject> targetList)
+    protected override void Skill(List<GameObject> targetList)
     {
-        base.Chase(targetList);
-
-        if(CurrentAction != ENEMY_ACTION.CHASING)
-        {
-            int num = Random.Range(0, targetList.Count);
-            TargetObject = targetList[num];
-        }
-
-        Chara player = TargetObject.GetComponent<Chara>();
-        Vector3 direction = player.Position - CharaMove.Position;
-        direction = Utility.Direction(direction);
-        CharaMove.Move(direction);
+        base.Attack(targetList);
     }
 
-    protected override void Search(List<GameObject> targetList)
-    {
-        if (CurrentAction != ENEMY_ACTION.CHASING)
-        {
-            
-        }
-
-        return;
-    }
-
-    private List<Vector3> AttackPosList(Vector3 pos)
+    protected override List<Vector3> AttackPosList(Vector3 pos)
     {
         List<Vector3> list = new List<Vector3>();
 

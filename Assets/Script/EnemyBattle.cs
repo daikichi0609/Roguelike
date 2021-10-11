@@ -2,25 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyBattle : CharaBattle
+public class EnemyAI : CharaBattle
 {
-    public enum ENEMY_ACTION
+    public enum ENEMY_STATE
     {
         SEARCHING,
         CHASING,
         ATTACKING
     }
 
-    protected ENEMY_ACTION CurrentAction
+    protected ENEMY_STATE CurrentState
     {
         get;
         set;
     }
 
-    protected Vector3 DestinationPos
+    [SerializeField] protected GameObject m_TargetObject;
+    protected GameObject TargetObject
     {
-        get;
-        set;
+        get { return m_TargetObject; }
+        set { m_TargetObject = value; }
     }
 
     public override void Initialize()
@@ -28,85 +29,163 @@ public class EnemyBattle : CharaBattle
         base.Initialize();
     }
 
-    protected EnemyActionAndTarget DecideActionAndTarget(List<Vector3> attackPosList)
+    public void DecideAndExcuteAction()
     {
-        List<GameObject> targetList = CreateTargetList_Attack(attackPosList);
-        if (targetList.Count >= 1)
+        List<Vector3> attackPosList = AttackPosList(CharaMove.Position);
+        EnemyActionAndTarget enemyActionAndTarget = Utility.DecideActionAndTarget(attackPosList, CharaMove.Position);
+        switch (enemyActionAndTarget.NextState)
         {
-            return CreateActionAndTarget(ENEMY_ACTION.ATTACKING, targetList);
-        }
+            case ENEMY_STATE.ATTACKING:
+                if(TurnManager.Instance.IsActing == true)
+                {
+                    return;
+                }
+                Attack(enemyActionAndTarget.TargetList);
+                break;
 
-        targetList = CreateTargetList_Chase();
-        if(targetList.Count >= 1)
-        {
-            return CreateActionAndTarget(ENEMY_ACTION.CHASING, targetList);
-        }
+            case ENEMY_STATE.CHASING:
+                Chase(enemyActionAndTarget.TargetList);
+                FinishTurn(); //移動できなかった場合も考える
+                break;
 
-        targetList = CreateTargetList_Search();
-        return CreateActionAndTarget(ENEMY_ACTION.SEARCHING, targetList);
+            case ENEMY_STATE.SEARCHING:
+                Search();
+                FinishTurn();
+                break;
+        }
     }
 
-    private List<GameObject> CreateTargetList_Attack(List<Vector3> attackPosList)
+    protected virtual void Attack(List<GameObject> targetList)
     {
-        List<GameObject> targetList = new List<GameObject>();
-        foreach (Vector3 attackPos in attackPosList)
+        CurrentState = ENEMY_STATE.ATTACKING;
+    }
+
+    protected virtual void Skill(List<GameObject> targetList)
+    {
+        CurrentState = ENEMY_STATE.ATTACKING;
+    }
+
+    protected virtual void Chase(List<GameObject> targetList)
+    {
+        if (CurrentState != ENEMY_STATE.CHASING)
         {
-            GameObject player = ObjectManager.Instance.SpecifiedPositionPlayerObject(attackPos);
-            if (player != null)
+            int num = Random.Range(0, targetList.Count);
+            TargetObject = targetList[num];
+        }
+
+        Chara player = TargetObject.GetComponent<Chara>();
+        Vector3 direction = player.Position - CharaMove.Position;
+        direction = Utility.Direction(direction);
+        CharaMove.Move(direction);
+    }
+
+    protected virtual void Search()
+    {
+        int currentRoomId = PositionManager.Instance.IsOnRoomID(CharaMove.Position);
+        //通路にいる場合
+        if (currentRoomId == 0)
+        {
+            AroundGridID aroundGridID = DungeonTerrain.Instance.CreateAroundGrid((int)CharaMove.Position.x, (int)CharaMove.Position.z);
+            Vector3 myDirection = CharaMove.Direction;
+            List<Vector3> directionList = new List<Vector3>();
+            if (aroundGridID.UpGrid > (int)DungeonTerrain.GRID_ID.WALL)
             {
-                targetList.Add(player);
+                Vector3 upDirection = new Vector3(0f, 0f, 1f);
+                if (myDirection != upDirection * -1)
+                {
+                    directionList.Add(upDirection);
+                }
             }
-        }
-        return targetList;
-    }
+            if (aroundGridID.UnderGrid > (int)DungeonTerrain.GRID_ID.WALL)
+            {
+                Vector3 downDirection = new Vector3(0f, 0f, -1f);
+                if (myDirection != downDirection * -1)
+                {
+                    directionList.Add(downDirection);
+                }
+            }
+            if (aroundGridID.LeftGrid > (int)DungeonTerrain.GRID_ID.WALL)
+            {
+                Vector3 leftDirection = new Vector3(-1f, 0f, 0f);
+                if (myDirection != leftDirection * -1)
+                {
+                    directionList.Add(leftDirection);
+                }
+            }
+            if (aroundGridID.RightGrid > (int)DungeonTerrain.GRID_ID.WALL)
+            {
+                Vector3 rightDirection = new Vector3(1f, 0f, 0f);
+                if (myDirection != rightDirection * -1)
+                {
+                    directionList.Add(rightDirection);
+                }
+            }
 
-    private List<GameObject> CreateTargetList_Chase()
-    {
-        List<GameObject> targetList = new List<GameObject>();
-        int roomId = PositionManager.Instance.IsOnRoomID(CharaMove.Position);
-        if (roomId == 0)
+            int num = Random.Range(0, directionList.Count);
+            myDirection = directionList[num];
+
+
+            if(CharaMove.Move(myDirection) == false)
+            {
+                
+            }
+            return;
+        }
+
+        //新しくChasingステートになった場合、目標となる部屋の入り口を設定する
+        if (CurrentState != ENEMY_STATE.CHASING) 
         {
-            return targetList;
+            List<GameObject> gateWayObjectList = ObjectManager.Instance.GateWayObjectList(PositionManager.Instance.IsOnRoomID(CharaMove.Position));
+            int num = Random.Range(0, gateWayObjectList.Count);
+            TargetObject = gateWayObjectList[num];
+            Debug.Log("目標設定");
         }
-        targetList = ObjectManager.Instance.SpecifiedRoomPlayerObjectList(roomId);
 
-        return targetList;
+        //入り口についた場合、部屋を出る
+        if(CharaMove.Position.x == TargetObject.transform.position.x && CharaMove.Position.z == TargetObject.transform.position.z)
+        {
+            Debug.Log("部屋を出る");
+            AroundGridID aroundGridID = DungeonTerrain.Instance.CreateAroundGrid((int)CharaMove.Position.x, (int)CharaMove.Position.z);
+            if(aroundGridID.UpGrid == (int)DungeonTerrain.GRID_ID.PATH_WAY)
+            {
+                CharaMove.Move(new Vector3(0f, 0f, 1f));
+                return;
+            }
+            if (aroundGridID.UnderGrid == (int)DungeonTerrain.GRID_ID.PATH_WAY)
+            {
+                CharaMove.Move(new Vector3(0f, 0f, -1f));
+                return;
+            }
+            if (aroundGridID.LeftGrid == (int)DungeonTerrain.GRID_ID.PATH_WAY)
+            {
+                CharaMove.Move(new Vector3(-1f, 0f, 0f));
+                return;
+            }
+            if (aroundGridID.RightGrid == (int)DungeonTerrain.GRID_ID.PATH_WAY)
+            {
+                CharaMove.Move(new Vector3(1f, 0f, 0f));
+                return;
+            }
+            Debug.LogError("通路が見つかりません");
+            return;
+        }
+
+        //通路出入り口へ向かう
+        Vector3 direction = TargetObject.transform.position - CharaMove.Position;
+        direction = Utility.Direction(direction);
+        CharaMove.Move(direction);
+        Debug.Log("目標へ進行");
     }
 
-    private List<GameObject> CreateTargetList_Search()
+    protected virtual List<Vector3> AttackPosList(Vector3 pos)
     {
-        return new List<GameObject>();
-    }
-
-    protected EnemyActionAndTarget CreateActionAndTarget(ENEMY_ACTION action, List<GameObject> targetList)
-    {
-        return new EnemyActionAndTarget(action, targetList);
-    }
-
-    virtual public void Attack(List<GameObject> targetList)
-    {
-        FinishTurn();
-    }
-
-    virtual public void Skill(List<GameObject> targetList)
-    {
-        FinishTurn();
-    }
-
-    virtual protected void Chase(List<GameObject> targetList)
-    {
-        FinishTurn();
-    }
-
-    virtual protected void Search(List<GameObject> targetList)
-    {
-        FinishTurn();
+        return null;
     }
 }
 
 public struct EnemyActionAndTarget
 {
-    public EnemyBattle.ENEMY_ACTION ACTION
+    public EnemyAI.ENEMY_STATE NextState
     {
         get;
     }
@@ -115,9 +194,9 @@ public struct EnemyActionAndTarget
         get;
     }
 
-    public EnemyActionAndTarget(EnemyBattle.ENEMY_ACTION action, List<GameObject> targetList)
+    public EnemyActionAndTarget(EnemyAI.ENEMY_STATE state, List<GameObject> targetList)
     {
-        ACTION = action;
+        NextState = state;
         TargetList = targetList;
     }
 }

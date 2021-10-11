@@ -1484,6 +1484,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e598f04251b24ff2bae499eece44821, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_CurrentState: 1
+  m_IsActing: 0
 --- !u!1 &1785988941
 GameObject:
   m_ObjectHideFlags: 0
@@ -1495,7 +1497,7 @@ GameObject:
   - component: {fileID: 1785988942}
   - component: {fileID: 1785988943}
   m_Layer: 0
-  m_Name: OnjectManager
+  m_Name: ObjectManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

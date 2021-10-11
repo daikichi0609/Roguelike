@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-class Boxman: PlayerBattle
+public class Boxman: PlayerBattle
 {
     [SerializeField] private const float NormalAttackMag = 1.0f;
     private const float HitFrame = 0.4f;
@@ -12,10 +12,9 @@ class Boxman: PlayerBattle
         BattleStatus = CharaDataManager.Instance.LoadPlayerScriptableObject(BattleStatus.NAME.BOXMAN);
     }
 
-    public override void Attack()
+    protected override void Attack()
     {
-        //ターン終了
-        base.Attack();
+        FinishTurn();
 
         //アタッキングブール操作＆アニメーション再生
         SwitchIsAttacking(ActFrame);
@@ -56,8 +55,8 @@ class Boxman: PlayerBattle
         }));
     }
 
-    public override void Skill()
+    protected override void Skill()
     {
-        
+        FinishTurn();
     }
 }

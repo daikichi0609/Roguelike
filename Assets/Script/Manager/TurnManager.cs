@@ -4,56 +4,113 @@ using UnityEngine;
 
 public class TurnManager : SingletonMonoBehaviour<TurnManager>
 {
-    public bool PlayerTurn
+    public enum STATE
     {
-        get;
-        private set;
+        NONE,
+        PLAYER_TURN,
+        ENEMY_TURN,
     }
 
-    public void Initialize()
+    [SerializeField] private STATE m_CurrentState;
+    [SerializeField] private bool m_IsActing;
+    public bool IsActing
     {
-        PlayerTurn = true;
+        get { return m_IsActing; }
+        set { m_IsActing = value; }
+    }
+
+    public STATE CurrentState
+    {
+        get { return m_CurrentState; }
+        set { m_CurrentState = value; }
+    }
+
+    public void InitializeTurn()
+    {
+        TurnOnAllPlayer();
     }
 
     public void UpdateTurn()
     {
-        if (AllEnemyTurnIsOff() == true)
+        IsActingCheck();
+        switch(CurrentState)
         {
-            PlayerTurn = true;
-            AllPlayerTurnOn();
+            case STATE.NONE:
+                if (IsAllEnemyTurnOff() == false)
+                {
+                    CurrentState = STATE.ENEMY_TURN;
+                }
+                else if (IsAllPlayerTurnOff() == false)
+                {
+                    CurrentState = STATE.PLAYER_TURN;
+                }
+                else
+                {
+                    CurrentState = STATE.PLAYER_TURN;
+                }
+                break;
+
+            case STATE.PLAYER_TURN:
+                if (IsAllPlayerTurnOff() == true)
+                {
+                    CurrentState = STATE.ENEMY_TURN;
+                    TurnOnAllEnemy();
+                    return;
+                }
+                break;
+
+            case STATE.ENEMY_TURN:
+                if (IsAllEnemyTurnOff() == true)
+                {
+                    CurrentState = STATE.PLAYER_TURN;
+                    TurnOnAllPlayer();
+                    return;
+                }
+                EnemyAct();
+                break;
+        }
+    }
+
+    private void IsActingCheck()
+    {
+        foreach(GameObject player in ObjectManager.Instance.PlayerList)
+        {
+            CharaMove playerMove = player.GetComponent<CharaMove>();
+            if(playerMove.IsActing == true)
+            {
+                IsActing = true;
+                return;
+            }
         }
 
-        if (AllPlayerTurnIsOff() == true)
+        foreach (GameObject enemy in ObjectManager.Instance.EnemyList)
         {
-            EnemyAct();
-            PlayerTurn = false;
-            AllEnemyTurnOn();
-            return;
+            CharaMove enemyMove = enemy.GetComponent<CharaMove>();
+            if (enemyMove.IsActing == true)
+            {
+                IsActing = true;
+                return;
+            }
         }
+        IsActing = false;
     }
 
     private void EnemyAct()
     {
         for (int i = 0; i <= ObjectManager.Instance.EnemyList.Count - 1; i++)
         {
-            Debug.Log("a");
             Chara chara = ObjectManager.Instance.EnemyObject(i).GetComponent<Chara>();
-            CharaBattle charaBattle = ObjectManager.Instance.EnemyObject(i).GetComponent<CharaBattle>();
-            if (i == 0)
+            EnemyAI enemyAI = ObjectManager.Instance.EnemyObject(i).GetComponent<EnemyAI>();
+            if (chara.Turn == true)
             {
-                charaBattle.DecideAndExcuteAction();
-                return;
-            }
-
-            if (chara.Turn == true && ObjectManager.Instance.EnemyObject(i - 1).GetComponent<Chara>().Turn == false)
-            {
-                charaBattle.DecideAndExcuteAction();
-                return;
+                Debug.Log(i);
+                enemyAI.DecideAndExcuteAction();
+                break;
             }
         }
     }
 
-    public bool AllPlayerTurnIsOff()
+    public bool IsAllPlayerTurnOff()
     {
         foreach (GameObject player in ObjectManager.Instance.PlayerList)
         {
@@ -66,7 +123,7 @@ public class TurnManager : SingletonMonoBehaviour<TurnManager>
         return true;
     }
 
-    public void AllPlayerTurnOn()
+    public void TurnOnAllPlayer()
     {
         foreach (GameObject player in ObjectManager.Instance.PlayerList)
         {
@@ -75,7 +132,7 @@ public class TurnManager : SingletonMonoBehaviour<TurnManager>
         }
     }
 
-    public bool AllEnemyTurnIsOff()
+    public bool IsAllEnemyTurnOff()
     {
         foreach (GameObject enemy in ObjectManager.Instance.EnemyList)
         {
@@ -88,7 +145,7 @@ public class TurnManager : SingletonMonoBehaviour<TurnManager>
         return true;
     }
 
-    public void AllEnemyTurnOn()
+    public void TurnOnAllEnemy()
     {
         foreach (GameObject enemy in ObjectManager.Instance.EnemyList)
         {

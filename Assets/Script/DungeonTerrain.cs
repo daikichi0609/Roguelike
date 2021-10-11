@@ -38,9 +38,10 @@ public class DungeonTerrain: SingletonMonoBehaviour<DungeonTerrain>
         set { m_RoomList = value; }
     }
 
+    //注意
     public List<GameObject> GetRoomList(int roomId)
     {
-        return RoomList[roomId];
+        return RoomList[roomId - 1];
     }
 
     public GameObject GetRoomListObject(int id, int num)
@@ -98,11 +99,13 @@ public class DungeonTerrain: SingletonMonoBehaviour<DungeonTerrain>
                     case (int)GRID_ID.WALL: //0
                         m_TerrainList.Add(new List<GameObject>());
                         GameObject @object = Instantiate(DungeonContentsHolder.Instance.Wall, new Vector3(i, 0, j), Quaternion.identity);
+                        @object.GetComponent<Grid>().GridID = GRID_ID.WALL;
                         m_TerrainList[i].Add(@object);
                         break;
 
                     case (int)GRID_ID.PATH_WAY: //1
                         @object = Instantiate(PathWayGrid(), new Vector3(i, 0, j), Quaternion.identity);
+                        @object.GetComponent<Grid>().GridID = GRID_ID.PATH_WAY;
                         m_TerrainList[i].Add(@object);
                         break;
 
@@ -112,11 +115,13 @@ public class DungeonTerrain: SingletonMonoBehaviour<DungeonTerrain>
                         {
                             Map[i, j] = (int)GRID_ID.GATE; //3
                             @object = Instantiate(RoomGrid(), new Vector3(i, 0, j), Quaternion.identity);
+                            @object.GetComponent<Grid>().GridID = GRID_ID.GATE;
                             m_TerrainList[i].Add(@object);
                         }
                         else
                         {
                             @object = Instantiate(RoomGrid(), new Vector3(i, 0, j), Quaternion.identity);
+                            @object.GetComponent<Grid>().GridID = GRID_ID.ROOM;
                             m_TerrainList[i].Add(@object);
                         }
                         break;
@@ -124,6 +129,7 @@ public class DungeonTerrain: SingletonMonoBehaviour<DungeonTerrain>
             }
         }
 
+        DungeonContents.Instance.DeployStairs();
         AddRoomObjectToList();
         RegisterRoomID();
     }
@@ -203,19 +209,19 @@ public class DungeonTerrain: SingletonMonoBehaviour<DungeonTerrain>
 
     private bool CheckGateWay(AroundGridID aroundGrid)
     {
-        if (aroundGrid.m_UpGrid == 1)
+        if (aroundGrid.UpGrid == (int)GRID_ID.PATH_WAY)
         {
             return true;
         }
-        if (aroundGrid.m_UnderGrid == 1)
+        if (aroundGrid.UnderGrid == (int)GRID_ID.PATH_WAY)
         {
             return true;
         }
-        if (aroundGrid.m_LeftGrid == 1)
+        if (aroundGrid.LeftGrid == (int)GRID_ID.PATH_WAY)
         {
             return true;
         }
-        if (aroundGrid.m_RightGrid == 1)
+        if (aroundGrid.RightGrid == (int)GRID_ID.PATH_WAY)
         {
             return true;
         }
@@ -239,26 +245,26 @@ public class DungeonTerrain: SingletonMonoBehaviour<DungeonTerrain>
 
 public struct AroundGridID
 {
-    public int m_UpGrid { get; } //上
-    public int m_UnderGrid { get; } //下
-    public int m_LeftGrid { get; } //左
-    public int m_RightGrid { get; } //右
+    public int UpGrid { get; } //上
+    public int UnderGrid { get; } //下
+    public int LeftGrid { get; } //左
+    public int RightGrid { get; } //右
 
-    public int m_UpperLeft { get; } //左上
-    public int m_UpperRight { get; } //右上
-    public int m_LowerLeft { get; } //左下
-    public int m_LowerRight { get; } //右下
+    public int UpperLeft { get; } //左上
+    public int UpperRight { get; } //右上
+    public int LowerLeft { get; } //左下
+    public int LowerRight { get; } //右下
 
     public AroundGridID(int[,] map, int x, int z)
     {
-        m_UpGrid = map[x, z + 1];
-        m_UnderGrid = map[x, z - 1];
-        m_LeftGrid = map[x - 1, z];
-        m_RightGrid = map[x + 1, z];
+        UpGrid = map[x, z + 1];
+        UnderGrid = map[x, z - 1];
+        LeftGrid = map[x - 1, z];
+        RightGrid = map[x + 1, z];
 
-        m_UpperLeft = map[x - 1, z + 1];
-        m_UpperRight = map[x + 1, z + 1];
-        m_LowerLeft = map[x - 1, z - 1];
-        m_LowerRight = map[x + 1, z - 1];
+        UpperLeft = map[x - 1, z + 1];
+        UpperRight = map[x + 1, z + 1];
+        LowerLeft = map[x - 1, z - 1];
+        LowerRight = map[x + 1, z - 1];
     }
 }

@@ -72,4 +72,19 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
         }
         return null;
     }
+
+    public List<GameObject> GateWayObjectList(int roomId)
+    {
+        List<GameObject> roomList = DungeonTerrain.Instance.GetRoomList(roomId);
+        List<GameObject> list = new List<GameObject>();
+        foreach (GameObject gridObject in roomList)
+        {
+            Grid grid = gridObject.GetComponent<Grid>();
+            if (grid.GridID == DungeonTerrain.GRID_ID.GATE)
+            {
+                list.Add(gridObject);
+            }
+        }
+        return list;
+    }
 }

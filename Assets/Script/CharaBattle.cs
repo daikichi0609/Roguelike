@@ -3,7 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class CharaBattle : MonoBehaviour
-{ 
+{
+    private const float DamageFrame = 0.01f;
+
+    public enum ACTION
+    {
+        ATTACK,
+        SKILL,
+        MOVE,
+    }
+
     private CharaMove m_CharaMove;
     protected CharaMove CharaMove
     {
@@ -23,12 +32,6 @@ public abstract class CharaBattle : MonoBehaviour
     {
         get { return m_Condition; }
         set { m_Condition = value; }
-    }
-
-    protected GameObject TargetObject
-    {
-        get;
-        set;
     }
 
     public bool IsAttacking
@@ -54,6 +57,7 @@ public abstract class CharaBattle : MonoBehaviour
         BattleStatus.Hp = Calculator.CalculateRemainingHp(BattleStatus.Hp, damage);
 
         SoundManager.Instance.Damage_Small.Play();
+        PlayAnimation("IsDamaging", DamageFrame);
 
         if(BattleStatus.Hp <= 0)
         {
@@ -94,6 +98,7 @@ public abstract class CharaBattle : MonoBehaviour
             StartCoroutine(Coroutine.DelayCoroutine(hitFrame, () =>
             {
                 SoundManager.Instance.Miss.Play();
+                CharaMove.IsActing = false;
             }));
         }
         else if (hit == true)
@@ -101,6 +106,7 @@ public abstract class CharaBattle : MonoBehaviour
             StartCoroutine(Coroutine.DelayCoroutine(hitFrame, () =>
             {
                 sound.Play();
+                CharaMove.IsActing = false;
             }));
         }
     }
@@ -108,21 +114,6 @@ public abstract class CharaBattle : MonoBehaviour
     protected void FinishTurn()
     {
         CharaMove.FinishTurn();
-    }
-
-    public virtual void DecideAndExcuteAction()
-    {
-
-    }
-
-    public virtual void Attack()
-    {
-        FinishTurn();
-    }
-
-    public virtual void Skill()
-    {
-        FinishTurn();
     }
 }
 
@@ -155,23 +146,33 @@ public abstract class PlayerBattle : CharaBattle
         AbilityLv = 1;
     }
 
-    override public void Attack()
+    public void Act(ACTION action)
     {
-        FinishTurn();
+        Debug.Log("行動");
+        CharaMove.IsActing = true;
+        switch (action)
+        {
+            case ACTION.ATTACK:
+                if (TurnManager.Instance.IsActing == true)
+                {
+                    return;
+                }
+                Attack();
+                break;
+
+            case ACTION.SKILL:
+                Skill();
+                break;
+        }
     }
 
-    override public void Skill()
+    protected virtual void Attack()
     {
-        FinishTurn();
+        
     }
 
-    virtual protected void Chase()
+    protected virtual void Skill()
     {
-        FinishTurn();
-    }
 
-    virtual protected void Search()
-    {
-        FinishTurn();
     }
 }
