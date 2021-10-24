@@ -29,7 +29,38 @@ public class PositionManager :SingletonMonoBehaviour<PositionManager>
         return false;
     }
 
-    public bool EnemyIsOn(Vector3 pos) //指定座標に敵がいるかどうかを調べる
+    public bool IsCharacterOn(Vector3 pos)
+    {
+        if (IsPlayerOn(pos) == true)
+        {
+            return true;
+        }
+
+        if (IsEnemyOn(pos) == true)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool IsPlayerOn(Vector3 pos)
+    {
+        int pos_x = (int)pos.x;
+        int pos_z = (int)pos.z;
+
+        foreach (GameObject player in ObjectManager.Instance.PlayerList)
+        {
+            Chara charaMove = player.GetComponent<Chara>();
+            if (charaMove.Position.x == pos.x && charaMove.Position.z == pos.z)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public bool IsEnemyOn(Vector3 pos) //指定座標に敵がいるかどうかを調べる
     {
         int pos_x = (int)pos.x;
         int pos_z = (int)pos.z;
@@ -45,7 +76,7 @@ public class PositionManager :SingletonMonoBehaviour<PositionManager>
         return false;
     }
 
-    public bool NoOneIsThere(Vector3 pos) //指定座標に誰もいないかどうかを返す
+    public bool IsNoOneThere(Vector3 pos) //指定座標に誰もいないかどうかを返す
     {
         foreach(GameObject player in ObjectManager.Instance.PlayerList ?? new List<GameObject>())
         {
@@ -71,7 +102,7 @@ public class PositionManager :SingletonMonoBehaviour<PositionManager>
         return DungeonTerrain.Instance.GetTerrainListObject((int)pos.x, (int)pos.z).GetComponent<Grid>().RoomID;
     }
 
-    public bool PlayerIsOnSpecifyRoom(int id) //指定IDの部屋にプレイヤーがいるかどうかを返す
+    public bool IsPlayerOnSpecifyRoom(int id) //指定IDの部屋にプレイヤーがいるかどうかを返す
     {
         foreach(GameObject player in ObjectManager.Instance.PlayerList)
         {

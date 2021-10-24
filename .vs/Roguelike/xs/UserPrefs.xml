@@ -1,31 +1,30 @@
 ﻿<Properties StartupConfiguration="{3B4D7A7B-B193-C7B8-731F-3F701A73DF6D}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Script/CharaMove.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Script/Dungeon/DungeonTerrain.cs">
     <Files>
-      <File FileName="Assets/Script/DungeonTerrain.cs" Line="256" Column="16" IsPinned="True" />
-      <File FileName="Assets/Script/DungeonContents.cs" Line="21" Column="50" IsPinned="True" />
-      <File FileName="Assets/Script/CharaMove.cs" Line="122" Column="6" IsPinned="True" />
-      <File FileName="Assets/Script/CharaBattle.cs" Line="67" Column="34" IsPinned="True" />
-      <File FileName="Assets/Script/Chara/Boxman.cs" Line="17" Column="22" IsPinned="True" />
-      <File FileName="Assets/Script/EnemyBattle.cs" Line="17" Column="13" IsPinned="True" />
-      <File FileName="Assets/Script/EnemuChara/Mashroom.cs" Line="28" Column="35" IsPinned="True" />
-      <File FileName="Assets/Script/Manager/TurnManager.cs" Line="12" Column="6" IsPinned="True" />
-      <File FileName="Assets/Script/GameManager.cs" Line="48" Column="14" IsPinned="True" />
-      <File FileName="Assets/Script/Grid.cs" Line="15" Column="41" IsPinned="True" />
-      <File FileName="Assets/Script/MapGenerator.cs" Line="69" Column="16" />
-      <File FileName="Assets/Script/BattleParameter.cs" Line="103" Column="2" />
-      <File FileName="Assets/Script/BattleManager.cs" Line="18" Column="6" />
-      <File FileName="Assets/Script/Singleton.cs" Line="20" Column="1" />
-      <File FileName="Assets/Script/Manager/InputManager.cs" Line="48" Column="4" />
-      <File FileName="Assets/Script/Utility/Utility.cs" Line="76" Column="57" />
-      <File FileName="Assets/Script/Manager/ObjectManager.cs" Line="38" Column="81" />
-      <File FileName="Assets/Script/CharaDataManager.cs" Line="42" Column="1" />
-      <File FileName="Assets/Script/CameraManager.cs" Line="25" Column="1" />
-      <File FileName="Assets/Script/Manager/PositionManager.cs" Line="86" Column="6" />
+      <File FileName="Assets/Script/Character/Player/Boxman.cs" Line="12" Column="45" />
+      <File FileName="Assets/Script/Character/Enemy/Mashroom.cs" Line="12" Column="45" />
+      <File FileName="Assets/Script/Base/CharaBattle/PlayerBattle.cs" Line="41" Column="43" />
+      <File FileName="Assets/Script/Base/CharaBattle/EnemyBattle.cs" Line="45" Column="73" />
+      <File FileName="Assets/Script/Base/CharaBattle/CharaBattle.cs" Line="69" Column="24" />
+      <File FileName="Assets/Script/Utility/Utility.cs" Line="43" Column="76" />
+      <File FileName="Assets/Script/Manager/PositionManager.cs" Line="17" Column="50" />
+      <File FileName="Assets/Script/Manager/CharaDataManager.cs" Line="44" Column="1" />
+      <File FileName="Assets/Script/Manager/InputManager.cs" Line="28" Column="66" />
+      <File FileName="Assets/Script/Base/CharaMove/CharaMove.cs" Line="11" Column="14" />
+      <File FileName="Assets/Script/Manager/ObjectManager.cs" Line="85" Column="10" />
+      <File FileName="Assets/Script/Dungeon/DungeonTerrain.cs" Line="1" Column="1" />
     </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="Roguelike" expanded="True" selected="True" />
+        </State>
+      </Pad>
+    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="79873166-7f53-4357-a88a-07bebc5abdaf" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="787d104d-dedc-4e5e-8132-013548829d58" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

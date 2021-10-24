@@ -3,9 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class Utility
+public static class Utility
 {
-    public static Vector3 Direction(Vector3 direction)
+    public static void Shuffle<T>(this IList<T> list)
+    {
+        for (int i = list.Count - 1; i > 0; i--)
+        {
+            int j = UnityEngine.Random.Range(0, i + 1);
+            var tmp = list[i];
+            list[i] = list[j];
+            list[j] = tmp;
+        }
+    }
+
+    public static Vector3 Direction(Vector3 direction) //移動方向を返す
     {
         int x = (int)direction.x;
         int z = (int)direction.z;
@@ -89,7 +100,7 @@ public class Utility
     }
 }
 
-public class Calculator
+public static class Calculator
 {
     public static float CalculateNormalAttackMag(int lv, float mag)
     {

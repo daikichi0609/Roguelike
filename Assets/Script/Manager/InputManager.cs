@@ -27,7 +27,7 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
 		CharaMove playerMove = chara.GetComponent<CharaMove>();
 		PlayerBattle playerBattle = chara.GetComponent<PlayerBattle>();
 
-		if(playerMove.Turn == false || playerMove.IsActing == true)
+		if (playerMove.Turn == false || playerMove.IsActing == true)
         {
 			return;
         }

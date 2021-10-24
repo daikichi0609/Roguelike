@@ -73,6 +73,28 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
         return null;
     }
 
+    public GameObject SpecifiedPositionCharacterObject(Vector3 pos)
+    {
+        foreach (GameObject player in PlayerList)
+        {
+            Chara charaMove = player.GetComponent<Chara>();
+            if (charaMove.Position.x == pos.x && charaMove.Position.z == pos.z)
+            {
+                return player;
+            }
+        }
+
+        foreach (GameObject enemy in EnemyList)
+        {
+            Chara charaMove = enemy.GetComponent<Chara>();
+            if (charaMove.Position.x == pos.x && charaMove.Position.z == pos.z)
+            {
+                return enemy;
+            }
+        }
+        return null;
+    }
+
     public List<GameObject> GateWayObjectList(int roomId)
     {
         List<GameObject> roomList = DungeonTerrain.Instance.GetRoomList(roomId);

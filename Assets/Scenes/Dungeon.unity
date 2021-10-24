@@ -322,7 +322,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1184686337}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 70, y: 0, z: 0}
 --- !u!1 &433474708
 GameObject:
@@ -845,7 +845,6 @@ GameObject:
   m_Component:
   - component: {fileID: 777512217}
   - component: {fileID: 777512218}
-  - component: {fileID: 777512219}
   m_Layer: 0
   m_Name: CharaDataManager
   m_TagString: Untagged
@@ -879,20 +878,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ac53656ecc594b3181f6d402e7f9239, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &777512219
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 777512216}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6384f5b4a3838464c9d3645d89abadd7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_BoxmanStatus: {fileID: 11400000, guid: 140edd9670f3c4fbf8a8980f5d443d85, type: 2}
-  m_MashroomStatus: {fileID: 11400000, guid: d4f0a3ca44afe4c19b35fa34c296a198, type: 2}
 --- !u!1 &903960822
 GameObject:
   m_ObjectHideFlags: 0
@@ -1082,7 +1067,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1184686337}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &932479613
 MonoBehaviour:
@@ -1326,8 +1311,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 283985143}
   - {fileID: 932479612}
+  - {fileID: 283985143}
   - {fileID: 777512217}
   - {fileID: 1890611263}
   - {fileID: 1811913516}
