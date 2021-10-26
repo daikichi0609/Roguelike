@@ -76,12 +76,12 @@ public class CharaMove: Chara
 	{
 		Face(direction);
 
-		if (PositionManager.Instance.IsPossibleToMoveGrid(Position, direction) == false)
+		if (Positional.IsPossibleToMoveGrid(Position, direction) == false)
 		{
 			return false;
 		}
 		Vector3 destinationPos = Position + direction;
-		if (PositionManager.Instance.IsEnemyOn(destinationPos) == true)
+		if (Positional.IsEnemyOn(destinationPos) == true)
 		{
 			return false;
 		}

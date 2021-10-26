@@ -84,7 +84,7 @@ public static class Utility
     private static List<GameObject> CreateTargetList_Chase(Vector3 pos)
     {
         List<GameObject> targetList = new List<GameObject>();
-        int roomId = PositionManager.Instance.IsOnRoomID(pos);
+        int roomId = Positional.IsOnRoomID(pos);
         if (roomId == 0)
         {
             return targetList;

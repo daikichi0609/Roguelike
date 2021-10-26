@@ -1,23 +1,37 @@
 ﻿<Properties StartupConfiguration="{3B4D7A7B-B193-C7B8-731F-3F701A73DF6D}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Script/Dungeon/DungeonTerrain.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Script/Manager/GameManager.cs">
     <Files>
-      <File FileName="Assets/Script/Character/Player/Boxman.cs" Line="12" Column="45" />
+      <File FileName="Assets/Script/Character/Player/Boxman.cs" Line="34" Column="2" />
       <File FileName="Assets/Script/Character/Enemy/Mashroom.cs" Line="12" Column="45" />
       <File FileName="Assets/Script/Base/CharaBattle/PlayerBattle.cs" Line="41" Column="43" />
-      <File FileName="Assets/Script/Base/CharaBattle/EnemyBattle.cs" Line="45" Column="73" />
-      <File FileName="Assets/Script/Base/CharaBattle/CharaBattle.cs" Line="69" Column="24" />
-      <File FileName="Assets/Script/Utility/Utility.cs" Line="43" Column="76" />
-      <File FileName="Assets/Script/Manager/PositionManager.cs" Line="17" Column="50" />
+      <File FileName="Assets/Script/Base/CharaBattle/EnemyBattle.cs" Line="186" Column="101" />
+      <File FileName="Assets/Script/Manager/PositionManager.cs" Line="5" Column="36" />
+      <File FileName="Assets/Script/Base/CharaBattle/CharaBattle.cs" Line="84" Column="31" />
+      <File FileName="Assets/Script/Utility/Utility.cs" Line="87" Column="32" />
       <File FileName="Assets/Script/Manager/CharaDataManager.cs" Line="44" Column="1" />
       <File FileName="Assets/Script/Manager/InputManager.cs" Line="28" Column="66" />
-      <File FileName="Assets/Script/Base/CharaMove/CharaMove.cs" Line="11" Column="14" />
-      <File FileName="Assets/Script/Manager/ObjectManager.cs" Line="85" Column="10" />
-      <File FileName="Assets/Script/Dungeon/DungeonTerrain.cs" Line="1" Column="1" />
+      <File FileName="Assets/Script/Base/CharaMove/CharaMove.cs" Line="79" Column="1" />
+      <File FileName="Assets/Script/Manager/ObjectManager.cs" Line="14" Column="32" />
+      <File FileName="Assets/Script/Dungeon/DungeonTerrain.cs" Line="127" Column="31" />
+      <File FileName="Assets/Script/UIManager/UIManager.cs" Line="8" Column="1" />
+      <File FileName="Assets/Script/Dungeon/DungeonContents.cs" Line="98" Column="33" />
+      <File FileName="Assets/Script/Utility/Positional.cs" Line="11" Column="32" />
+      <File FileName="Assets/Script/Manager/GameManager.cs" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
-          <Node name="Roguelike" expanded="True" selected="True" />
+          <Node name="Roguelike" expanded="True">
+            <Node name="Assets" expanded="True">
+              <Node name="Script" expanded="True">
+                <Node name="Dungeon" expanded="True" />
+                <Node name="Manager" expanded="True">
+                  <Node name="GameManager.cs" selected="True" />
+                </Node>
+                <Node name="Utility" expanded="True" />
+              </Node>
+            </Node>
+          </Node>
         </State>
       </Pad>
     </Pads>

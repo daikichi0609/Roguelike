@@ -74,21 +74,21 @@ public abstract class CharaBattle : MonoBehaviour
         switch(target)
         {
             case TARGET.PLAYER:
-                if (PositionManager.Instance.IsPlayerOn(attackPos) == false)
+                if (Positional.IsPlayerOn(attackPos) == false)
                 {
                     return;
                 }
                 break;
 
             case TARGET.ENEMY:
-                if (PositionManager.Instance.IsEnemyOn(attackPos) == false)
+                if (Positional.IsEnemyOn(attackPos) == false)
                 {
                     return;
                 }
                 break;
 
             case TARGET.NONE:
-                if (PositionManager.Instance.IsCharacterOn(attackPos) == false)
+                if (Positional.IsCharacterOn(attackPos) == false)
                 {
                     return;
                 }

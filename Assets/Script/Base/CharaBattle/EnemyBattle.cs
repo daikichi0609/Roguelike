@@ -131,7 +131,7 @@ public abstract class EnemyAI : CharaBattle
 
     protected virtual void Search()
     {
-        int currentRoomId = PositionManager.Instance.IsOnRoomID(CharaMove.Position);
+        int currentRoomId = Positional.IsOnRoomID(CharaMove.Position);
         //通路にいる場合
         if (currentRoomId == 0)
         {
@@ -183,7 +183,7 @@ public abstract class EnemyAI : CharaBattle
         //新しくSEARCHINGステートになった場合、目標となる部屋の入り口を設定する
         if (CurrentState != ENEMY_STATE.SEARCHING) 
         {
-            List<GameObject> gateWayObjectList = ObjectManager.Instance.GateWayObjectList(PositionManager.Instance.IsOnRoomID(CharaMove.Position));
+            List<GameObject> gateWayObjectList = ObjectManager.Instance.GateWayObjectList(Positional.IsOnRoomID(CharaMove.Position));
             int num = Random.Range(0, gateWayObjectList.Count);
             TargetObject = gateWayObjectList[num];
         }

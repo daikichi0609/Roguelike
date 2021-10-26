@@ -95,7 +95,7 @@ public class DungeonContents : SingletonMonoBehaviour<DungeonContents>
         while(isEmpty == false)
         {
             coord = ChooseRandamRoomGrid(map);
-            isEmpty = PositionManager.Instance.IsNoOneThere(new Vector3(coord[0], 0, coord[1]));
+            isEmpty = Positional.IsNoOneThere(new Vector3(coord[0], 0, coord[1]));
         }
         return coord;
     }

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PositionManager :SingletonMonoBehaviour<PositionManager>
+public static class Positional
 {
-    public bool IsPossibleToMoveGrid(Vector3 pos, Vector3 direction) //指定座標から指定方向へ１マス移動可能かどうか調べる
+    public static bool IsPossibleToMoveGrid(Vector3 pos, Vector3 direction) //指定座標から指定方向へ１マス移動可能かどうか調べる
     {
         int[,] map = DungeonTerrain.Instance.Map;
         int pos_x = (int)pos.x;
@@ -29,7 +29,7 @@ public class PositionManager :SingletonMonoBehaviour<PositionManager>
         return false;
     }
 
-    public bool IsCharacterOn(Vector3 pos)
+    public static bool IsCharacterOn(Vector3 pos)
     {
         if (IsPlayerOn(pos) == true)
         {
@@ -44,7 +44,7 @@ public class PositionManager :SingletonMonoBehaviour<PositionManager>
         return false;
     }
 
-    public bool IsPlayerOn(Vector3 pos)
+    public static bool IsPlayerOn(Vector3 pos)
     {
         int pos_x = (int)pos.x;
         int pos_z = (int)pos.z;
@@ -60,7 +60,7 @@ public class PositionManager :SingletonMonoBehaviour<PositionManager>
         return false;
     }
 
-    public bool IsEnemyOn(Vector3 pos) //指定座標に敵がいるかどうかを調べる
+    public static bool IsEnemyOn(Vector3 pos) //指定座標に敵がいるかどうかを調べる
     {
         int pos_x = (int)pos.x;
         int pos_z = (int)pos.z;
@@ -76,7 +76,7 @@ public class PositionManager :SingletonMonoBehaviour<PositionManager>
         return false;
     }
 
-    public bool IsNoOneThere(Vector3 pos) //指定座標に誰もいないかどうかを返す
+    public static bool IsNoOneThere(Vector3 pos) //指定座標に誰もいないかどうかを返す
     {
         foreach(GameObject player in ObjectManager.Instance.PlayerList ?? new List<GameObject>())
         {
@@ -97,12 +97,12 @@ public class PositionManager :SingletonMonoBehaviour<PositionManager>
         return true;
     }
 
-    public int IsOnRoomID(Vector3 pos) //指定座標の部屋IDを返す
+    public static int IsOnRoomID(Vector3 pos) //指定座標の部屋IDを返す
     {
         return DungeonTerrain.Instance.GetTerrainListObject((int)pos.x, (int)pos.z).GetComponent<Grid>().RoomID;
     }
 
-    public bool IsPlayerOnSpecifyRoom(int id) //指定IDの部屋にプレイヤーがいるかどうかを返す
+    public static bool IsPlayerOnSpecifyRoom(int id) //指定IDの部屋にプレイヤーがいるかどうかを返す
     {
         foreach(GameObject player in ObjectManager.Instance.PlayerList)
         {
