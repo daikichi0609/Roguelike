@@ -5,8 +5,8 @@ public class Boxman: PlayerBattle
 {
     public override void Initialize()
     {
-        base.Initialize();
         BattleStatus = CharaDataManager.Instance.LoadPlayerScriptableObject(BattleStatus.NAME.BOXMAN);
+        base.Initialize();
     }
 
     protected override AttackInfo AttackInfo => new BoxmanNormalAttack();

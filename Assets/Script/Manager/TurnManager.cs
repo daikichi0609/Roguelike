@@ -9,6 +9,7 @@ public class TurnManager : SingletonMonoBehaviour<TurnManager>
         NONE,
         PLAYER_TURN,
         ENEMY_TURN,
+        UI_POPUPING
     }
 
     [SerializeField] private STATE m_CurrentState;
@@ -68,6 +69,9 @@ public class TurnManager : SingletonMonoBehaviour<TurnManager>
                 }
                 EnemyAct();
                 break;
+
+            case STATE.UI_POPUPING:
+                return;
         }
     }
 
@@ -84,6 +88,8 @@ public class TurnManager : SingletonMonoBehaviour<TurnManager>
             }
         }
     }
+
+    //以下static
 
     private void IsActingCheck()
     {

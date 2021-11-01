@@ -38,8 +38,8 @@ public class CharaDataManager : SingletonMonoBehaviour<CharaDataManager>
 
 	public PlayerStatus LoadPlayerScriptableObject(BattleStatus.NAME name)
 	{
-		PlayerStatus status = ScriptableObject.CreateInstance<PlayerStatus>();
-		PlayerStatus constStatus = LoadPlayerStatus(name) as PlayerStatus;
+		PlayerStatus status = ScriptableObject.Instantiate(Resources.Load(name.ToString())) as PlayerStatus;
+		PlayerStatus constStatus = LoadCharaStatus(name) as PlayerStatus;
 
 		status.Name = constStatus.Name;
 		status.Hp = constStatus.Hp;
@@ -58,8 +58,9 @@ public class CharaDataManager : SingletonMonoBehaviour<CharaDataManager>
 
 	public EnemyStatus LoadEnemyScriptableObject(BattleStatus.NAME name)
 	{
-		EnemyStatus status = ScriptableObject.CreateInstance<EnemyStatus>();
-		EnemyStatus constStatus = LoadPlayerStatus(name) as EnemyStatus;
+		EnemyStatus status = ScriptableObject.Instantiate(Resources.Load(name.ToString())) as EnemyStatus;
+		//EnemyStatus status = ScriptableObject.CreateInstance<EnemyStatus>();
+		EnemyStatus constStatus = LoadCharaStatus(name) as EnemyStatus;
 
 		status.Name = constStatus.Name;
 		status.Hp = constStatus.Hp;
@@ -76,7 +77,7 @@ public class CharaDataManager : SingletonMonoBehaviour<CharaDataManager>
 		return status;
 	}
 
-	public static BattleStatus LoadPlayerStatus(BattleStatus.NAME name)
+	public static BattleStatus LoadCharaStatus(BattleStatus.NAME name)
     {
 		return Resources.Load<BattleStatus>(name.ToString());
     }

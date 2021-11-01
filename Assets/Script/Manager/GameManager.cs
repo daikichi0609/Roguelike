@@ -36,6 +36,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
         DungeonTerrain.Instance.DeployDungeonTerrain();
         DungeonContents.Instance.DeployDungeonContents();
+
     }
 
     // Start is called before the first frame update
@@ -48,6 +49,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     private void Update()
     {
         TurnManager.Instance.UpdateTurn();
-        InputManager.Instance.DetectInput(ObjectManager.Instance.PlayerObject(0));
+        InputManager.Instance.DetectCharaInput(ObjectManager.Instance.PlayerObject(0));
+        UIManager.Instance.UpdateCharaUi();
     }
 }

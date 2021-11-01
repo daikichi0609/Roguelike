@@ -134,6 +134,11 @@ public class DungeonTerrain: SingletonMonoBehaviour<DungeonTerrain>
         RegisterRoomID();
     }
 
+    public void HideObject()
+    {
+
+    }
+
     public void AddRoomObjectToList()
     {
         RoomList = new List<List<GameObject>>();
@@ -226,6 +231,11 @@ public class DungeonTerrain: SingletonMonoBehaviour<DungeonTerrain>
             return true;
         }
         return false;
+    }
+
+    public int GridID(int pos_x, int pos_z)
+    {
+        return Map[pos_x, pos_z];
     }
 
     public int DestinationGridID(int pos_x, int pos_z, int direction_x, int direction_z)

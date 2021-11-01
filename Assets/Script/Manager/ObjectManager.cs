@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
 {
+    public ObjectPool m_ObjectPool;
+
     [SerializeField] private List<GameObject> m_PlayerList = new List<GameObject>();
     public List<GameObject> PlayerList
     {
@@ -109,4 +111,6 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
         }
         return list;
     }
+
+    //[SerializeField] private List<GameObject>
 }

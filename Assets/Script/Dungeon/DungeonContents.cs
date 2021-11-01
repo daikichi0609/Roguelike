@@ -31,6 +31,7 @@ public class DungeonContents : SingletonMonoBehaviour<DungeonContents>
         ObjectManager.Instance.PlayerList.Add(player);
         player.GetComponent<Chara>().Initialize();
         player.GetComponent<CharaBattle>().Initialize();
+        UIManager.Instance.GenerateCharacterUi(player);
     }
 
     private GameObject PlayerObject()

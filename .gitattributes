@@ -21,3 +21,7 @@ Library/metadata/9d/9dfc27711d0cb9648b637f43af9d4dd3 filter=lfs diff=lfs merge=l
 Library/metadata/5c/5ce62d7bd47bdbe46aafd815ac6bbbff filter=lfs diff=lfs merge=lfs -text
 *.resource filter=lfs diff=lfs merge=lfs -text
 *.mp3 filter=lfs diff=lfs merge=lfs -text
+Assets/Assets/SD_Project/Sample_Map.unity filter=lfs diff=lfs merge=lfs -text
+Assets/Assets/SD_Project/character.unity filter=lfs diff=lfs merge=lfs -text
+Assets/ImportAssets/SD_Project/Sample_Map.unity filter=lfs diff=lfs merge=lfs -text
+Assets/ImportAssets/SD_Project/character.unity filter=lfs diff=lfs merge=lfs -text

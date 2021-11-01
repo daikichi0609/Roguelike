@@ -22,8 +22,14 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
 		set;
     }
 
-    public void DetectInput(GameObject chara)
+    public void DetectCharaInput(GameObject chara)
     {
+		if(TurnManager.Instance.CurrentState == TurnManager.STATE.UI_POPUPING)
+        {
+			DetectUiInput();
+			return;
+        }
+
 		CharaMove playerMove = chara.GetComponent<CharaMove>();
 		PlayerBattle playerBattle = chara.GetComponent<PlayerBattle>();
 
@@ -70,6 +76,11 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
 		{
 			playerBattle.Act(CharaBattle.ACTION.ATTACK);
 		}		
+	}
+
+	public void DetectUiInput()
+    {
+		UIManager.Instance.DetectInput();
 	}
 
 	private void DetectAdditionalInput(GameObject chara)
