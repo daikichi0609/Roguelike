@@ -4,27 +4,33 @@ using UnityEngine;
 
 public class InputManager : SingletonMonoBehaviour<InputManager>
 {
+	//移動方向
 	private Vector3 Direction
     {
 		get;
 		set;
     }
 
+	//追加入力受付用タイマー
 	private float Timer
     {
 		get;
 		set;
     }
 
+	//追加入力受付用フラグ
 	private bool IsWaitingAdditionalInput
     {
 		get;
 		set;
     }
 
-    public void DetectCharaInput(GameObject chara)
+	//入力受付メソッド
+    public void DetectInput()
     {
-		if(TurnManager.Instance.CurrentState == TurnManager.STATE.UI_POPUPING)
+		GameObject chara = ObjectManager.Instance.PlayerObject(0);
+
+		if (TurnManager.Instance.CurrentState == TurnManager.STATE.UI_POPUPING)
         {
 			DetectUiInput();
 			return;
@@ -80,7 +86,7 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
 
 	public void DetectUiInput()
     {
-		UIManager.Instance.DetectInput();
+		UiManager.Instance.DetectInput();
 	}
 
 	private void DetectAdditionalInput(GameObject chara)

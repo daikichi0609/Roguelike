@@ -94,6 +94,8 @@ public class MapGenerator : SingletonMonoBehaviour<MapGenerator>
 
 		int[,] map = new int[mapSizeX, mapSizeY];
 
+		Initialize();
+
 		CreateRange(maxRoom);
 		CreateRoom();
 
@@ -132,6 +134,14 @@ public class MapGenerator : SingletonMonoBehaviour<MapGenerator>
 		TrimPassList(ref map);
 
 		return map;
+	}
+
+	private void Initialize()
+	{
+		roomList = new List<Range>();
+		rangeList = new List<Range>();
+		passList = new List<Range>();
+		roomPassList = new List<Range>();
 	}
 
 	public void CreateRange(int maxRoom)

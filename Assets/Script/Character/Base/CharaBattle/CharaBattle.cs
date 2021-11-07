@@ -157,11 +157,9 @@ public abstract class CharaBattle : MonoBehaviour
         }
     }
 
-    private void Death()
+    protected virtual void Death()
     {
-        int num = ObjectManager.Instance.EnemyList.IndexOf(ObjectManager.Instance.SpecifiedPositionEnemyObject(CharaMove.Position));
-        ObjectManager.Instance.EnemyList.RemoveAt(num);
-        Destroy(this.gameObject);
+        
     }
 
     protected void PlayAnimation(string name) //アニメーション一回流す

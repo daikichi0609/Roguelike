@@ -98,6 +98,11 @@ public static class Utility
     {
         return new List<GameObject>();
     }
+
+    public static BattleStatus.NAME RandomEnemyName()
+    {
+        return BattleStatus.NAME.MASHROOM;
+    }
 }
 
 public static class Calculator

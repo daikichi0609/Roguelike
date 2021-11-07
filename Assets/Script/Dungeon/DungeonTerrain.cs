@@ -11,24 +11,30 @@ public class DungeonTerrain: SingletonMonoBehaviour<DungeonTerrain>
         get { return m_Map; }
         private set { m_Map = value; }
     }
-    private List<List<GameObject>> m_TerrainList = new List<List<GameObject>>();
 
-    public GameObject GetTerrainListObject(int x, int z)
-    {
-        return m_TerrainList[x][z];
-    }
-
-    public void SetValueInTerrainList(int value, int x, int z)
+    public void SetValueOnMap(int value, int x, int z)
     {
         Map[x, z] = value;
     }
 
+    private List<List<GameObject>> m_TerrainList = new List<List<GameObject>>();
+    public List<List<GameObject>> TerrainList
+    {
+        get { return m_TerrainList; }
+        set { m_TerrainList = value; }
+    }
+
+    public GameObject GetTerrainListObject(int x, int z)
+    {
+        return TerrainList[x][z];
+    }
+
     public void SetObjectInTerrainListInstead(GameObject @object, int x, int z)
     {
-        GameObject removeObject = m_TerrainList[x][z];
-        m_TerrainList[x].RemoveAt(z);
+        GameObject removeObject = TerrainList[x][z];
+        TerrainList[x].RemoveAt(z);
         Destroy(removeObject);
-        m_TerrainList[x].Insert(z, @object);
+        TerrainList[x].Insert(z, @object);
     }
 
     private List<List<GameObject>> m_RoomList = new List<List<GameObject>>();
@@ -38,7 +44,8 @@ public class DungeonTerrain: SingletonMonoBehaviour<DungeonTerrain>
         set { m_RoomList = value; }
     }
 
-    //注意
+    //部屋IDの部屋オブジェクトリストを取得
+    //-1に注意
     public List<GameObject> GetRoomList(int roomId)
     {
         return RoomList[roomId - 1];
@@ -85,28 +92,76 @@ public class DungeonTerrain: SingletonMonoBehaviour<DungeonTerrain>
      x → → →
     */
 
-    public void DeployDungeonTerrain()
+    public void DeployDungeon()
     {
         Map = MapGenerator.Instance.GenerateMap(m_MapSizeX, m_MapSizeZ, m_MaxRoom);
 
+        DeployDungeonTerrain();
+        DeployStairs();
+        AddRoomObjectToList();
+        RegisterRoomID();
+    }
+
+    public void RemoveDungeon()
+    {
+        foreach(List<GameObject> list in TerrainList)
+        {
+            foreach(GameObject terrain in list)
+            {
+                GRID_ID id = terrain.GetComponent<Grid>().GridID;
+                string key = id.ToString();
+                ObjectPool.Instance.SetObject(key, terrain);
+            }
+        }
+
+        InitializeAllList();
+    }
+
+    private void InitializeAllList()
+    {
+        TerrainList = new List<List<GameObject>>();
+        RoomList = new List<List<GameObject>>();
+        RangeList = new List<Range>();
+    }
+
+    private void DeployDungeonTerrain()
+    {
         for (int i = 0; i < Map.GetLength(0) - 1; i++)
         {
+            TerrainList.Add(new List<GameObject>());
+
             for (int j = 0; j < Map.GetLength(1) - 1; j++)
             {
                 int id = Map[i, j];
+                GameObject obj;
                 switch (id)
                 {
                     case (int)GRID_ID.WALL: //0
-                        m_TerrainList.Add(new List<GameObject>());
-                        GameObject @object = Instantiate(DungeonContentsHolder.Instance.Wall, new Vector3(i, 0, j), Quaternion.identity);
-                        @object.GetComponent<Grid>().GridID = GRID_ID.WALL;
-                        m_TerrainList[i].Add(@object);
+                        obj = ObjectPool.Instance.PoolObject(GRID_ID.WALL.ToString());
+                        if(obj == null)
+                        {
+                            obj = Instantiate(DungeonContentsHolder.Instance.Wall, new Vector3(i, 0, j), Quaternion.identity);
+                            obj.GetComponent<Grid>().GridID = GRID_ID.WALL;
+                        }
+                        else
+                        {
+                            obj.transform.position = new Vector3(i, 0, j);
+                        }
+                        TerrainList[i].Add(obj);
                         break;
 
                     case (int)GRID_ID.PATH_WAY: //1
-                        @object = Instantiate(PathWayGrid(), new Vector3(i, 0, j), Quaternion.identity);
-                        @object.GetComponent<Grid>().GridID = GRID_ID.PATH_WAY;
-                        m_TerrainList[i].Add(@object);
+                        obj = ObjectPool.Instance.PoolObject(GRID_ID.PATH_WAY.ToString());
+                        if (obj == null)
+                        {
+                            obj = Instantiate(PathWayGrid(), new Vector3(i, 0, j), Quaternion.identity);
+                            obj.GetComponent<Grid>().GridID = GRID_ID.PATH_WAY;
+                        }
+                        else
+                        {
+                            obj.transform.position = new Vector3(i, 0, j);
+                        }
+                        TerrainList[i].Add(obj);
                         break;
 
                     case (int)GRID_ID.ROOM: //2
@@ -114,29 +169,57 @@ public class DungeonTerrain: SingletonMonoBehaviour<DungeonTerrain>
                         if (CheckGateWay(aroundGrid) == true)
                         {
                             Map[i, j] = (int)GRID_ID.GATE; //3
-                            @object = Instantiate(RoomGrid(), new Vector3(i, 0, j), Quaternion.identity);
-                            @object.GetComponent<Grid>().GridID = GRID_ID.GATE;
-                            m_TerrainList[i].Add(@object);
+                            obj = ObjectPool.Instance.PoolObject(GRID_ID.GATE.ToString());
+                            if (obj == null)
+                            {
+                                obj = Instantiate(RoomGrid(), new Vector3(i, 0, j), Quaternion.identity);
+                                obj.GetComponent<Grid>().GridID = GRID_ID.GATE;
+                            }
+                            else
+                            {
+                                obj.transform.position = new Vector3(i, 0, j);
+                            }
+                            TerrainList[i].Add(obj);
                         }
                         else
                         {
-                            @object = Instantiate(RoomGrid(), new Vector3(i, 0, j), Quaternion.identity);
-                            @object.GetComponent<Grid>().GridID = GRID_ID.ROOM;
-                            m_TerrainList[i].Add(@object);
+                            obj = ObjectPool.Instance.PoolObject(GRID_ID.ROOM.ToString());
+                            if (obj == null)
+                            {
+                                obj = Instantiate(RoomGrid(), new Vector3(i, 0, j), Quaternion.identity);
+                                obj.GetComponent<Grid>().GridID = GRID_ID.ROOM;
+                            }
+                            else
+                            {
+                                obj.transform.position = new Vector3(i, 0, j);
+                            }
+                            TerrainList[i].Add(obj);
                         }
                         break;
                 }
             }
         }
-
-        DungeonContents.Instance.DeployStairs();
-        AddRoomObjectToList();
-        RegisterRoomID();
     }
 
-    public void HideObject()
+    // 4 -> 階段
+    private void DeployStairs() //階段配置
     {
+        int[,] map = Map; //マップ取得
+        int[] coord = DungeonContents.Instance.ChooseEmptyRandomRoomGrid(map); //何もない部屋座標を取得
 
+        SetValueOnMap((int)GRID_ID.STAIRS, coord[0], coord[1]); //マップに階段を登録
+        GameObject gridObject = ObjectPool.Instance.PoolObject(GRID_ID.STAIRS.ToString());
+        if(gridObject == null)
+        {
+            gridObject = Instantiate(DungeonContentsHolder.Instance.Stairs, new Vector3(coord[0], 0, coord[1]), Quaternion.identity); //オブジェクト生成
+            gridObject.GetComponent<Grid>().GridID = GRID_ID.STAIRS;
+        }
+        else
+        {
+            gridObject.transform.position = new Vector3(coord[0], 0, coord[1]);
+        }
+        
+        Instance.SetObjectInTerrainListInstead(gridObject, coord[0], coord[1]); //既存のオブジェクトを破壊して代わりに代入
     }
 
     public void AddRoomObjectToList()

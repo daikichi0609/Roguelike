@@ -104,7 +104,10 @@ public class CharaMove: Chara
 
 	public void CheckCurrentGrid()
     {
-		UIManager.Instance.ControlLogUi(UIManager.LOG_KEY.STAIRS, true);
+		if(this.gameObject == ObjectManager.Instance.PlayerList[0])
+        {
+			UiManager.Instance.ControlLogUi(UiManager.LOG_KEY.STAIRS, true);
+		}
     }
 
 	protected void Moving()

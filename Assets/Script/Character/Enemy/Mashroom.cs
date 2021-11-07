@@ -5,7 +5,7 @@ public class Mashroom : EnemyAI
 {
     public override void Initialize()
     {
-        BattleStatus = CharaDataManager.Instance.LoadEnemyScriptableObject(BattleStatus.NAME.MASHROOM);
+        BattleStatus = CharaDataManager.LoadEnemyScriptableObject(BattleStatus.NAME.MASHROOM);
         base.Initialize();
     }
 

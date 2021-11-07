@@ -67,6 +67,7 @@
     <Compile Include="Assets\ImportAssets\SD_Project\Scripts\controller.cs" />
     <Compile Include="Assets\ImportAssets\SD_Project\Scripts\MecanimButton.cs" />
     <Compile Include="Assets\ImportAssets\SD_Project\Scripts\ThirdPersonCamera.cs" />
+    <Compile Include="Assets\Script\Attribute\LabelAttribute.cs" />
     <Compile Include="Assets\Script\Character\Base\CharaBattle\CharaBattle.cs" />
     <Compile Include="Assets\Script\Character\Base\CharaBattle\EnemyBattle.cs" />
     <Compile Include="Assets\Script\Character\Base\CharaBattle\PlayerBattle.cs" />
@@ -78,11 +79,13 @@
     <Compile Include="Assets\Script\DesignPattern\ObjectPool.cs" />
     <Compile Include="Assets\Script\DesignPattern\Singleton.cs" />
     <Compile Include="Assets\Script\Dungeon\DungeonContents.cs" />
-    <Compile Include="Assets\Script\Dungeon\DungeonContentsHolder.cs" />
     <Compile Include="Assets\Script\Dungeon\DungeonTerrain.cs" />
     <Compile Include="Assets\Script\Dungeon\Grid.cs" />
     <Compile Include="Assets\Script\Dungeon\MapGenerator.cs" />
-    <Compile Include="Assets\Script\LabelAttribute.cs" />
+    <Compile Include="Assets\Script\ExtensionMethod\DictionaryExtensions.cs" />
+    <Compile Include="Assets\Script\Holder\CharaHolder.cs" />
+    <Compile Include="Assets\Script\Holder\DungeonContentsHolder.cs" />
+    <Compile Include="Assets\Script\Holder\UiHolder.cs" />
     <Compile Include="Assets\Script\Manager\BattleManager.cs" />
     <Compile Include="Assets\Script\Manager\CameraManager.cs" />
     <Compile Include="Assets\Script\Manager\CharaDataManager.cs" />
@@ -91,9 +94,10 @@
     <Compile Include="Assets\Script\Manager\ObjectManager.cs" />
     <Compile Include="Assets\Script\Manager\SoundManager.cs" />
     <Compile Include="Assets\Script\Manager\TurnManager.cs" />
-    <Compile Include="Assets\Script\Manager\UIManager.cs" />
     <Compile Include="Assets\Script\UI\Base\Log.cs" />
     <Compile Include="Assets\Script\UI\CharaUi.cs" />
+    <Compile Include="Assets\Script\UI\Manager\BlackPanelManager.cs" />
+    <Compile Include="Assets\Script\UI\Manager\UiManager.cs" />
     <Compile Include="Assets\Script\UI\QuestionAndChoiceUi\StairsLog.cs" />
     <Compile Include="Assets\Script\Utility\Positional.cs" />
     <Compile Include="Assets\Script\Utility\Utility.cs" />
@@ -113,6 +117,7 @@
     <None Include="Assets\ImportAssets\SD_Project\UnityChanShader\Shader\Unitychan_chara_hada_blend.shader" />
     <None Include="Assets\Font\nikkyou-sans-font\info.txt" />
     <None Include="Assets\ImportAssets\SD_Project\README.txt" />
+    <None Include="Assets\ImportAssets\Tiny Fantasy Icons\README.txt" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>/Users/daikichi/Desktop/UnityProjects/Roguelike/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>

@@ -1,24 +1,17 @@
 ﻿using UnityEngine;
 using System.IO;
 using UnityEditor;
-using System.Collections.Generic;
 
-public class CharaDataManager : SingletonMonoBehaviour<CharaDataManager>
+public static class CharaDataManager
 {
-	private string m_Datapath;
-	public string Datapath
+	private static string m_Datapath = Application.dataPath + "/Resources/TestJson.json";
+	public static string Datapath
     {
         get { return m_Datapath; }
-    }
-
-	private void Awake()
-	{
-		//初めに保存先を計算する　Application.dataPathで今開いているUnityプロジェクトのAssetsフォルダ直下を指定して、後ろに保存名を書く
-		m_Datapath = Application.dataPath + "/Resources/TestJson.json";
-	}
+    } 
 
 	//セーブのメソッド
-	public void SaveTest(PlayerStatus data)
+	public static void SaveTest(PlayerStatus data)
 	{
 		string jsonstr = JsonUtility.ToJson(data);//受け取ったPlayerDataをJSONに変換
 		StreamWriter writer = new StreamWriter(m_Datapath, false);//初めに指定したデータの保存先を開く
@@ -27,7 +20,7 @@ public class CharaDataManager : SingletonMonoBehaviour<CharaDataManager>
 		writer.Close();//ファイルをクローズする
 	}
 
-    public string LoadTest(string dataPath)
+    public static string LoadTest(string dataPath)
 	{
 		StreamReader reader = new StreamReader(dataPath); //受け取ったパスのファイルを読み込む
 		string datastr = reader.ReadToEnd();//ファイルの中身をすべて読み込む
@@ -36,9 +29,9 @@ public class CharaDataManager : SingletonMonoBehaviour<CharaDataManager>
 		return datastr;//読み込んだJSONファイルをstring型に変換して返す
 	}
 
-	public PlayerStatus LoadPlayerScriptableObject(BattleStatus.NAME name)
+	public static PlayerStatus LoadPlayerScriptableObject(BattleStatus.NAME name)
 	{
-		PlayerStatus status = ScriptableObject.Instantiate(Resources.Load(name.ToString())) as PlayerStatus;
+		PlayerStatus status = ScriptableObject.CreateInstance<PlayerStatus>();
 		PlayerStatus constStatus = LoadCharaStatus(name) as PlayerStatus;
 
 		status.Name = constStatus.Name;
@@ -56,10 +49,9 @@ public class CharaDataManager : SingletonMonoBehaviour<CharaDataManager>
 		return status;
     }
 
-	public EnemyStatus LoadEnemyScriptableObject(BattleStatus.NAME name)
+	public static EnemyStatus LoadEnemyScriptableObject(BattleStatus.NAME name)
 	{
-		EnemyStatus status = ScriptableObject.Instantiate(Resources.Load(name.ToString())) as EnemyStatus;
-		//EnemyStatus status = ScriptableObject.CreateInstance<EnemyStatus>();
+		EnemyStatus status = ScriptableObject.CreateInstance<EnemyStatus>();
 		EnemyStatus constStatus = LoadCharaStatus(name) as EnemyStatus;
 
 		status.Name = constStatus.Name;
@@ -75,6 +67,12 @@ public class CharaDataManager : SingletonMonoBehaviour<CharaDataManager>
 		status.Ex = constStatus.Ex;
 
 		return status;
+	}
+
+	public static void SaveScriptableObject(BattleStatus status)
+    {
+		EditorUtility.SetDirty(status);
+		AssetDatabase.SaveAssets();
 	}
 
 	public static BattleStatus LoadCharaStatus(BattleStatus.NAME name)

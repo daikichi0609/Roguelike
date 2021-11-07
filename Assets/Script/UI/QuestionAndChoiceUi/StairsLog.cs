@@ -20,17 +20,18 @@ public class StairsLog : LogInfo
 
     public override Action[] OptionMethod
     {
-        get => new Action[2]{ () => Yes(), () => No()};
+        get => new Action[2] { () => Yes(), () => No() };
     }
 
     private void Yes()
     {
-        
+        UiManager.Instance.ControlLogUi(UiManager.LOG_KEY.STAIRS, false);
+        GameManager.Instance.UpToNextFloor();
     }
 
     private void No()
     {
-        UIManager.Instance.ControlLogUi(UIManager.LOG_KEY.STAIRS, false);
+        UiManager.Instance.ControlLogUi(UiManager.LOG_KEY.STAIRS, false);
         TurnManager.Instance.CurrentState = TurnManager.STATE.NONE;
     }
 }

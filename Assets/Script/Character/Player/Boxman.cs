@@ -5,7 +5,7 @@ public class Boxman: PlayerBattle
 {
     public override void Initialize()
     {
-        BattleStatus = CharaDataManager.Instance.LoadPlayerScriptableObject(BattleStatus.NAME.BOXMAN);
+        BattleStatus = CharaDataManager.LoadPlayerScriptableObject(BattleStatus.NAME.BOXMAN);
         base.Initialize();
     }
 

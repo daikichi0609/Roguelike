@@ -30,6 +30,13 @@ public abstract class EnemyAI : CharaBattle
         base.Initialize();
     }
 
+    protected override void Death()
+    {
+        int num = ObjectManager.Instance.EnemyList.IndexOf(ObjectManager.Instance.SpecifiedPositionEnemyObject(CharaMove.Position));
+        ObjectManager.Instance.EnemyList.RemoveAt(num);
+        ObjectPool.Instance.SetObject(BattleStatus.Name.ToString(), gameObject);
+    }
+
     public void DecideAndExcuteAction()
     {
         List<Vector3> attackPosList = AttackPosList(CharaMove.Position);

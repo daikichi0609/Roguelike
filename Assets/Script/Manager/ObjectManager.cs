@@ -4,12 +4,11 @@ using UnityEngine;
 
 public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
 {
-    public ObjectPool m_ObjectPool;
-
     [SerializeField] private List<GameObject> m_PlayerList = new List<GameObject>();
     public List<GameObject> PlayerList
     {
         get { return m_PlayerList; }
+        set { m_PlayerList = value; }
     }
     public GameObject PlayerObject(int i)
     {
@@ -57,6 +56,7 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
     public List<GameObject> EnemyList
     {
         get { return m_EnemyList; }
+        set { m_EnemyList = value; }
     }
     public GameObject EnemyObject(int i)
     {

@@ -4,10 +4,34 @@ using UnityEngine;
 
 public class SoundManager :  SingletonMonoBehaviour<SoundManager>
 {
-    [SerializeField] private AudioSource m_NormalBGM;
-    public AudioSource NormalBGM
+    [SerializeField] private AudioSource m_BlueCrossBGM;
+    public AudioSource BlueCrossBGM
     {
-        get { return m_NormalBGM; }
+        get { return m_BlueCrossBGM; }
+    }
+
+    [SerializeField] private AudioSource m_GrassBGM;
+    public AudioSource GrassBGM
+    {
+        get { return m_GrassBGM; }
+    }
+
+    [SerializeField] private AudioSource m_RockBGM;
+    public AudioSource RockBGM
+    {
+        get { return m_RockBGM; }
+    }
+
+    [SerializeField] private AudioSource m_CrystalBGM;
+    public AudioSource CrystalBGM
+    {
+        get { return m_CrystalBGM; }
+    }
+
+    [SerializeField] private AudioSource m_WhiteBGM;
+    public AudioSource WhiteBGM
+    {
+        get { return m_WhiteBGM; }
     }
 
     [SerializeField] private AudioSource m_BossBGM;
