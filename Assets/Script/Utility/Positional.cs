@@ -97,6 +97,25 @@ public static class Positional
         return true;
     }
 
+    public static bool IsNothingThere(Vector3 pos)
+    {
+        if (IsNoOneThere(pos) == false)
+        {
+            return false;
+        }
+
+        foreach (GameObject itemObj in ObjectManager.Instance.ItemList ?? new List<GameObject>())
+        {
+            Item item = itemObj.GetComponent<Item>();
+            if (item.Position.x == pos.x && item.Position.z == pos.z)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public static int IsOnRoomID(Vector3 pos) //指定座標の部屋IDを返す
     {
         return DungeonTerrain.Instance.GetTerrainListObject((int)pos.x, (int)pos.z).GetComponent<Grid>().RoomID;

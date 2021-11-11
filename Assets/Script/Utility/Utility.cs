@@ -103,6 +103,11 @@ public static class Utility
     {
         return BattleStatus.NAME.MASHROOM;
     }
+
+    public static Item.NAME RandomItemName()
+    {
+        return Item.NAME.APPLE;
+    }
 }
 
 public static class Calculator

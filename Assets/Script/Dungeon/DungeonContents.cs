@@ -4,11 +4,18 @@ using UnityEngine;
 
 public class DungeonContents : SingletonMonoBehaviour<DungeonContents>
 {
+    /// <summary>
+    /// 
+    /// まとめメソッド
+    /// 
+    /// </summary>
+    
     //ダンジョンコンテンツ配置
     public void DeployDungeonContents()
     {
         DeployPlayer();
         DeployEnemy(5);
+        DeployItem(5);
     }
 
     //ダンジョンコンテンツ撤去
@@ -16,6 +23,7 @@ public class DungeonContents : SingletonMonoBehaviour<DungeonContents>
     {
         //RemoveAllPlayerObject();
         RemoveAllEnemyObject();
+        RemoveAllItemObject();
     }
 
     public void RedeployDungeonContents()
@@ -24,7 +32,7 @@ public class DungeonContents : SingletonMonoBehaviour<DungeonContents>
         DeployEnemy(5);
     }
 
-    //敵オブジェクト取得用
+    //キャラオブジェクト取得用
     private GameObject CharaObject(BattleStatus.NAME name)
     {
         GameObject chara = ObjectPool.Instance.PoolObject(name.ToString());
@@ -34,6 +42,12 @@ public class DungeonContents : SingletonMonoBehaviour<DungeonContents>
         }
         return chara;
     }
+
+    /// <summary>
+    ///
+    /// プレイヤー関連
+    /// 
+    /// </summary>
 
     //プレイヤー配置
     private void DeployPlayer()
@@ -49,6 +63,7 @@ public class DungeonContents : SingletonMonoBehaviour<DungeonContents>
         UiManager.Instance.GenerateCharacterUi(player);
     }
 
+    //プレイヤー再配置
     private void RedeployPlayer()
     {
         int[,] map = DungeonTerrain.Instance.Map; //マップ取得
@@ -58,24 +73,6 @@ public class DungeonContents : SingletonMonoBehaviour<DungeonContents>
         player.transform.position = new Vector3(coord[0], 0.51f, coord[1]);
         player.GetComponent<Chara>().Position = player.transform.position;
         player.GetComponent<Chara>().Direction = new Vector3(0, 0, -1);
-    }
-
-    //敵配置
-    public void DeployEnemy(int enemyNum)
-    {
-        if (enemyNum <= 0)
-            return;
-
-        int[,] map = DungeonTerrain.Instance.Map;
-
-        for (int num = 1; num <= enemyNum; num++)
-        {
-            int[] coord = ChooseEmptyRandomRoomGrid(map);
-            GameObject enemy = Instantiate(CharaObject(Utility.RandomEnemyName()), new Vector3(coord[0], 0.51f, coord[1]), Quaternion.identity);
-            ObjectManager.Instance.EnemyList.Add(enemy);
-            enemy.GetComponent<Chara>().Initialize();
-            enemy.GetComponent<CharaBattle>().Initialize();
-        }
     }
 
     //全てのプレイヤーオブジェクトを撤去
@@ -89,6 +86,31 @@ public class DungeonContents : SingletonMonoBehaviour<DungeonContents>
         }
 
         ObjectManager.Instance.PlayerList = new List<GameObject>();
+    }
+
+    /// <summary>
+    ///
+    /// 敵関連
+    /// 
+    /// </summary>
+
+    //敵配置
+    private void DeployEnemy(int enemyNum)
+    {
+        if (enemyNum <= 0)
+            return;
+
+        int[,] map = DungeonTerrain.Instance.Map;
+
+        for (int num = 1; num <= enemyNum; num++)
+        {
+            int[] coord = ChooseEmptyRandomRoomGrid(map);
+            GameObject enemy = CharaObject(Utility.RandomEnemyName());
+            enemy.transform.position = new Vector3(coord[0], 0.51f, coord[1]);
+            ObjectManager.Instance.EnemyList.Add(enemy);
+            enemy.GetComponent<Chara>().Initialize();
+            enemy.GetComponent<CharaBattle>().Initialize();
+        }
     }
 
     //全ての敵オブジェクトを撤去
@@ -109,6 +131,58 @@ public class DungeonContents : SingletonMonoBehaviour<DungeonContents>
         ObjectManager.Instance.EnemyList.Remove(enemy);
         string name = enemy.GetComponent<BattleStatus>().Name.ToString();
         ObjectPool.Instance.SetObject(name, enemy);
+    }
+
+    /// <summary>
+    ///
+    /// アイテム関連
+    /// 
+    /// </summary>
+    
+    private GameObject ItemObject(Item.NAME name)
+    {
+        GameObject item = ObjectPool.Instance.PoolObject(name.ToString());
+        if(item == null)
+        {
+            item = Instantiate(ItemHolder.Instance.ItemObject(name));
+        }
+        return item;
+    }
+
+    private void DeployItem(int itemNum)
+    {
+        if (itemNum <= 0)
+            return;
+
+        int[,] map = DungeonTerrain.Instance.Map;
+
+        for (int num = 1; num <= itemNum; num++)
+        {
+            int[] coord = ChooseEmptyRandomRoomGrid(map);
+            GameObject item = ItemObject(Utility.RandomItemName());
+            item.transform.position = new Vector3(coord[0], 0.51f, coord[1]);
+            ObjectManager.Instance.ItemList.Add(item);
+        }
+    }
+
+    //全てのアイテムオブジェクトを撤去
+    private void RemoveAllItemObject()
+    {
+        foreach (GameObject item in ObjectManager.Instance.ItemList)
+        {
+            string name = item.GetComponent<Item>().Name.ToString();
+            ObjectPool.Instance.SetObject(name, item);
+        }
+        ObjectManager.Instance.ItemList = new List<GameObject>();
+    }
+
+    //特定の敵オブジェクトを撤去
+    public void RemoveItemObject(GameObject item)
+    {
+        item.SetActive(false);
+        ObjectManager.Instance.ItemList.Remove(item);
+        string name = item.GetComponent<Item>().Name.ToString();
+        ObjectPool.Instance.SetObject(name, item);
     }
 
     //ランダムな部屋座標を返す

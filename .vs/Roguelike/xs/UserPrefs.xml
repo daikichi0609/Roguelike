@@ -1,10 +1,8 @@
 ﻿<Properties StartupConfiguration="{3B4D7A7B-B193-C7B8-731F-3F701A73DF6D}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Script/Character/CharaHolder.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Script/Bag/Bag.cs">
     <Files>
-      <File FileName="Assets/Script/Manager/ObjectManager.cs" Line="6" Column="2" />
-      <File FileName="Assets/Script/Dungeon/DungeonContentsHolder.cs" Line="80" Column="6" />
-      <File FileName="Assets/Script/Dungeon/DungeonContents.cs" Line="1" Column="1" />
-      <File FileName="Assets/Script/Character/CharaHolder.cs" Line="5" Column="28" />
+      <File FileName="Assets/Script/Character/Base/CharaMove/CharaMove.cs" Line="128" Column="6" />
+      <File FileName="Assets/Script/Bag/Bag.cs" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -12,16 +10,23 @@
           <Node name="Roguelike" expanded="True">
             <Node name="Assets" expanded="True">
               <Node name="Script" expanded="True">
+                <Node name="Bag" expanded="True">
+                  <Node name="Bag.cs" selected="True" />
+                </Node>
                 <Node name="Character" expanded="True">
                   <Node name="Base" expanded="True">
                     <Node name="CharaBattle" expanded="True" />
                     <Node name="CharaMove" expanded="True" />
                   </Node>
-                  <Node name="CharaHolder.cs" selected="True" />
                 </Node>
                 <Node name="DesignPattern" expanded="True" />
                 <Node name="Dungeon" expanded="True" />
+                <Node name="Item" expanded="True">
+                  <Node name="Base" expanded="True" />
+                  <Node name="Items" expanded="True" />
+                </Node>
                 <Node name="Manager" expanded="True" />
+                <Node name="ObjectHolder" expanded="True" />
                 <Node name="UI" expanded="True">
                   <Node name="QuestionAndChoiceUi" expanded="True" />
                 </Node>

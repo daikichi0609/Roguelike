@@ -32,9 +32,7 @@ public abstract class EnemyAI : CharaBattle
 
     protected override void Death()
     {
-        int num = ObjectManager.Instance.EnemyList.IndexOf(ObjectManager.Instance.SpecifiedPositionEnemyObject(CharaMove.Position));
-        ObjectManager.Instance.EnemyList.RemoveAt(num);
-        ObjectPool.Instance.SetObject(BattleStatus.Name.ToString(), gameObject);
+        DungeonContents.Instance.RemoveEnemyObject(gameObject);
     }
 
     public void DecideAndExcuteAction()

@@ -38,6 +38,12 @@ public abstract class Chara : MonoBehaviour
 		set;
 	}
 
+	public Bag Bag
+	{
+		get;
+		set;
+	} = new Bag();
+
 	protected Animator m_CharaAnimator;
 	public Animator CharaAnimator
 	{
@@ -104,9 +110,27 @@ public class CharaMove: Chara
 
 	public void CheckCurrentGrid()
     {
-		if(this.gameObject == ObjectManager.Instance.PlayerList[0])
-        {
-			UiManager.Instance.ControlLogUi(UiManager.LOG_KEY.STAIRS, true);
+		//メインプレイヤーなら
+		if (this.gameObject == ObjectManager.Instance.PlayerList[0])
+		{
+			//階段チェック
+			if (DungeonTerrain.Instance.GridID((int)Position.x, (int)Position.z) == (int)DungeonTerrain.GRID_ID.STAIRS)
+			{
+				UiManager.Instance.ControlLogUi(UiManager.LOG_KEY.STAIRS, true);
+			}
+
+			//アイテムチェック
+			foreach(GameObject item in ObjectManager.Instance.ItemList)
+            {
+				Vector3 pos = item.GetComponent<Item>().Position;
+				if(pos.x == Position.x && pos.z == Position.z)
+                {
+					
+                }
+            }
+
+			//罠チェック
+
 		}
     }
 
@@ -130,10 +154,8 @@ public class CharaMove: Chara
 		IsActing = false;
 		CharaAnimator.SetBool("IsRunning", false);
 		MoveObject.transform.position = Position;
-		if (DungeonTerrain.Instance.GridID((int)Position.x, (int)Position.z) == (int)DungeonTerrain.GRID_ID.STAIRS)
-		{
-			CheckCurrentGrid();
-		}
+
+		CheckCurrentGrid();
 	}
 
     private void Update()
