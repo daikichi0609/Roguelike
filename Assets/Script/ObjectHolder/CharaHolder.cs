@@ -2,14 +2,14 @@
 
 public class CharaHolder : SingletonMonoBehaviour<CharaHolder>
 {
-    public GameObject CharaObject(BattleStatus.NAME name)
+    public GameObject CharaObject(Define.CHARA_NAME name)
     {
         switch (name)
         {
-            case BattleStatus.NAME.BOXMAN:
+            case Define.CHARA_NAME.BOXMAN:
                 return Boxman;
 
-            case BattleStatus.NAME.MASHROOM:
+            case Define.CHARA_NAME.MASHROOM:
                 return Mashroom;
         }
         return null;

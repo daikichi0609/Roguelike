@@ -73,8 +73,8 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     } = false;
 
     //リーダーキャラの名前
-    [SerializeField] private BattleStatus.NAME m_LeaderName;
-    public BattleStatus.NAME LeaderName
+    [SerializeField] private Define.CHARA_NAME m_LeaderName;
+    public Define.CHARA_NAME LeaderName
     {
         get { return m_LeaderName; }
     }
@@ -88,7 +88,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     //初期化処理
     private void Initialize()
     {
-        m_LeaderName = BattleStatus.NAME.BOXMAN;
+        m_LeaderName = Define.CHARA_NAME.BOXMAN;
 
         SoundManager.Instance.BlueCrossBGM.Play();
         //SoundManager.Instance.BossBGM.Play();

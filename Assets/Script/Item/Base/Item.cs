@@ -4,12 +4,7 @@ using UnityEngine;
 
 public abstract class Item
 {
-    public enum NAME
-    {
-        APPLE
-    }
-
-    public virtual NAME Name
+    public virtual Define.ITEM_NAME Name
     {
         get;
     }
@@ -17,5 +12,11 @@ public abstract class Item
     public Vector3 Position
     {
         get; set;
+    }
+
+    //アイテム効果
+    public virtual void Execute()
+    {
+
     }
 }

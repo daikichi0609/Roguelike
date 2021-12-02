@@ -29,44 +29,44 @@ public static class CharaDataManager
 		return datastr;//読み込んだJSONファイルをstring型に変換して返す
 	}
 
-	public static PlayerStatus LoadPlayerScriptableObject(BattleStatus.NAME name)
+	public static PlayerStatus.PlayerParameter LoadPlayerScriptableObject(Define.CHARA_NAME name)
 	{
-		PlayerStatus status = ScriptableObject.CreateInstance<PlayerStatus>();
-		PlayerStatus constStatus = LoadCharaStatus(name) as PlayerStatus;
+		PlayerStatus.PlayerParameter param = new PlayerStatus.PlayerParameter();
+		PlayerStatus.PlayerParameter constParam = LoadCharaStatus(name) as PlayerStatus.PlayerParameter;
 
-		status.Name = constStatus.Name;
-		status.Hp = constStatus.Hp;
-		status.Atk = constStatus.Atk;
-		status.Def = constStatus.Def;
-		status.Agi = constStatus.Agi;
-		status.Dex = constStatus.Dex;
-		status.Eva = constStatus.Eva;
-		status.CriticalRate = constStatus.CriticalRate;
-		status.Res = constStatus.Res;
+		param.Name = constParam.Name;
+		param.Hp = constParam.Hp;
+		param.Atk = constParam.Atk;
+		param.Def = constParam.Def;
+		param.Agi = constParam.Agi;
+		param.Dex = constParam.Dex;
+		param.Eva = constParam.Eva;
+		param.CriticalRate = constParam.CriticalRate;
+		param.Res = constParam.Res;
 
-		status.Luk = constStatus.Luk;
+		param.Luk = constParam.Luk;
 
-		return status;
+		return param;
     }
 
-	public static EnemyStatus LoadEnemyScriptableObject(BattleStatus.NAME name)
+	public static EnemyStatus.EnemyParameter LoadEnemyScriptableObject(Define.CHARA_NAME name)
 	{
-		EnemyStatus status = ScriptableObject.CreateInstance<EnemyStatus>();
-		EnemyStatus constStatus = LoadCharaStatus(name) as EnemyStatus;
+		EnemyStatus.EnemyParameter param = new EnemyStatus.EnemyParameter();
+		EnemyStatus.EnemyParameter constParam = LoadCharaStatus(name) as EnemyStatus.EnemyParameter;
 
-		status.Name = constStatus.Name;
-		status.Hp = constStatus.Hp;
-		status.Atk = constStatus.Atk;
-		status.Def = constStatus.Def;
-		status.Agi = constStatus.Agi;
-		status.Dex = constStatus.Dex;
-		status.Eva = constStatus.Eva;
-		status.CriticalRate = constStatus.CriticalRate;
-		status.Res = constStatus.Res;
+		param.Name = constParam.Name;
+		param.Hp = constParam.Hp;
+		param.Atk = constParam.Atk;
+		param.Def = constParam.Def;
+		param.Agi = constParam.Agi;
+		param.Dex = constParam.Dex;
+		param.Eva = constParam.Eva;
+		param.CriticalRate = constParam.CriticalRate;
+		param.Res = constParam.Res;
 
-		status.Ex = constStatus.Ex;
+		param.Ex = constParam.Ex;
 
-		return status;
+		return param;
 	}
 
 	public static void SaveScriptableObject(BattleStatus status)
@@ -75,8 +75,9 @@ public static class CharaDataManager
 		AssetDatabase.SaveAssets();
 	}
 
-	public static BattleStatus LoadCharaStatus(BattleStatus.NAME name)
+	public static BattleStatus.Parameter LoadCharaStatus(Define.CHARA_NAME name)
     {
-		return Resources.Load<BattleStatus>(name.ToString());
+		BattleStatus battleStatus = Resources.Load<BattleStatus>(name.ToString());
+		return battleStatus.m_Parameter;
     }
 }

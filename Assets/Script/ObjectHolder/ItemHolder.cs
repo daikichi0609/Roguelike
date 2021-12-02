@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class ItemHolder : SingletonMonoBehaviour<ItemHolder>
 {
-    public GameObject ItemObject(Item.NAME name)
+    public GameObject ItemObject(Define.ITEM_NAME name)
     {
         switch (name)
         {
-            case Item.NAME.APPLE:
+            case Define.ITEM_NAME.APPLE:
                 return Apple;
         }
         return null;

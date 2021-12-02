@@ -104,6 +104,7 @@
     <Compile Include="Assets\Script\UI\Manager\BlackPanelManager.cs" />
     <Compile Include="Assets\Script\UI\Manager\UiManager.cs" />
     <Compile Include="Assets\Script\UI\QuestionAndChoiceUi\StairsLog.cs" />
+    <Compile Include="Assets\Script\Utility\Define.cs" />
     <Compile Include="Assets\Script\Utility\Positional.cs" />
     <Compile Include="Assets\Script\Utility\Utility.cs" />
     <None Include="Assets\ImportAssets\SD_Project\UnityChanShader\Shader\Unitychan_chara_eye.shader" />

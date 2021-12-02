@@ -99,14 +99,14 @@ public static class Utility
         return new List<GameObject>();
     }
 
-    public static BattleStatus.NAME RandomEnemyName()
+    public static Define.CHARA_NAME RandomEnemyName()
     {
-        return BattleStatus.NAME.MASHROOM;
+        return Define.CHARA_NAME.MASHROOM;
     }
 
-    public static Item.NAME RandomItemName()
+    public static Define.ITEM_NAME RandomItemName()
     {
-        return Item.NAME.APPLE;
+        return Define.ITEM_NAME.APPLE;
     }
 }
 

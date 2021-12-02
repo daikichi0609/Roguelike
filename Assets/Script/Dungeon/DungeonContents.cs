@@ -33,7 +33,7 @@ public class DungeonContents : SingletonMonoBehaviour<DungeonContents>
     }
 
     //キャラオブジェクト取得用
-    private GameObject CharaObject(BattleStatus.NAME name)
+    private GameObject CharaObject(Define.CHARA_NAME name)
     {
         GameObject chara = ObjectPool.Instance.PoolObject(name.ToString());
         if (chara == null)
@@ -81,7 +81,7 @@ public class DungeonContents : SingletonMonoBehaviour<DungeonContents>
         foreach(GameObject player in ObjectManager.Instance.PlayerList)
         {
             ObjectManager.Instance.PlayerList.Remove(player);
-            string name = player.GetComponent<CharaBattle>().BattleStatus.Name.ToString();
+            string name = player.GetComponent<CharaBattle>().Parameter.Name.ToString();
             ObjectPool.Instance.SetObject(name, player);
         }
 
@@ -118,7 +118,7 @@ public class DungeonContents : SingletonMonoBehaviour<DungeonContents>
     {
         foreach (GameObject enemy in ObjectManager.Instance.EnemyList)
         {
-            string name = enemy.GetComponent<CharaBattle>().BattleStatus.Name.ToString();
+            string name = enemy.GetComponent<CharaBattle>().Parameter.Name.ToString();
             ObjectPool.Instance.SetObject(name, enemy);
         }
         ObjectManager.Instance.EnemyList = new List<GameObject>();
@@ -129,7 +129,7 @@ public class DungeonContents : SingletonMonoBehaviour<DungeonContents>
     {
         enemy.SetActive(false);
         ObjectManager.Instance.EnemyList.Remove(enemy);
-        string name = enemy.GetComponent<BattleStatus>().Name.ToString();
+        string name = enemy.GetComponent<BattleStatus>().m_Parameter.Name.ToString();
         ObjectPool.Instance.SetObject(name, enemy);
     }
 
@@ -139,7 +139,7 @@ public class DungeonContents : SingletonMonoBehaviour<DungeonContents>
     /// 
     /// </summary>
     
-    private GameObject ItemObject(Item.NAME name)
+    private GameObject ItemObject(Define.ITEM_NAME name)
     {
         GameObject item = ObjectPool.Instance.PoolObject(name.ToString());
         if(item == null)

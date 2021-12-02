@@ -28,14 +28,14 @@ public class CharaUi : MonoBehaviour
     {
         TargetObject = target;
         CharaBattle chara = TargetObject.GetComponent<CharaBattle>();
-        CharaName.text = chara.BattleStatus.Name.ToString();
+        CharaName.text = chara.Parameter.Name.ToString();
         HpSlider.maxValue = chara.MaxHp;
-        HpSlider.value = chara.BattleStatus.Hp;
+        HpSlider.value = chara.Parameter.Hp;
     }
 
     public void UpdateUi()
     {
-        BattleStatus battleStatus = TargetObject.GetComponent<CharaBattle>().BattleStatus;
-        HpSlider.value = battleStatus.Hp;
+        BattleStatus.Parameter param = TargetObject.GetComponent<CharaBattle>().Parameter;
+        HpSlider.value = param.Hp;
     }
 }

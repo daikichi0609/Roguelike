@@ -18,11 +18,11 @@ public abstract class CharaBattle : MonoBehaviour
         set { m_CharaMove = value; }
     }
 
-    [SerializeField] private BattleStatus m_BattleStatus;
-    public BattleStatus BattleStatus
+    [SerializeField] private BattleStatus.Parameter m_Parameter;
+    public BattleStatus.Parameter Parameter
     {
-        get { return m_BattleStatus; }
-        set { m_BattleStatus = value; }
+        get { return m_Parameter; }
+        set { m_Parameter = value; }
     }
 
     protected CharaCondition m_Condition;
@@ -47,7 +47,7 @@ public abstract class CharaBattle : MonoBehaviour
     {
         CharaMove = this.gameObject.GetComponent<CharaMove>();
         Condition = this.gameObject.GetComponent<CharaCondition>();
-        MaxHp = BattleStatus.Hp;
+        MaxHp = Parameter.Hp;
     }
 
     protected virtual AttackInfo AttackInfo { get; }
@@ -107,11 +107,11 @@ public abstract class CharaBattle : MonoBehaviour
         }
 
         CharaBattle targetBattle = ObjectManager.Instance.SpecifiedPositionCharacterObject(attackPos).GetComponent<CharaBattle>();
-        BattleStatus targetStatus = targetBattle.BattleStatus;
+        BattleStatus.Parameter targetParam = targetBattle.Parameter;
 
         //威力計算
         float mag = Calculator.CalculateNormalAttackMag(AttackInfo.Lv, AttackInfo.Mag);
-        int power = Calculator.CalculatePower(BattleStatus.Atk, mag);
+        int power = Calculator.CalculatePower(Parameter.Atk, mag);
 
         //音再生は剣のヒット時
         StartCoroutine(Coroutine.DelayCoroutine(AttackInfo.AnimFrame, () =>
@@ -122,7 +122,7 @@ public abstract class CharaBattle : MonoBehaviour
         //ダメージはモーション終わり
         StartCoroutine(Coroutine.DelayCoroutine(AttackInfo.AnimFrame, () =>
         {
-            targetBattle.Damage(power, BattleStatus.Dex);
+            targetBattle.Damage(power, Parameter.Dex);
         }));
     }
 
@@ -135,14 +135,14 @@ public abstract class CharaBattle : MonoBehaviour
     {
         CharaMove.IsActing = true;
         //ヒットorノット判定
-        if (Calculator.JudgeHit(dex, BattleStatus.Eva) == false)
+        if (Calculator.JudgeHit(dex, Parameter.Eva) == false)
         {
             PlaySound(false, 0f, null);
             return;
         }
 
-        int damage = Calculator.CalculateDamage(power, BattleStatus.Def);
-        BattleStatus.Hp = Calculator.CalculateRemainingHp(BattleStatus.Hp, damage);
+        int damage = Calculator.CalculateDamage(power, Parameter.Def);
+        Parameter.Hp = Calculator.CalculateRemainingHp(Parameter.Hp, damage);
 
         SoundManager.Instance.Damage_Small.Play();
         PlayAnimation("IsDamaging");
@@ -151,7 +151,7 @@ public abstract class CharaBattle : MonoBehaviour
             CharaMove.IsActing = false;
         }));
 
-        if (BattleStatus.Hp <= 0)
+        if (Parameter.Hp <= 0)
         {
             Death();
         }

@@ -4,5 +4,10 @@ using UnityEngine;
 
 public class Apple : Item
 {
-    public override NAME Name => NAME.APPLE;
+    public override Define.ITEM_NAME Name => Define.ITEM_NAME.APPLE;
+
+    public override void Execute()
+    {
+        
+    }
 }
