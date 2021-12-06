@@ -1,23 +1,16 @@
 ﻿<Properties StartupConfiguration="{3B4D7A7B-B193-C7B8-731F-3F701A73DF6D}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Script/ObjectHolder/ItemHolder.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Script/Bag/Bag.cs">
     <Files>
-      <File FileName="Assets/Script/Character/Base/CharaMove/CharaMove.cs" Line="128" Column="6" />
-      <File FileName="Assets/Script/Bag/Bag.cs" Line="15" Column="12" />
-      <File FileName="Assets/Script/Character/Base/Parameter/BattleStatus.cs" Line="9" Column="47" />
-      <File FileName="Assets/Script/Dungeon/DungeonContents.cs" Line="142" Column="51" />
-      <File FileName="Assets/Script/Manager/CharaDataManager.cs" Line="78" Column="61" />
-      <File FileName="Assets/Script/ObjectHolder/CharaHolder.cs" Line="5" Column="41" />
-      <File FileName="Assets/Script/Manager/GameManager.cs" Line="77" Column="18" />
-      <File FileName="Assets/Script/Utility/Utility.cs" Line="104" Column="22" />
-      <File FileName="Assets/Script/Character/Base/CharaBattle/CharaBattle.cs" Line="5" Column="23" />
-      <File FileName="Assets/Script/Character/Player/Boxman.cs" Line="8" Column="71" />
-      <File FileName="Assets/Script/Character/Enemy/Mashroom.cs" Line="8" Column="70" />
-      <File FileName="Assets/Script/UI/CharaUi.cs" Line="39" Column="35" />
-      <File FileName="Assets/Script/Character/Base/CharaBattle/PlayerBattle.cs" Line="3" Column="42" />
-      <File FileName="Assets/Script/Item/Base/Item.cs" Line="20" Column="1" />
-      <File FileName="Assets/Script/Utility/Definition.cs" Line="5" Column="27" />
-      <File FileName="Assets/Script/Item/Items/Apple.cs" Line="7" Column="62" />
-      <File FileName="Assets/Script/ObjectHolder/ItemHolder.cs" Line="11" Column="23" />
+      <File FileName="Assets/Script/Character/Base/Parameter/BattleStatus.cs" Line="8" Column="32" />
+      <File FileName="Assets/Script/Manager/CharaDataManager.cs" Line="82" Column="10" />
+      <File FileName="Assets/Script/Dungeon/DungeonContents.cs" Line="132" Column="62" />
+      <File FileName="Assets/Script/Character/Base/CharaBattle/CharaBattle.cs" Line="25" Column="37" />
+      <File FileName="Assets/Script/Character/Base/Parameter/EnemyStatus.cs" Line="25" Column="2" />
+      <File FileName="Assets/Script/Character/Base/Parameter/PlayerStatus.cs" Line="15" Column="16" />
+      <File FileName="Assets/Script/Character/Base/CharaMove/CharaMove.cs" Line="125" Column="34" />
+      <File FileName="Assets/Script/Item/Items/Apple.cs" Line="5" Column="26" />
+      <File FileName="Assets/Script/Item/Base/Item.cs" Line="11" Column="1" />
+      <File FileName="Assets/Script/Bag/Bag.cs" Line="11" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />

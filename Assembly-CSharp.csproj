@@ -75,6 +75,8 @@
     <Compile Include="Assets\Script\Character\Base\CharaCondition.cs" />
     <Compile Include="Assets\Script\Character\Base\CharaMove\CharaMove.cs" />
     <Compile Include="Assets\Script\Character\Base\Parameter\BattleStatus.cs" />
+    <Compile Include="Assets\Script\Character\Base\Parameter\EnemyStatus.cs" />
+    <Compile Include="Assets\Script\Character\Base\Parameter\PlayerStatus.cs" />
     <Compile Include="Assets\Script\Character\Enemy\Mashroom.cs" />
     <Compile Include="Assets\Script\Character\Player\Boxman.cs" />
     <Compile Include="Assets\Script\DesignPattern\ObjectPool.cs" />

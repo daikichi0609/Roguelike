@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Item
+public abstract class Item : MonoBehaviour
 {
     public virtual Define.ITEM_NAME Name
     {

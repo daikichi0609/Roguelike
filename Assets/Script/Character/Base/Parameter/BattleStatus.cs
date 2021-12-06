@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
+
 public abstract class BattleStatus: ScriptableObject //キャラ共通で必要なパラメタまとめ
 {
-	public Parameter m_Parameter;
-
 	public class Parameter
 	{
 		[SerializeField, Label("名前")] private Define.CHARA_NAME m_GivenName;
@@ -69,54 +68,4 @@ public abstract class BattleStatus: ScriptableObject //キャラ共通で必要�
 			set { m_Res = value; }
 		}
 	}
-}
-
-[CreateAssetMenu(menuName = "MyScriptable/Create PlayerStatus")]
-[System.Serializable] //定義したクラスをJSONデータに変換できるようにする
-public class PlayerStatus: BattleStatus
-{
-    public PlayerStatus()
-    {
-		m_Parameter = new PlayerParameter();
-    }
-
-    public class PlayerParameter: Parameter
-    {
-		//満腹度
-		[SerializeField, Label("満腹度")]  public int m_Satiety;
-		public int Satiety
-        {
-            get { return m_Satiety; }
-			set { m_Satiety = value; }
-        }
-
-		//運
-		[SerializeField, Label("運")] private float m_Luk;
-		public float Luk
-		{
-			get { return m_Luk; }
-			set { m_Luk = value; }
-		}
-	}
-}
-
-[CreateAssetMenu(menuName = "MyScriptable/Create EnemyData")]
-public class EnemyStatus : BattleStatus
-{
-	public EnemyStatus()
-	{
-		m_Parameter = new EnemyParameter();
-	}
-
-	public class EnemyParameter : Parameter
-	{
-		//倒されるともらえる経験値
-		[SerializeField, Label("倒すともらえる経験値")] private int m_Ex;
-		public int Ex
-		{
-			get { return m_Ex; }
-			set { m_Ex = value; }
-		}
-	}
-	
 }

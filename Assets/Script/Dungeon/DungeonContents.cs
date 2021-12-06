@@ -129,7 +129,7 @@ public class DungeonContents : SingletonMonoBehaviour<DungeonContents>
     {
         enemy.SetActive(false);
         ObjectManager.Instance.EnemyList.Remove(enemy);
-        string name = enemy.GetComponent<BattleStatus>().m_Parameter.Name.ToString();
+        string name = enemy.GetComponent<CharaBattle>().Parameter.Name.ToString();
         ObjectPool.Instance.SetObject(name, enemy);
     }
 

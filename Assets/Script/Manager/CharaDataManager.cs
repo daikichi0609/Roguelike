@@ -32,7 +32,7 @@ public static class CharaDataManager
 	public static PlayerStatus.PlayerParameter LoadPlayerScriptableObject(Define.CHARA_NAME name)
 	{
 		PlayerStatus.PlayerParameter param = new PlayerStatus.PlayerParameter();
-		PlayerStatus.PlayerParameter constParam = LoadCharaStatus(name) as PlayerStatus.PlayerParameter;
+		PlayerStatus.PlayerParameter constParam = LoadPlayerParameter(name) as PlayerStatus.PlayerParameter;
 
 		param.Name = constParam.Name;
 		param.Hp = constParam.Hp;
@@ -52,7 +52,7 @@ public static class CharaDataManager
 	public static EnemyStatus.EnemyParameter LoadEnemyScriptableObject(Define.CHARA_NAME name)
 	{
 		EnemyStatus.EnemyParameter param = new EnemyStatus.EnemyParameter();
-		EnemyStatus.EnemyParameter constParam = LoadCharaStatus(name) as EnemyStatus.EnemyParameter;
+		EnemyStatus.EnemyParameter constParam = LoadPlayerParameter(name) as EnemyStatus.EnemyParameter;
 
 		param.Name = constParam.Name;
 		param.Hp = constParam.Hp;
@@ -75,9 +75,21 @@ public static class CharaDataManager
 		AssetDatabase.SaveAssets();
 	}
 
-	public static BattleStatus.Parameter LoadCharaStatus(Define.CHARA_NAME name)
+	public static BattleStatus.Parameter LoadPlayerParameter(Define.CHARA_NAME name)
     {
-		BattleStatus battleStatus = Resources.Load<BattleStatus>(name.ToString());
-		return battleStatus.m_Parameter;
-    }
+		PlayerStatus playerStatus = Resources.Load<PlayerStatus>(name.ToString());
+		if(playerStatus != null)
+        {
+			return playerStatus.Param;
+        }
+
+		EnemyStatus enemyStatus = Resources.Load<EnemyStatus>(name.ToString());
+		if (enemyStatus != null)
+        {
+			return enemyStatus.Param;
+        }
+
+		Debug.LogError("キャラクターステータスの読み込みに失敗しました");
+		return null;
+	}
 }
