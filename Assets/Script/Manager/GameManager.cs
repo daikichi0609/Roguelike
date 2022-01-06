@@ -5,49 +5,24 @@ using System.IO;
 
 public class GameManager : SingletonMonoBehaviour<GameManager>
 {
-    //ゲーム全体のステート
-    public enum GAME_STATE
-    {
-        LOADING,
-        PLAYING
-    }
-
     //現在のゲームステート
-    [SerializeField] private GAME_STATE m_CurrentGameState;
-    public GAME_STATE CurrentGameState
+    [SerializeField] private InternalDefine.GAME_STATE m_CurrentGameState;
+    public InternalDefine.GAME_STATE CurrentGameState
     {
         get { return m_CurrentGameState; }
         set { m_CurrentGameState = value; }
     }
 
-    //ダンジョンテーマ
-    public enum DUNGEON_THEME
-    {
-        GRASS,
-        ROCK,
-        CRYSTAL,
-        WHITE
-    }
-
     //現在のダンジョンテーマ
-    [SerializeField] private DUNGEON_THEME m_DungeonTheme;
-    public DUNGEON_THEME DungeonTheme
+    [SerializeField] private Define.DUNGEON_THEME m_DungeonTheme;
+    public Define.DUNGEON_THEME DungeonTheme
     {
         get { return m_DungeonTheme; }
         set { m_DungeonTheme = value; }
     }
 
-    //ダンジョン名
-    public enum DUNGEON_NAME
-    {
-        始まりの森,
-        岩場,
-        クリスタル,
-        白
-    }
-
     //現在のダンジョン名
-    public DUNGEON_NAME DungeonName
+    public Define.DUNGEON_NAME DungeonName
     {
         get; set;
     }
@@ -111,7 +86,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     private void Update()
     {
         //暗転・明転時に呼ばれる
-        if(CurrentGameState == GAME_STATE.LOADING)
+        if(CurrentGameState == InternalDefine.GAME_STATE.LOADING)
         {
             switch(IsFinishToBuildDungeon)
             {
@@ -129,7 +104,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
         TurnManager.Instance.UpdateTurn();
         InputManager.Instance.DetectInput();
-        UiManager.Instance.UpdateCharaUi();
+        CharaUiManager.Instance.UpdateCharaUi();
     }
 
     //ダンジョン再構築
@@ -152,14 +127,14 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     public void UpToNextFloor()
     {
         FloorNum++;
-        CurrentGameState = GAME_STATE.LOADING;
+        CurrentGameState = InternalDefine.GAME_STATE.LOADING;
         IsFinishToBuildDungeon = false;
     }
 
     //暗転してダンジョン生成
     private void IndicateNextFloorUi()
     {
-        BlackPanelManager.Instance.FadeOn();
+        BlackPanelManager.Instance.Indicate();
         if(BlackPanelManager.Instance.IsFinish == true)
         {
             IsFinishToBuildDungeon = true;
@@ -178,10 +153,10 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     //明転
     private void HideNextFloorUi()
     {
-        BlackPanelManager.Instance.FadeOut();
+        BlackPanelManager.Instance.Hide();
         if (BlackPanelManager.Instance.IsFinish == true)
         {
-            CurrentGameState = GAME_STATE.PLAYING;
+            CurrentGameState = InternalDefine.GAME_STATE.PLAYING;
         }
     }
 }

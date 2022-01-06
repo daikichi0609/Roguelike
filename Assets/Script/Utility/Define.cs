@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public static class Define
+﻿public static class Define
 {
 	// キャラ名
 	public enum CHARA_NAME
@@ -20,5 +16,46 @@ public static class Define
 	public enum ITEM_NAME
     {
 		APPLE
+    }
+
+	//ダンジョンテーマ
+	public enum DUNGEON_THEME
+	{
+		GRASS,
+		ROCK,
+		CRYSTAL,
+		WHITE
+	}
+
+	//ダンジョン名
+	public enum DUNGEON_NAME
+	{
+		始まりの森,
+		岩場,
+		クリスタル,
+		白
+	}
+}
+
+public static class InternalDefine
+{
+	//ゲーム全体のステート
+	public enum GAME_STATE
+	{
+		LOADING,
+		PLAYING
+	}
+
+	//Logのステート
+	public enum LOG_STATE
+	{
+		STAIRS,
+	}
+
+	//Menuのステート
+	public enum MENU_STATE
+    {
+		MENU,
+		BAG
     }
 }

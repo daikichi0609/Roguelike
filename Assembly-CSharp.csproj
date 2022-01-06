@@ -104,7 +104,9 @@
     <Compile Include="Assets\Script\UI\Base\Log.cs" />
     <Compile Include="Assets\Script\UI\CharaUi.cs" />
     <Compile Include="Assets\Script\UI\Manager\BlackPanelManager.cs" />
-    <Compile Include="Assets\Script\UI\Manager\UiManager.cs" />
+    <Compile Include="Assets\Script\UI\Manager\CharaUiManager.cs" />
+    <Compile Include="Assets\Script\UI\Manager\LogManager.cs" />
+    <Compile Include="Assets\Script\UI\Manager\MenuManager.cs" />
     <Compile Include="Assets\Script\UI\QuestionAndChoiceUi\StairsLog.cs" />
     <Compile Include="Assets\Script\Utility\Define.cs" />
     <Compile Include="Assets\Script\Utility\Positional.cs" />

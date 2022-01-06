@@ -28,14 +28,15 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
 	//入力受付メソッド
     public void DetectInput()
     {
-		GameObject chara = ObjectManager.Instance.PlayerObject(0);
-
+		//Ui表示中なら入力をUi管理側に送る
 		if (TurnManager.Instance.CurrentState == TurnManager.STATE.UI_POPUPING)
         {
-			DetectUiInput();
+			LogManager.Instance.DetectInput();
 			return;
         }
 
+		//プレイヤーキャラ取得
+		GameObject chara = ObjectManager.Instance.PlayerObject(0);
 		CharaMove playerMove = chara.GetComponent<CharaMove>();
 		PlayerBattle playerBattle = chara.GetComponent<PlayerBattle>();
 
@@ -43,6 +44,14 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
         {
 			return;
         }
+
+		//バッグを開く STATEも合わせて変更
+		if (Input.GetKey(KeyCode.Q))
+		{
+			TurnManager.Instance.CurrentState = TurnManager.STATE.UI_POPUPING;
+			MenuManager.Instance.Indicate();
+			return;
+		}
 
 		if (IsWaitingAdditionalInput == true)
         {
@@ -82,11 +91,6 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
 		{
 			playerBattle.Act(CharaBattle.ACTION.ATTACK);
 		}		
-	}
-
-	public void DetectUiInput()
-    {
-		UiManager.Instance.DetectInput();
 	}
 
 	private void DetectAdditionalInput(GameObject chara)

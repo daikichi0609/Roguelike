@@ -1,21 +1,16 @@
 ﻿<Properties StartupConfiguration="{3B4D7A7B-B193-C7B8-731F-3F701A73DF6D}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Script/Bag/Bag.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Script/UI/QuestionAndChoiceUi/StairsLog.cs">
     <Files>
-      <File FileName="Assets/Script/Character/Base/Parameter/BattleStatus.cs" Line="8" Column="32" />
-      <File FileName="Assets/Script/Manager/CharaDataManager.cs" Line="82" Column="10" />
-      <File FileName="Assets/Script/Dungeon/DungeonContents.cs" Line="132" Column="62" />
-      <File FileName="Assets/Script/Character/Base/CharaBattle/CharaBattle.cs" Line="25" Column="37" />
-      <File FileName="Assets/Script/Character/Base/Parameter/EnemyStatus.cs" Line="25" Column="2" />
-      <File FileName="Assets/Script/Character/Base/Parameter/PlayerStatus.cs" Line="15" Column="16" />
-      <File FileName="Assets/Script/Character/Base/CharaMove/CharaMove.cs" Line="125" Column="34" />
-      <File FileName="Assets/Script/Item/Items/Apple.cs" Line="5" Column="26" />
-      <File FileName="Assets/Script/Item/Base/Item.cs" Line="11" Column="1" />
-      <File FileName="Assets/Script/Bag/Bag.cs" Line="11" Column="1" />
+      <File FileName="Assets/Script/UI/Manager/MenuManager.cs" Line="30" Column="6" />
+      <File FileName="Assets/Script/Utility/Define.cs" />
+      <File FileName="Assets/Script/UI/Manager/LogManager.cs" Line="39" Column="36" />
+      <File FileName="Assets/Script/UI/Base/Log.cs" Line="1" Column="1" />
+      <File FileName="Assets/Script/UI/QuestionAndChoiceUi/StairsLog.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="38bd48a3-2604-40c7-bfa5-d5e0f8c45b3b" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="e201ca18-69c9-4721-829e-b990104f3dc0" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

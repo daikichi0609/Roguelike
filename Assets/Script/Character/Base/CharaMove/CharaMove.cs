@@ -42,7 +42,7 @@ public abstract class Chara : MonoBehaviour
 	{
 		get;
 		set;
-	} = new Bag();
+	}
 
 	protected Animator m_CharaAnimator;
 	public Animator CharaAnimator
@@ -51,8 +51,9 @@ public abstract class Chara : MonoBehaviour
 		protected set { m_CharaAnimator = value; }
 	}
 
-	public void Initialize()
+	public void Initialize(int inventoryCount)
 	{
+		Bag = new Bag(inventoryCount);
 		CharaAnimator = CharaObject.GetComponent<Animator>();
 		Direction = new Vector3(0, 0, -1);
 		Position = MoveObject.transform.position;
@@ -116,16 +117,17 @@ public class CharaMove: Chara
 			//階段チェック
 			if (DungeonTerrain.Instance.GridID((int)Position.x, (int)Position.z) == (int)DungeonTerrain.GRID_ID.STAIRS)
 			{
-				UiManager.Instance.ControlLogUi(UiManager.LOG_KEY.STAIRS, true);
+				LogManager.Instance.ControlLogUi(InternalDefine.LOG_STATE.STAIRS, true);
 			}
 
 			//アイテムチェック
-			foreach(GameObject item in ObjectManager.Instance.ItemList)
+			foreach(GameObject obj in ObjectManager.Instance.ItemList)
             {
-				Vector3 pos = item.GetComponent<Item>().Position;
+				Vector3 pos = obj.GetComponent<Item>().Position;
+
 				if(pos.x == Position.x && pos.z == Position.z)
                 {
-					
+					Bag.PutAway(obj);
                 }
             }
 

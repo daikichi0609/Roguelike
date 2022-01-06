@@ -9,8 +9,28 @@ public class Bag
         get;
     } = new List<Item>();
 
-    public int Maximum
+    public int InventoryCount
     {
-        get; set;
-    } = 20;
+        get;
+    }
+
+    public Bag(int inventoryCount)
+    {
+        InventoryCount = inventoryCount;
+    }
+
+    public void PutAway(GameObject obj)
+    {
+        Item item = obj.GetComponent<Item>();
+        if(item == null)
+        {
+            Debug.Log("不正なアイテムです");
+        }
+
+        if(ItemList.Count < InventoryCount)
+        {
+            ItemList.Add(item);
+            ObjectPool.Instance.SetObject(item.Name.ToString(), obj);
+        }
+    }
 }

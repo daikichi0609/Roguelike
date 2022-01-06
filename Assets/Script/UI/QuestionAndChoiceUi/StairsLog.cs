@@ -25,13 +25,13 @@ public class StairsLog : LogInfo
 
     private void Yes()
     {
-        UiManager.Instance.ControlLogUi(UiManager.LOG_KEY.STAIRS, false);
+        LogManager.Instance.ControlLogUi(InternalDefine.LOG_STATE.STAIRS, false);
         GameManager.Instance.UpToNextFloor();
     }
 
     private void No()
     {
-        UiManager.Instance.ControlLogUi(UiManager.LOG_KEY.STAIRS, false);
+        LogManager.Instance.ControlLogUi(InternalDefine.LOG_STATE.STAIRS, false);
         TurnManager.Instance.CurrentState = TurnManager.STATE.NONE;
     }
 }

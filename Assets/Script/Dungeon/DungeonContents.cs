@@ -2,7 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DungeonContents : SingletonMonoBehaviour<DungeonContents>
+public interface IDungeonContents
+{
+    void DeployDungeonContents();
+    void RemoveDungeonContents();
+    void RedeployDungeonContents();
+}
+
+public class DungeonContents : SingletonMonoBehaviour<DungeonContents>, IDungeonContents
 {
     /// <summary>
     /// 
@@ -58,9 +65,9 @@ public class DungeonContents : SingletonMonoBehaviour<DungeonContents>
         GameObject player = CharaObject(GameManager.Instance.LeaderName);
         player.transform.position = new Vector3(coord[0], 0.51f, coord[1]);
         ObjectManager.Instance.PlayerList.Add(player);
-        player.GetComponent<Chara>().Initialize();
+        player.GetComponent<Chara>().Initialize(20);
         player.GetComponent<CharaBattle>().Initialize();
-        UiManager.Instance.GenerateCharacterUi(player);
+        CharaUiManager.Instance.GenerateCharacterUi(player);
     }
 
     //プレイヤー再配置
@@ -108,7 +115,7 @@ public class DungeonContents : SingletonMonoBehaviour<DungeonContents>
             GameObject enemy = CharaObject(Utility.RandomEnemyName());
             enemy.transform.position = new Vector3(coord[0], 0.51f, coord[1]);
             ObjectManager.Instance.EnemyList.Add(enemy);
-            enemy.GetComponent<Chara>().Initialize();
+            enemy.GetComponent<Chara>().Initialize(1);
             enemy.GetComponent<CharaBattle>().Initialize();
         }
     }

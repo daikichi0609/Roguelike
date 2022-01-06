@@ -32,8 +32,7 @@ public class BlackPanelManager : SingletonMonoBehaviour<BlackPanelManager>
         get; set;
     } = false;
 
-    //暗転
-    public void FadeOn()
+    public void Indicate()
     {
         IsFinish = false;
         UiHolder.Instance.DungeonNameText.text = GameManager.Instance.DungeonName.ToString();
@@ -54,8 +53,7 @@ public class BlackPanelManager : SingletonMonoBehaviour<BlackPanelManager>
         CheckValue();
     }
 
-    //明転
-    public void FadeOut()
+    public void Hide()
     {
         IsFinish = false;
         UiHolder.Instance.DungeonNameText.color = new Color(255, 255, 255, TextAlfa);
@@ -73,6 +71,7 @@ public class BlackPanelManager : SingletonMonoBehaviour<BlackPanelManager>
         CheckValue();
     }
 
+    //色補正
     private void CheckValue()
     {
         if(PanelAlfa > 1f)
@@ -94,5 +93,10 @@ public class BlackPanelManager : SingletonMonoBehaviour<BlackPanelManager>
         {
             TextAlfa = 0f;
         }
+    }
+
+    public void UiUpdate()
+    {
+
     }
 }

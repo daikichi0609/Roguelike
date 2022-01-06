@@ -256,16 +256,16 @@ public class DungeonTerrain: SingletonMonoBehaviour<DungeonTerrain>
     {
         switch(GameManager.Instance.DungeonTheme)
         {
-            case GameManager.DUNGEON_THEME.GRASS:
+            case Define.DUNGEON_THEME.GRASS:
                 return DungeonContentsHolder.Instance.Grass_C;
 
-            case GameManager.DUNGEON_THEME.ROCK:
+            case Define.DUNGEON_THEME.ROCK:
                 return DungeonContentsHolder.Instance.Rock_C;
 
-            case GameManager.DUNGEON_THEME.WHITE:
+            case Define.DUNGEON_THEME.WHITE:
                 return DungeonContentsHolder.Instance.White_C;
 
-            case GameManager.DUNGEON_THEME.CRYSTAL:
+            case Define.DUNGEON_THEME.CRYSTAL:
                 return DungeonContentsHolder.Instance.CrystalRock_C;
         }
         return null;
@@ -275,16 +275,16 @@ public class DungeonTerrain: SingletonMonoBehaviour<DungeonTerrain>
     {
         switch (GameManager.Instance.DungeonTheme)
         {
-            case GameManager.DUNGEON_THEME.GRASS:
+            case Define.DUNGEON_THEME.GRASS:
                 return DungeonContentsHolder.Instance.Grass_A;
 
-            case GameManager.DUNGEON_THEME.ROCK:
+            case Define.DUNGEON_THEME.ROCK:
                 return DungeonContentsHolder.Instance.Rock_A;
 
-            case GameManager.DUNGEON_THEME.WHITE:
+            case Define.DUNGEON_THEME.WHITE:
                 return DungeonContentsHolder.Instance.White_A;
 
-            case GameManager.DUNGEON_THEME.CRYSTAL:
+            case Define.DUNGEON_THEME.CRYSTAL:
                 return DungeonContentsHolder.Instance.CrystalRock_A;
         }
         return null;

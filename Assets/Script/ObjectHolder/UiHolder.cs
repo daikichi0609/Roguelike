@@ -5,6 +5,10 @@ using UnityEngine.UI;
 
 public class UiHolder : SingletonMonoBehaviour<UiHolder>
 {
+    /// <summary>
+    /// Ui全体
+    /// </summary>
+    
     //キャンバス
     [SerializeField] private GameObject m_Canvas;
     public GameObject Canvas
@@ -12,6 +16,10 @@ public class UiHolder : SingletonMonoBehaviour<UiHolder>
         get { return m_Canvas; }
     }
 
+    /// <summary>
+    /// 暗転系
+    /// </summary>
+    
     //暗転用パネル
     [SerializeField] private GameObject m_BlackPanel;
     public GameObject BlackPanel
@@ -31,12 +39,49 @@ public class UiHolder : SingletonMonoBehaviour<UiHolder>
         get { return m_FloorNumText; }
     }
 
+    /// <summary>
+    /// キャラUi関連
+    /// </summary>
+
     //キャラクターUIプレハブ
     [SerializeField] private GameObject m_CharacterUi;
     public GameObject CharacterUi
     {
         get { return m_CharacterUi; }
     }
+
+    /// <summary>
+    /// メニュー
+    /// </summary>
+
+    //メニューUi
+    [SerializeField] private GameObject m_MenuUi;
+    public GameObject MenuUi
+    {
+        get { return m_MenuUi; }
+    }
+
+    /// <summary>
+    /// バッグ
+    /// </summary>
+
+    //バッグUi
+    [SerializeField] private GameObject m_BagUi;
+    public GameObject BagUi
+    {
+        get { return m_BagUi; }
+    }
+
+    //アイテム一覧テキスト
+    [SerializeField] private GameObject[] m_ItemTexts;
+    public GameObject[] ItemTexts
+    {
+        get { return m_ItemTexts; }
+    }
+
+    /// <summary>
+    /// Log
+    /// </summary>
 
     //質問文と選択肢だけの汎用UI（シーンに存在）
     [SerializeField] private GameObject m_QuestionAndChoiceUi;
