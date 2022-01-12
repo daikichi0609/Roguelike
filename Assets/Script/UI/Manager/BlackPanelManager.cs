@@ -13,7 +13,7 @@ public class BlackPanelManager : SingletonMonoBehaviour<BlackPanelManager>
     } = false;
 
     //実行中リクエスト情報
-    private Message.RequestBlackPanel Request
+    private Message.MRequestBlackPanel Request
     {
         get;
         set;
@@ -69,13 +69,13 @@ public class BlackPanelManager : SingletonMonoBehaviour<BlackPanelManager>
             .Where(_ => IsActive == true)
             .Subscribe(_ => ControllBlackPanel());
 
-        MessageBroker.Default.Receive<Message.RequestBlackPanel>().Subscribe(_ => ReceiveRequest(_)).AddTo(this);
+        MessageBroker.Default.Receive<Message.MRequestBlackPanel>().Subscribe(_ => ReceiveRequest(_)).AddTo(this);
 
         GetPanelAlphaChanged.Subscribe(_ => PanelUpdate()).AddTo(this);
         GetTextAlphaChanged.Subscribe(_ => TextUpdate()).AddTo(this);
     }
 
-    private void ReceiveRequest(Message.RequestBlackPanel request)
+    private void ReceiveRequest(Message.MRequestBlackPanel request)
     {
         IsActive = true;
         Request = request;
@@ -93,7 +93,7 @@ public class BlackPanelManager : SingletonMonoBehaviour<BlackPanelManager>
                 {
                     PanelAlpha = 1f;
                     IsActive = false;
-                    MessageBroker.Default.Publish(new Message.IsFinishBlackPanel { IsDark = true });
+                    MessageBroker.Default.Publish(new Message.MFinishBlackPanel { IsDark = true });
                 }
                 break;
 
@@ -103,7 +103,7 @@ public class BlackPanelManager : SingletonMonoBehaviour<BlackPanelManager>
                 {
                     PanelAlpha = 0f;
                     IsActive = false;
-                    MessageBroker.Default.Publish(new Message.IsFinishBlackPanel { IsDark = false });
+                    MessageBroker.Default.Publish(new Message.MFinishBlackPanel { IsDark = false });
                 }
                 break;
         }
@@ -126,7 +126,7 @@ public class BlackPanelManager : SingletonMonoBehaviour<BlackPanelManager>
             TextAlpha -= TextSpeed;
             if(TextAlpha <= 0f)
             {
-                MessageBroker.Default.Publish(new Message.IsFinishFloorText());
+                MessageBroker.Default.Publish(new Message.MFinishFloorText());
             }
         }
     }

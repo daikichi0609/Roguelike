@@ -52,7 +52,7 @@ public static class Message
 	/// <summary>
     /// 暗転・明転のリクエスト用
     /// </summary>
-	public struct RequestBlackPanel
+	public struct MRequestBlackPanel
 	{
 		public bool IsDark
 		{
@@ -64,7 +64,7 @@ public static class Message
 	/// <summary>
     /// 明転・暗転終了通知
     /// </summary>
-	public struct IsFinishBlackPanel
+	public struct MFinishBlackPanel
     {
 		public bool IsDark
         {
@@ -76,7 +76,7 @@ public static class Message
     /// FloorText表示処理終了通知
     /// 実質ダンジョン再構築完了通知
     /// </summary>
-	public struct IsFinishFloorText
+	public struct MFinishFloorText
     {
 
     }
@@ -84,7 +84,7 @@ public static class Message
 	/// <summary>
     /// ターン終了通知
     /// </summary>
-	public struct IsFinishTurn
+	public struct MFinishTurn
     {
 		
     }
@@ -92,7 +92,7 @@ public static class Message
 	/// <summary>
     /// プレイヤーのListに変更があった通知
     /// </summary>
-	public struct IsChangedPlayerList
+	public struct MChangedPlayerList
     {
 
     }

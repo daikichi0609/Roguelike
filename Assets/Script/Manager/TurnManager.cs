@@ -29,7 +29,7 @@ public class TurnManager : SingletonMonoBehaviour<TurnManager>
 
     protected override void Awake()
     {
-        MessageBroker.Default.Receive<Message.IsFinishTurn>()
+        MessageBroker.Default.Receive<Message.MFinishTurn>()
             .Subscribe(_ => NextAction()).AddTo(this);
     }
 
@@ -42,6 +42,7 @@ public class TurnManager : SingletonMonoBehaviour<TurnManager>
         {
             if(obj.GetComponent<CharaTurn>().IsFinishTurn == false)
             {
+                Debug.Log("自分の行動まち");
                 return;
             }
         }
@@ -50,10 +51,14 @@ public class TurnManager : SingletonMonoBehaviour<TurnManager>
         {
             if (obj.GetComponent<CharaTurn>().IsFinishTurn == false)
             {
+                Debug.Log("敵の行動");
                 EnemyAct(obj);
                 return;
             }
         }
+
+        //全キャラ行動済みなら行動済みステータスをリセット
+        AllCharaActionable();
     }
 
     private void EnemyAct(GameObject enemy)
@@ -81,6 +86,7 @@ public class TurnManager : SingletonMonoBehaviour<TurnManager>
     {
         foreach (GameObject enemy in ObjectManager.Instance.m_EnemyList)
         {
+            Debug.Log("再起処理");
             CharaTurn chara = enemy.GetComponent<CharaTurn>();
             chara.IsFinishTurn = false;
         }

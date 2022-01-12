@@ -95,12 +95,21 @@ public class CharaMove: Chara
 		GameManager.Instance.GetUpdate.Subscribe(_ => Moving());
     }
 
+	/// <summary>
+    /// 向きを変える
+    /// </summary>
+    /// <param name="direction"></param>
 	public void Face(Vector3 direction)
 	{
 		Direction = direction;
 		CharaObject.transform.rotation = Quaternion.LookRotation(direction);
 	}
 
+	/// <summary>
+    /// 移動
+    /// </summary>
+    /// <param name="direction"></param>
+    /// <returns></returns>
 	public bool Move(Vector3 direction)
 	{
 		Face(direction);
@@ -135,6 +144,9 @@ public class CharaMove: Chara
 		return true;
 	}
 
+	/// <summary>
+    /// 移動中処理
+    /// </summary>
 	private void Moving()
 	{
 		if(IsMoving == false)
@@ -151,13 +163,21 @@ public class CharaMove: Chara
 		}
 	}
 
+	/// <summary>
+    /// 移動終わり
+    /// </summary>
 	private void FinishMove()
 	{
+		Debug.Log("移動終了");
+		TurnManager.Instance.IsCanAttack = true;
 		IsMoving = false;
 		CharaAnimator.SetBool("IsRunning", false);
 		MoveObject.transform.position = Position;
 	}
 
+	/// <summary>
+    /// 現在地マスのイベント処理
+    /// </summary>
 	public void CheckCurrentGrid()
     {
 		//メインプレイヤーなら
@@ -188,8 +208,13 @@ public class CharaMove: Chara
 		}
     }
 
+	/// <summary>
+    /// 行動済み状態になる
+    /// </summary>
 	public void FinishTurn()
     {
-		CharaTurn.IsFinishTurn = true;
+		Debug.Log("ターン終了");
+		CharaTurn.FinishTurn();
+		MessageBroker.Default.Publish(new Message.MFinishTurn());
     }
 }

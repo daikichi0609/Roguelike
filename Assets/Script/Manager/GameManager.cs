@@ -83,31 +83,28 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     protected override void Awake()
     {
-        m_Initialize.Subscribe(_ =>
+        GetInit.Subscribe(_ =>
         {
             //暫定処理たくさん
             m_LeaderName = Define.CHARA_NAME.BOXMAN;
 
             SoundManager.Instance.BlueCrossBGM.Play();
-
-            DungeonTerrain.Instance.DeployDungeon();
-            DungeonContents.Instance.DeployDungeonContents();
         }).AddTo(this);
 
         //暗転終了通知
-        MessageBroker.Default.Receive<Message.IsFinishBlackPanel>()
+        MessageBroker.Default.Receive<Message.MFinishBlackPanel>()
             .Where(_ => _.IsDark == true)
             .Subscribe(_ => ReInitialize()).AddTo(this);
 
         //明転終了通知
-        MessageBroker.Default.Receive<Message.IsFinishBlackPanel>()
+        MessageBroker.Default.Receive<Message.MFinishBlackPanel>()
             .Where(_ => _.IsDark == false)
             .Subscribe(_ => ReStartGame()).AddTo(this);
 
         //ダンジョン再構築終了通知
-        MessageBroker.Default.Receive<Message.IsFinishFloorText>()
+        MessageBroker.Default.Receive<Message.MFinishFloorText>()
             .Subscribe(_ =>  MessageBroker.Default
-                .Publish(new Message.RequestBlackPanel { IsDark = false }));
+                .Publish(new Message.MRequestBlackPanel { IsDark = false }));
     }
 
     //初期化処理呼び出し
@@ -152,7 +149,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     {
         FloorNum++;
         CurrentGameState = InternalDefine.GAME_STATE.LOADING;
-        MessageBroker.Default.Publish(new Message.RequestBlackPanel { IsDark = true　});
+        MessageBroker.Default.Publish(new Message.MRequestBlackPanel { IsDark = true　});
     }
 
     //明転

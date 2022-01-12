@@ -54,7 +54,7 @@ public abstract class CharaBattle : MonoBehaviour
 
     protected virtual void NormalAttack()
     {
-        FinishTurn();
+        CharaMove.FinishTurn();
         //ステート操作＆アニメーション再生
         SwitchIsAttacking(AttackInfo.ActFrame);
         PlayAnimation("IsAttacking");
@@ -197,11 +197,6 @@ public abstract class CharaBattle : MonoBehaviour
                 TurnManager.Instance.IsCanAction = true;
             }));
         }
-    }
-
-    protected void FinishTurn()
-    {
-        CharaMove.FinishTurn();
     }
 }
 

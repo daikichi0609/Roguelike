@@ -53,13 +53,11 @@ public abstract class EnemyAI : CharaBattle
             case ENEMY_STATE.CHASING:
                 Chase(enemyActionAndTarget.TargetList);
                 CurrentState = ENEMY_STATE.CHASING;
-                FinishTurn(); //暫定処置
                 break;
 
             case ENEMY_STATE.SEARCHING:
                 Search();
                 CurrentState = ENEMY_STATE.SEARCHING;
-                FinishTurn();
                 break;
         }
     }
@@ -112,8 +110,6 @@ public abstract class EnemyAI : CharaBattle
         {
             
         }
-
-        FinishTurn();
     }
 
     protected virtual void Chase(List<GameObject> targetList)

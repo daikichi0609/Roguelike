@@ -20,18 +20,24 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
     {
         base.Awake();
 
-        GetPlayerObs.Subscribe(_ => MessageBroker.Default.Publish(new Message.IsChangedPlayerList()));
+        GetPlayerObs.Subscribe(_ => MessageBroker.Default.Publish(new Message.MChangedPlayerList()));
     }
 
     /// <summary>
     /// Playerのオブジェクト管理リスト
     /// </summary>
-    [SerializeField] public ReactiveCollection<GameObject> m_PlayerList = new ReactiveCollection<GameObject>();
+    public ReactiveCollection<GameObject> m_PlayerList = new ReactiveCollection<GameObject>();
 
     /// <summary>
     /// IObservable取得用
     /// </summary>
     public IObservable<CollectionReplaceEvent<GameObject>> GetPlayerObs => m_PlayerList.ObserveReplace();
+
+    /// <summary>
+    /// リストの値だけ見れる
+    /// </summary>
+    [SerializeField]
+    public List<GameObject> PlayerValueList => m_PlayerList.ToList();
 
     /// <summary>
     /// Playerオブジェクト取得
@@ -83,17 +89,18 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
     /// <summary>
     /// Enemyのオブジェクト管理リスト
     /// </summary>
-    [SerializeField] public ReactiveCollection<GameObject> m_EnemyList = new ReactiveCollection<GameObject>();
-
-    /// <summary>
-    /// リストの値だけ見れる
-    /// </summary>
-    //public List<GameObject> EnemyValueList => m_EnemyList.ToList();
+    public ReactiveCollection<GameObject> m_EnemyList = new ReactiveCollection<GameObject>();
 
     /// <summary>
     /// IObservable取得用
     /// </summary>
     public IObservable<CollectionReplaceEvent<GameObject>> GetEnemyObs => m_EnemyList.ObserveReplace();
+
+    /// <summary>
+    /// リストの値だけ見れる
+    /// </summary>
+    [SerializeField]
+    public List<GameObject> EnemyValueList => m_EnemyList.ToList();
 
     public GameObject EnemyObject(int i)
     {

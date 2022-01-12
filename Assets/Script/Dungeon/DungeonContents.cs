@@ -1,22 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UniRx;
 
-public interface IDungeonContents
+public class DungeonContents : SingletonMonoBehaviour<DungeonContents>
 {
-    void DeployDungeonContents();
-    void RemoveDungeonContents();
-    void RedeployDungeonContents();
-}
+    protected override void Awake()
+    {
+        base.Awake();
+        GameManager.Instance.GetInit.Subscribe(_ => DeployDungeonContents());
+    }
 
-public class DungeonContents : SingletonMonoBehaviour<DungeonContents>, IDungeonContents
-{
-    /// <summary>
-    /// 
-    /// まとめメソッド
-    /// 
-    /// </summary>
-    
     //ダンジョンコンテンツ配置
     public void DeployDungeonContents()
     {
