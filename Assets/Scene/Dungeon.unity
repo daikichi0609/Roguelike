@@ -2875,8 +2875,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e598f04251b24ff2bae499eece44821, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_CurrentState: 1
-  m_IsActing: 0
+  m_IsCanAction: 1
+  m_IsCanAttack: 1
 --- !u!1 &1785988941
 GameObject:
   m_ObjectHideFlags: 0
@@ -2920,8 +2920,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20195d7aaedb54a1fbb8e18fede4cffb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_PlayerList: []
-  m_EnemyList: []
   m_ItemList: []
 --- !u!1 &1811913515
 GameObject:
@@ -3478,7 +3476,10 @@ MonoBehaviour:
   m_FloorNumText: {fileID: 277792059}
   m_CharacterUi: {fileID: 9033225181970526970, guid: 6873beef1f8ce4f7baaa077836d02cfc,
     type: 3}
-  m_MenuUi: {fileID: 0}
+  m_MenuUi: {fileID: 1644732871}
+  m_MenuText:
+  - {fileID: 1665778379}
+  - {fileID: 1520855593}
   m_BagUi: {fileID: 0}
   m_ItemTexts: []
   m_QuestionAndChoiceUi: {fileID: 126201893}

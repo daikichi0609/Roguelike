@@ -64,7 +64,7 @@ public class DungeonContents : SingletonMonoBehaviour<DungeonContents>, IDungeon
 
         GameObject player = CharaObject(GameManager.Instance.LeaderName);
         player.transform.position = new Vector3(coord[0], 0.51f, coord[1]);
-        ObjectManager.Instance.PlayerList.Add(player);
+        ObjectManager.Instance.m_PlayerList.Add(player);
         player.GetComponent<Chara>().Initialize(20);
         player.GetComponent<CharaBattle>().Initialize();
         CharaUiManager.Instance.GenerateCharacterUi(player);
@@ -76,7 +76,7 @@ public class DungeonContents : SingletonMonoBehaviour<DungeonContents>, IDungeon
         int[,] map = DungeonTerrain.Instance.Map; //マップ取得
         int[] coord = ChooseEmptyRandomRoomGrid(map); //何もない部屋座標を取得
 
-        GameObject player = ObjectManager.Instance.PlayerList[0];
+        GameObject player = ObjectManager.Instance.m_PlayerList[0];
         player.transform.position = new Vector3(coord[0], 0.51f, coord[1]);
         player.GetComponent<Chara>().Position = player.transform.position;
         player.GetComponent<Chara>().Direction = new Vector3(0, 0, -1);
@@ -85,14 +85,14 @@ public class DungeonContents : SingletonMonoBehaviour<DungeonContents>, IDungeon
     //全てのプレイヤーオブジェクトを撤去
     private void RemoveAllPlayerObject()
     {
-        foreach(GameObject player in ObjectManager.Instance.PlayerList)
+        foreach(GameObject player in ObjectManager.Instance.m_PlayerList)
         {
-            ObjectManager.Instance.PlayerList.Remove(player);
+            ObjectManager.Instance.m_PlayerList.Remove(player);
             string name = player.GetComponent<CharaBattle>().Parameter.Name.ToString();
             ObjectPool.Instance.SetObject(name, player);
         }
 
-        ObjectManager.Instance.PlayerList = new List<GameObject>();
+        ObjectManager.Instance.m_PlayerList.Clear();
     }
 
     /// <summary>
@@ -114,7 +114,7 @@ public class DungeonContents : SingletonMonoBehaviour<DungeonContents>, IDungeon
             int[] coord = ChooseEmptyRandomRoomGrid(map);
             GameObject enemy = CharaObject(Utility.RandomEnemyName());
             enemy.transform.position = new Vector3(coord[0], 0.51f, coord[1]);
-            ObjectManager.Instance.EnemyList.Add(enemy);
+            ObjectManager.Instance.m_EnemyList.Add(enemy);
             enemy.GetComponent<Chara>().Initialize(1);
             enemy.GetComponent<CharaBattle>().Initialize();
         }
@@ -123,19 +123,19 @@ public class DungeonContents : SingletonMonoBehaviour<DungeonContents>, IDungeon
     //全ての敵オブジェクトを撤去
     private void RemoveAllEnemyObject()
     {
-        foreach (GameObject enemy in ObjectManager.Instance.EnemyList)
+        foreach (GameObject enemy in ObjectManager.Instance.m_EnemyList)
         {
             string name = enemy.GetComponent<CharaBattle>().Parameter.Name.ToString();
             ObjectPool.Instance.SetObject(name, enemy);
         }
-        ObjectManager.Instance.EnemyList = new List<GameObject>();
+        ObjectManager.Instance.m_EnemyList.Clear();
     }
 
     //特定の敵オブジェクトを撤去
     public void RemoveEnemyObject(GameObject enemy)
     {
         enemy.SetActive(false);
-        ObjectManager.Instance.EnemyList.Remove(enemy);
+        ObjectManager.Instance.m_EnemyList.Remove(enemy);
         string name = enemy.GetComponent<CharaBattle>().Parameter.Name.ToString();
         ObjectPool.Instance.SetObject(name, enemy);
     }

@@ -2,96 +2,75 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UniRx;
+using System;
 
 /// <summary>
 /// 選択肢と質問文のUi
 /// </summary>
 
-public class LogManager : SingletonMonoBehaviour<LogManager>
+public class LogManager :SingletonMonoBehaviour<LogManager>
 {
-    //何のLog表示中か示す
-    public InternalDefine.LOG_STATE CurentState
+    private LogManager.Manager m_Manager = new Manager();
+    public Manager GetManager
     {
-        get;
-        set;
+        get => m_Manager;
     }
 
-    [SerializeField] private Dictionary<InternalDefine.LOG_STATE, LogInfo> m_LogInfo = new Dictionary<InternalDefine.LOG_STATE, LogInfo>()
+    public class Manager : UiManager
     {
-        {InternalDefine.LOG_STATE.STAIRS, new StairsLog() }
-    };
-    public Dictionary<InternalDefine.LOG_STATE, LogInfo> LogInfo
-    {
-        get { return m_LogInfo; }
-        set { m_LogInfo = value; }
+        /// <summary>
+        /// Logテキスト情報
+        /// </summary>
+        private ReactiveProperty<LogInfo> m_Log = new ReactiveProperty<LogInfo>();
+
+        public IObservable<LogInfo> LogChanged
+        {
+            get { return m_Log.Skip(1); }
+        }
+
+        public LogInfo Log
+        {
+            private get => m_Log.Value;
+            set => m_Log.Value = value;
+        }
+
+        /// <summary>
+        /// 選択肢の数
+        /// </summary>
+        protected override int OptionCount => Log.OptionNum;
+
+        /// <summary>
+        /// 選択肢のメソッド
+        /// </summary>
+        protected override List<Action> OptionMethods => Log.OptionMethod;
+
+        /// <summary>
+        /// 操作するUi
+        /// </summary>
+        protected override GameObject Ui => UiHolder.Instance.QuestionAndChoiceUi;
+
+        /// <summary>
+        /// 操作するテキストUi
+        /// </summary>
+        protected override List<Text> Texts => UiHolder.Instance.OptionTextList;
+
+        protected override void Awake()
+        {
+            base.Awake();
+        }
+
+        /// <summary>
+        /// Subscribeする 一回読み込み
+        /// </summary>
+        protected override void UpdateText()
+        {
+            base.UpdateText();
+
+            //質問文の更新
+            UiHolder.Instance.QuestionText.text = Log.Question;
+        }
     }
 
-    /// <summary>
-    /// Ui表示と非表示
-    /// </summary>
-    /// <param name="state">どのUiを操作するか</param>
-    /// <param name="_switch">オンオフフラグ</param>
-    
-    public void ControlLogUi(InternalDefine.LOG_STATE state, bool _switch)
-    {
-        if(_switch == true)
-        {
-            TurnManager.Instance.CurrentState = TurnManager.STATE.UI_POPUPING;
-        }
-        else if(_switch == false)
-        {
-            TurnManager.Instance.CurrentState = TurnManager.STATE.NONE;
-        }
-        UiHolder.Instance.QuestionAndChoiceUi.SetActive(_switch);
-        CurentState = state;
-        UpdateLog(state);
-    }
 
-    public void DetectInput()
-    {
-        //決定ボタン 該当メソッド実行
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-            LogInfo[CurentState].ExcuteMethod();
-            return;
-        }
-
-        //上にカーソル移動
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            LogInfo[CurentState].OptionId--;
-            if(LogInfo[CurentState].OptionId < 0)
-            {
-                LogInfo[CurentState].OptionId = 0;
-            }
-        }
-
-        //下にカーソル移動
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            LogInfo[CurentState].OptionId++;
-            if (LogInfo[CurentState].OptionId > LogInfo[CurentState].OptionNum)
-            {
-                LogInfo[CurentState].OptionId = LogInfo[CurentState].OptionNum;
-            }
-        }
-
-        UpdateLog(CurentState);
-    }
-
-    public void UpdateLog(InternalDefine.LOG_STATE key)
-    {
-        //質問文の更新
-        UiHolder.Instance.QuestionText.text = LogInfo[key].Question;
-
-        //選択肢の文字色更新
-        for(int i = 0; i <= UiHolder.Instance.OptionTextList.Count - 1; i++)
-        {
-            UiHolder.Instance.OptionTextList[i].color = Color.white;
-            UiHolder.Instance.OptionTextList[i].text = LogInfo[key].Option[i];
-        }
-
-        //選択中の文字色更新
-        UiHolder.Instance.OptionTextList[LogInfo[key].OptionId].color = Color.yellow;
-    }
 }

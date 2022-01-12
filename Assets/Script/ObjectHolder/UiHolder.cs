@@ -61,6 +61,13 @@ public class UiHolder : SingletonMonoBehaviour<UiHolder>
         get { return m_MenuUi; }
     }
 
+    //メニューテキスト
+    [SerializeField] private List<Text> m_MenuText;
+    public List<Text> MenuText
+    {
+        get { return m_MenuText; }
+    }
+
     /// <summary>
     /// バッグ
     /// </summary>
@@ -73,8 +80,8 @@ public class UiHolder : SingletonMonoBehaviour<UiHolder>
     }
 
     //アイテム一覧テキスト
-    [SerializeField] private GameObject[] m_ItemTexts;
-    public GameObject[] ItemTexts
+    [SerializeField] private List<Text> m_ItemTexts;
+    public List<Text> ItemTexts
     {
         get { return m_ItemTexts; }
     }

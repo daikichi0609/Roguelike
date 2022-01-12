@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UniRx;
 
 public class CharaUiManager : SingletonMonoBehaviour<CharaUiManager>
 {
@@ -10,6 +11,14 @@ public class CharaUiManager : SingletonMonoBehaviour<CharaUiManager>
     {
         get { return m_CharacterUiList; }
         set { m_CharacterUiList = value; }
+    }
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        GameManager.Instance.GetUpdate
+            .Subscribe(_ => UpdateCharaUi());
     }
 
     public void GenerateCharacterUi(GameObject player)

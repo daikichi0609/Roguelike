@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UniRx;
 
 public static class Positional
 {
@@ -49,7 +50,7 @@ public static class Positional
         int pos_x = (int)pos.x;
         int pos_z = (int)pos.z;
 
-        foreach (GameObject player in ObjectManager.Instance.PlayerList)
+        foreach (GameObject player in ObjectManager.Instance.m_PlayerList)
         {
             Chara charaMove = player.GetComponent<Chara>();
             if (charaMove.Position.x == pos.x && charaMove.Position.z == pos.z)
@@ -65,7 +66,7 @@ public static class Positional
         int pos_x = (int)pos.x;
         int pos_z = (int)pos.z;
 
-        foreach(GameObject enemy in ObjectManager.Instance.EnemyList)
+        foreach(GameObject enemy in ObjectManager.Instance.m_EnemyList)
         {
             Chara charaMove = enemy.GetComponent<Chara>();
             if (charaMove.Position.x == pos.x && charaMove.Position.z == pos.z)
@@ -78,7 +79,7 @@ public static class Positional
 
     public static bool IsNoOneThere(Vector3 pos) //指定座標に誰もいないかどうかを返す
     {
-        foreach(GameObject player in ObjectManager.Instance.PlayerList ?? new List<GameObject>())
+        foreach(GameObject player in ObjectManager.Instance.m_PlayerList ?? new ReactiveCollection<GameObject>())
         {
             Chara charaMove = player.GetComponent<Chara>();
             if (charaMove.Position.x == pos.x && charaMove.Position.z == pos.z)
@@ -86,7 +87,7 @@ public static class Positional
                 return false;
             }
         }
-        foreach (GameObject enemy in ObjectManager.Instance.EnemyList ?? new List<GameObject>())
+        foreach (GameObject enemy in ObjectManager.Instance.m_EnemyList ?? new ReactiveCollection<GameObject>())
         {
             Chara charaMove = enemy.GetComponent<Chara>();
             if (charaMove.Position.x == pos.x && charaMove.Position.z == pos.z)
@@ -123,7 +124,7 @@ public static class Positional
 
     public static bool IsPlayerOnSpecifyRoom(int id) //指定IDの部屋にプレイヤーがいるかどうかを返す
     {
-        foreach(GameObject player in ObjectManager.Instance.PlayerList)
+        foreach(GameObject player in ObjectManager.Instance.m_PlayerList)
         {
             CharaMove charaMove = player.GetComponent<CharaMove>();
             Vector3 playerPos = charaMove.Position;

@@ -42,7 +42,7 @@ public abstract class EnemyAI : CharaBattle
         switch (enemyActionAndTarget.NextState)
         {
             case ENEMY_STATE.ATTACKING:
-                if(TurnManager.Instance.IsActing == true)
+                if(TurnManager.Instance.IsCanAttack == false)
                 {
                     return;
                 }

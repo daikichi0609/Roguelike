@@ -1,102 +1,163 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UniRx;
+using System;
 
 public class BlackPanelManager : SingletonMonoBehaviour<BlackPanelManager>
 {
-    //暗転スピード
+    //暗転・明転動作完了フラグ
+    public bool IsActive
+    {
+        get;
+        set;
+    } = false;
+
+    //実行中リクエスト情報
+    private Message.RequestBlackPanel Request
+    {
+        get;
+        set;
+    }
+
+    /// <summary>
+    /// 暗転用パネルの透明度
+    /// </summary>
+    private ReactiveProperty<float> m_PanelAlpha = new ReactiveProperty<float>();
+
+    public IObservable<float> GetPanelAlphaChanged
+    {
+        get { return m_PanelAlpha; }
+    }
+
+    private float PanelAlpha
+    {
+        get => m_PanelAlpha.Value;
+        set => m_PanelAlpha.Value = value;
+    }
+
+    /// <summary>
+    /// テキストの透明度
+    /// </summary>
+    private ReactiveProperty<float> m_TextAlpha = new ReactiveProperty<float>();
+
+    public IObservable<float> GetTextAlphaChanged
+    {
+        get { return m_TextAlpha; }
+    }
+
+    private float TextAlpha
+    {
+        get => m_TextAlpha.Value;
+        set => m_TextAlpha.Value = value;
+    }
+
+    //暗転速度
     private float BlackPanelSpeed
     {
         get;
     } = 0.1f;
 
+    //テキスト透明度変化速度
     private float TextSpeed
     {
         get;
     } = 0.05f;
 
-    //暗転用パネルの透明度
-    private float PanelAlfa
+    protected override void Awake()
     {
-        get; set;
-    } = 1f;
+        GameManager.Instance.GetUpdate
+            .Where(_ => IsActive == true)
+            .Subscribe(_ => ControllBlackPanel());
 
-    //テキストの透明度
-    private float TextAlfa
+        MessageBroker.Default.Receive<Message.RequestBlackPanel>().Subscribe(_ => ReceiveRequest(_)).AddTo(this);
+
+        GetPanelAlphaChanged.Subscribe(_ => PanelUpdate()).AddTo(this);
+        GetTextAlphaChanged.Subscribe(_ => TextUpdate()).AddTo(this);
+    }
+
+    private void ReceiveRequest(Message.RequestBlackPanel request)
     {
-        get; set;
-    } = 0f;
+        IsActive = true;
+        Request = request;
+    }
 
-    //暗転・明転完了フラグ
-    public bool IsFinish
+    private void ControllBlackPanel()
     {
-        get; set;
-    } = false;
+        bool isDark = Request.IsDark;
 
-    public void Indicate()
-    {
-        IsFinish = false;
-        UiHolder.Instance.DungeonNameText.text = GameManager.Instance.DungeonName.ToString();
-        UiHolder.Instance.FloorNumText.text = GameManager.Instance.FloorNum.ToString() + "F";
-
-        UiHolder.Instance.BlackPanel.GetComponent<Image>().color = new Color(0, 0, 0, PanelAlfa);
-        PanelAlfa += BlackPanelSpeed;
-        if (PanelAlfa >= 1f)
+        switch(isDark)
         {
-            UiHolder.Instance.DungeonNameText.color = new Color(255, 255, 255, TextAlfa);
-            UiHolder.Instance.FloorNumText.color = new Color(255, 255, 255, TextAlfa);
-            TextAlfa += TextSpeed;
-            if (TextAlfa >= 1f)
+            case true:
+                PanelAlpha += BlackPanelSpeed;
+                if (PanelAlpha >= 1f)
+                {
+                    PanelAlpha = 1f;
+                    IsActive = false;
+                    MessageBroker.Default.Publish(new Message.IsFinishBlackPanel { IsDark = true });
+                }
+                break;
+
+            case false:
+                PanelAlpha -= BlackPanelSpeed;
+                if (PanelAlpha >= 0f)
+                {
+                    PanelAlpha = 0f;
+                    IsActive = false;
+                    MessageBroker.Default.Publish(new Message.IsFinishBlackPanel { IsDark = false });
+                }
+                break;
+        }
+    }
+
+    public void ControllText()
+    {
+        bool s = false;
+
+        if(s == false)
+        {
+            TextAlpha += TextSpeed;
+            if(TextAlpha >= 1f)
             {
-                IsFinish = true;
+                s = true;
             }
         }
-        CheckValue();
-    }
-
-    public void Hide()
-    {
-        IsFinish = false;
-        UiHolder.Instance.DungeonNameText.color = new Color(255, 255, 255, TextAlfa);
-        UiHolder.Instance.FloorNumText.color = new Color(255, 255, 255, TextAlfa);
-        TextAlfa -= TextSpeed;
-        if (TextAlfa <= 0)
+        else
         {
-            UiHolder.Instance.BlackPanel.GetComponent<Image>().color = new Color(0, 0, 0, PanelAlfa);
-            PanelAlfa -= BlackPanelSpeed;
-            if (PanelAlfa <= 0)
+            TextAlpha -= TextSpeed;
+            if(TextAlpha <= 0f)
             {
-                IsFinish = true;
+                MessageBroker.Default.Publish(new Message.IsFinishFloorText());
             }
         }
-        CheckValue();
     }
 
-    //色補正
-    private void CheckValue()
+    private void PanelUpdate()
     {
-        if(PanelAlfa > 1f)
+        if (PanelAlpha > 1f)
         {
-            PanelAlfa = 1f;
+            PanelAlpha = 1f;
         }
 
-        if(PanelAlfa < 0f)
+        if (PanelAlpha < 0f)
         {
-            PanelAlfa = 0f;
+            PanelAlpha = 0f;
         }
 
-        if(TextAlfa > 1f)
-        {
-            TextAlfa = 1f;
-        }
-
-        if(TextAlfa < 0f)
-        {
-            TextAlfa = 0f;
-        }
+        UiHolder.Instance.BlackPanel.GetComponent<Image>().color = new Color(0, 0, 0, PanelAlpha);
     }
 
-    public void UiUpdate()
+    private void TextUpdate()
     {
+        if (TextAlpha > 1f)
+        {
+            TextAlpha = 1f;
+        }
 
+        if (TextAlpha < 0f)
+        {
+            TextAlpha = 0f;
+        }
+
+        UiHolder.Instance.FloorNumText.color = new Color(0, 0, 0, TextAlpha);
     }
 }

@@ -133,7 +133,7 @@ public abstract class CharaBattle : MonoBehaviour
 
     public void Damage(int power, float dex)
     {
-        CharaMove.IsActing = true;
+        TurnManager.Instance.IsCanAction = false;
         //ヒットorノット判定
         if (Calculator.JudgeHit(dex, Parameter.Eva) == false)
         {
@@ -148,7 +148,7 @@ public abstract class CharaBattle : MonoBehaviour
         PlayAnimation("IsDamaging");
         StartCoroutine(Coroutine.DelayCoroutine(0.1f, () =>
         {
-            CharaMove.IsActing = false;
+            TurnManager.Instance.IsCanAction = true;
         }));
 
         if (Parameter.Hp <= 0)
@@ -175,7 +175,7 @@ public abstract class CharaBattle : MonoBehaviour
     {
         StartCoroutine(Coroutine.DelayCoroutine(actFrame, () =>
         {
-            CharaMove.IsActing = false;
+            TurnManager.Instance.IsCanAction = true;
         }));
     }
 
@@ -186,7 +186,7 @@ public abstract class CharaBattle : MonoBehaviour
             StartCoroutine(Coroutine.DelayCoroutine(delayFrame, () =>
             {
                 SoundManager.Instance.Miss.Play();
-                CharaMove.IsActing = false;
+                TurnManager.Instance.IsCanAction = true;
             }));
         }
         else if (hit == true)
@@ -194,7 +194,7 @@ public abstract class CharaBattle : MonoBehaviour
             StartCoroutine(Coroutine.DelayCoroutine(delayFrame, () =>
             {
                 sound.Play();
-                CharaMove.IsActing = false;
+                TurnManager.Instance.IsCanAction = true;
             }));
         }
     }

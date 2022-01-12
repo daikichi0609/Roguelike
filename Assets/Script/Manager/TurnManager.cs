@@ -1,161 +1,88 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UniRx;
 
 public class TurnManager : SingletonMonoBehaviour<TurnManager>
 {
-    public enum STATE
+    /// <summary>
+    /// 全キャラに行動を禁止させるフラグ
+    /// </summary>
+    [SerializeField]
+    private bool m_IsCanAction = true;
+    public bool IsCanAction
     {
-        NONE,
-        PLAYER_TURN,
-        ENEMY_TURN,
-        UI_POPUPING
+        get { return m_IsCanAction; }
+        set { m_IsCanAction = value; }
     }
 
-    [SerializeField] private STATE m_CurrentState;
-    [SerializeField] private bool m_IsActing;
-    public bool IsActing
+    /// <summary>
+    /// 全キャラに攻撃を禁止させるフラグ
+    /// </summary>
+    [SerializeField]
+    private bool m_IsCanAttack = true;
+    public bool IsCanAttack
     {
-        get { return m_IsActing; }
-        set { m_IsActing = value; }
+        get { return m_IsCanAction; }
+        set { m_IsCanAction = value; }
     }
 
-    public STATE CurrentState
+    protected override void Awake()
     {
-        get { return m_CurrentState; }
-        set { m_CurrentState = value; }
+        MessageBroker.Default.Receive<Message.IsFinishTurn>()
+            .Subscribe(_ => NextAction()).AddTo(this);
     }
 
-    public void InitializeTurn()
+    /// <summary>
+    /// 次の行動を促す
+    /// </summary>
+    private void NextAction()
     {
-        TurnOnAllPlayer();
-    }
-
-    public void UpdateTurn()
-    {
-        IsActingCheck();
-        switch(CurrentState)
+        foreach(GameObject obj in ObjectManager.Instance.m_PlayerList)
         {
-            case STATE.NONE:
-                if (IsAllEnemyTurnOff() == false)
-                {
-                    CurrentState = STATE.ENEMY_TURN;
-                }
-                else if (IsAllPlayerTurnOff() == false)
-                {
-                    CurrentState = STATE.PLAYER_TURN;
-                }
-                else
-                {
-                    CurrentState = STATE.PLAYER_TURN;
-                }
-                break;
-
-            case STATE.PLAYER_TURN:
-                if (IsAllPlayerTurnOff() == true)
-                {
-                    CurrentState = STATE.ENEMY_TURN;
-                    TurnOnAllEnemy();
-                    return;
-                }
-                break;
-
-            case STATE.ENEMY_TURN:
-                if (IsAllEnemyTurnOff() == true)
-                {
-                    CurrentState = STATE.PLAYER_TURN;
-                    TurnOnAllPlayer();
-                    return;
-                }
-                EnemyAct();
-                break;
-
-            case STATE.UI_POPUPING:
-                return;
-        }
-    }
-
-    private void EnemyAct()
-    {
-        for (int i = 0; i <= ObjectManager.Instance.EnemyList.Count - 1; i++)
-        {
-            Chara chara = ObjectManager.Instance.EnemyObject(i).GetComponent<Chara>();
-            EnemyAI enemyAI = ObjectManager.Instance.EnemyObject(i).GetComponent<EnemyAI>();
-            if (chara.Turn == true)
+            if(obj.GetComponent<CharaTurn>().IsFinishTurn == false)
             {
-                enemyAI.DecideAndExcuteAction();
-                break;
-            }
-        }
-    }
-
-    //以下static
-
-    private void IsActingCheck()
-    {
-        foreach(GameObject player in ObjectManager.Instance.PlayerList)
-        {
-            CharaMove playerMove = player.GetComponent<CharaMove>();
-            if(playerMove.IsActing == true)
-            {
-                IsActing = true;
                 return;
             }
         }
 
-        foreach (GameObject enemy in ObjectManager.Instance.EnemyList)
+        foreach(GameObject obj in ObjectManager.Instance.m_EnemyList)
         {
-            CharaMove enemyMove = enemy.GetComponent<CharaMove>();
-            if (enemyMove.IsActing == true)
+            if (obj.GetComponent<CharaTurn>().IsFinishTurn == false)
             {
-                IsActing = true;
+                EnemyAct(obj);
                 return;
             }
         }
-        IsActing = false;
     }
 
-    public bool IsAllPlayerTurnOff()
+    private void EnemyAct(GameObject enemy)
     {
-        foreach (GameObject player in ObjectManager.Instance.PlayerList)
-        {
-            Chara chara = player.GetComponent<Chara>();
-            if (chara.Turn == true)
-            {
-                return false;
-            }
-        }
-        return true;
+        EnemyAI enemyAI = enemy.GetComponent<EnemyAI>();
+        enemyAI.DecideAndExcuteAction();
     }
 
-    public void TurnOnAllPlayer()
+    public void AllCharaActionable()
     {
-        foreach (GameObject player in ObjectManager.Instance.PlayerList)
+        AllPlayerActionable();
+        AllEnemyActionable();
+    }
+
+    public void AllPlayerActionable()
+    {
+        foreach (GameObject player in ObjectManager.Instance.m_PlayerList)
         {
-            Chara chara = player.GetComponent<Chara>();
-            chara.Turn = true;
+            CharaTurn chara = player.GetComponent<CharaTurn>();
+            chara.IsFinishTurn = false;
         }
     }
 
-    public bool IsAllEnemyTurnOff()
+    public void AllEnemyActionable()
     {
-        foreach (GameObject enemy in ObjectManager.Instance.EnemyList)
+        foreach (GameObject enemy in ObjectManager.Instance.m_EnemyList)
         {
-            Chara chara = enemy.GetComponent<Chara>();
-            if (chara.Turn == true)
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public void TurnOnAllEnemy()
-    {
-        foreach (GameObject enemy in ObjectManager.Instance.EnemyList)
-        {
-            Chara chara = enemy.GetComponent<Chara>();
-            chara.Turn = true;
+            CharaTurn chara = enemy.GetComponent<CharaTurn>();
+            chara.IsFinishTurn = false;
         }
     }
 }

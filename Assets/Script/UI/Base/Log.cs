@@ -1,14 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 
 public abstract class LogInfo
 {
-    //選択肢Id
-    public int OptionId
-    {
-        get;
-        set;
-    } = 0;
-
     //質問文
     public virtual string Question
     {
@@ -23,20 +17,14 @@ public abstract class LogInfo
     } = 0;
 
     //選択肢文
-    public virtual string[] Option
+    public virtual List<string> Option
     {
         get;
     }
 
     //選択肢のメソッド
-    public virtual Action[] OptionMethod
+    public virtual List<Action> OptionMethod
     {
         get;
-    }
-
-    //実行用メソッド
-    public void ExcuteMethod()
-    {
-        OptionMethod[OptionId]();
     }
 } 

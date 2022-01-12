@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UniRx;
 
 public class InputManager : SingletonMonoBehaviour<InputManager>
 {
@@ -25,22 +26,28 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
 		set;
     }
 
-	//入力受付メソッド
-    public void DetectInput()
-    {
-		//Ui表示中なら入力をUi管理側に送る
-		if (TurnManager.Instance.CurrentState == TurnManager.STATE.UI_POPUPING)
-        {
-			LogManager.Instance.DetectInput();
-			return;
-        }
+	//UI表示中かどうか
+	public bool IsUiPopUp => LogManager.Instance.GetManager.IsActive || MenuManager.Instance.GetManager.IsActive;
 
+    protected override void Awake()
+    {
+        base.Awake();
+
+		GameManager.Instance.GetUpdate
+			.Subscribe(_ => DetectInput()).AddTo(this);
+    }
+
+    //入力受付メソッド
+    private void DetectInput()
+    {
 		//プレイヤーキャラ取得
 		GameObject chara = ObjectManager.Instance.PlayerObject(0);
 		CharaMove playerMove = chara.GetComponent<CharaMove>();
+		CharaTurn charaTurn = chara.GetComponent<CharaTurn>();
 		PlayerBattle playerBattle = chara.GetComponent<PlayerBattle>();
 
-		if (playerMove.Turn == false || playerMove.IsActing == true)
+		//操作対象キャラのターンが終わっている場合、行動が禁じられている場合、UI表示中の場合は入力を受け付けない
+		if (charaTurn.IsFinishTurn == true || TurnManager.Instance.IsCanAction == false || IsUiPopUp == true)
         {
 			return;
         }
@@ -48,8 +55,7 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
 		//バッグを開く STATEも合わせて変更
 		if (Input.GetKey(KeyCode.Q))
 		{
-			TurnManager.Instance.CurrentState = TurnManager.STATE.UI_POPUPING;
-			MenuManager.Instance.Indicate();
+			MenuManager.Instance.GetManager.IsActive = true;
 			return;
 		}
 

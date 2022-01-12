@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 public class StairsLog : LogInfo
 {
@@ -10,28 +11,26 @@ public class StairsLog : LogInfo
     public override int OptionNum
     {
         get => 2;
-        set => base.OptionNum = value;
+        set => OptionNum = value;
     }
 
-    public override string[] Option
+    public override List<string> Option
     {
-        get => new string[2] { "はい", "いいえ" };
+        get => new List<string> { "はい", "いいえ" };
     }
 
-    public override Action[] OptionMethod
+    public override List<Action> OptionMethod
     {
-        get => new Action[2] { () => Yes(), () => No() };
+        get => new List<Action> { () => Yes(), () => No() };
     }
 
     private void Yes()
     {
-        LogManager.Instance.ControlLogUi(InternalDefine.LOG_STATE.STAIRS, false);
         GameManager.Instance.UpToNextFloor();
     }
 
     private void No()
     {
-        LogManager.Instance.ControlLogUi(InternalDefine.LOG_STATE.STAIRS, false);
-        TurnManager.Instance.CurrentState = TurnManager.STATE.NONE;
+        
     }
 }

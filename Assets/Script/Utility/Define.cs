@@ -45,17 +45,55 @@ public static class InternalDefine
 		LOADING,
 		PLAYING
 	}
+}
 
-	//Logのステート
-	public enum LOG_STATE
+public static class Message
+{
+	/// <summary>
+    /// 暗転・明転のリクエスト用
+    /// </summary>
+	public struct RequestBlackPanel
 	{
-		STAIRS,
+		public bool IsDark
+		{
+			get;
+			set;
+		}
 	}
 
-	//Menuのステート
-	public enum MENU_STATE
+	/// <summary>
+    /// 明転・暗転終了通知
+    /// </summary>
+	public struct IsFinishBlackPanel
     {
-		MENU,
-		BAG
+		public bool IsDark
+        {
+			get; set;
+        }
+    }
+
+	/// <summary>
+    /// FloorText表示処理終了通知
+    /// 実質ダンジョン再構築完了通知
+    /// </summary>
+	public struct IsFinishFloorText
+    {
+
+    }
+
+	/// <summary>
+    /// ターン終了通知
+    /// </summary>
+	public struct IsFinishTurn
+    {
+		
+    }
+
+	/// <summary>
+    /// プレイヤーのListに変更があった通知
+    /// </summary>
+	public struct IsChangedPlayerList
+    {
+
     }
 }

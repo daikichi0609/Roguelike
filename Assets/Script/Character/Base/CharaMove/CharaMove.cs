@@ -1,49 +1,53 @@
 ﻿using UnityEngine;
+using UniRx;
 
 public abstract class Chara : MonoBehaviour
 {
-	public bool Turn
-	{
-		get;
-		set;
-	}
-
-	public bool IsActing
-    {
-		get;
-		set;
-    }
-
+	/// <summary>
+    /// 実際に動かすオブジェクト
+    /// </summary>
 	[SerializeField] private GameObject m_MoveObject;
 	protected GameObject MoveObject
 	{
 		get { return m_MoveObject; }
 	}
 
+	/// <summary>
+    /// キャラのオブジェクト
+    /// </summary>
 	[SerializeField] private GameObject m_CharaObject;
 	protected GameObject CharaObject
 	{
 		get { return m_CharaObject; }
 	}
 
+	protected CharaTurn CharaTurn
+    {
+		get;
+		set;
+    }
+
+	/// <summary>
+    /// 位置
+    /// </summary>
 	public Vector3 Position
 	{
 		get;
 		set;
 	}
 
+	/// <summary>
+    /// 向いている方向
+    /// </summary>
 	public Vector3 Direction
 	{
 		get;
 		set;
 	}
 
-	public Bag Bag
-	{
-		get;
-		set;
-	}
-
+	/// <summary>
+    /// キャラが持つアニメーター
+    /// </summary>
 	protected Animator m_CharaAnimator;
 	public Animator CharaAnimator
 	{
@@ -51,33 +55,51 @@ public abstract class Chara : MonoBehaviour
 		protected set { m_CharaAnimator = value; }
 	}
 
-	public void Initialize(int inventoryCount)
+	/// <summary>
+    /// 初期化処理
+    /// </summary>
+    /// <param name="inventoryCount"></param>
+	public virtual void Initialize(int inventoryCount)
 	{
-		Bag = new Bag(inventoryCount);
 		CharaAnimator = CharaObject.GetComponent<Animator>();
 		Direction = new Vector3(0, 0, -1);
 		Position = MoveObject.transform.position;
+		CharaTurn = GetComponent<CharaTurn>();
 	}
-
-	public void FinishTurn()
-    {
-		Turn = false;
-    }
 }
 
 public class CharaMove: Chara
 {
+	/// <summary>
+    /// 移動目標座標
+    /// </summary>
 	public Vector3 DestinationPos
     {
 		get;
 		private set;
     }
 
-	public bool IsMoving
+	/// <summary>
+    /// 移動中かどうか
+    /// </summary>
+	private bool IsMoving
     {
 		get;
-	    set;
+		set;
     }
+
+    public override void Initialize(int inventoryCount)
+    {
+        base.Initialize(inventoryCount);
+
+		GameManager.Instance.GetUpdate.Subscribe(_ => Moving());
+    }
+
+	public void Face(Vector3 direction)
+	{
+		Direction = direction;
+		CharaObject.transform.rotation = Quaternion.LookRotation(direction);
+	}
 
 	public bool Move(Vector3 direction)
 	{
@@ -93,31 +115,60 @@ public class CharaMove: Chara
 			return false;
 		}
 
-		DestinationPos = Position + direction;
-		Position = DestinationPos;
-		IsMoving = true;
-		IsActing = true;
+		//移動開始
 		CharaAnimator.SetBool("IsRunning", true);
+		IsMoving = true;
+		TurnManager.Instance.IsCanAttack = false;
 
+		//目標座標設定
+		DestinationPos = destinationPos;
+
+		//内部的には先に移動しとく
+		Position = DestinationPos;
+
+		//移動終わる前に現在マスチェックを済ませる
+		CheckCurrentGrid();
+
+		//ターンを返す
 		FinishTurn();
+
 		return true;
 	}
 
-	public void Face(Vector3 direction)
+	private void Moving()
 	{
-		Direction = direction;
-		CharaObject.transform.rotation = Quaternion.LookRotation(direction);
+		if(IsMoving == false)
+        {
+			return;
+        }
+
+		TurnManager.Instance.IsCanAttack = false;
+		MoveObject.transform.position = Vector3.MoveTowards(MoveObject.transform.position, DestinationPos, Time.deltaTime * 3);
+
+		if ((MoveObject.transform.position - DestinationPos).magnitude <= 0.01f)
+		{
+			FinishMove();
+		}
+	}
+
+	private void FinishMove()
+	{
+		IsMoving = false;
+		CharaAnimator.SetBool("IsRunning", false);
+		MoveObject.transform.position = Position;
 	}
 
 	public void CheckCurrentGrid()
     {
 		//メインプレイヤーなら
-		if (this.gameObject == ObjectManager.Instance.PlayerList[0])
+		if (this.gameObject == ObjectManager.Instance.m_PlayerList[0])
 		{
 			//階段チェック
 			if (DungeonTerrain.Instance.GridID((int)Position.x, (int)Position.z) == (int)DungeonTerrain.GRID_ID.STAIRS)
 			{
-				LogManager.Instance.ControlLogUi(InternalDefine.LOG_STATE.STAIRS, true);
+				LogManager.Instance.GetManager.Log = new StairsLog();
+				LogManager.Instance.GetManager.IsActive = true;
+				return;
 			}
 
 			//アイテムチェック
@@ -127,8 +178,9 @@ public class CharaMove: Chara
 
 				if(pos.x == Position.x && pos.z == Position.z)
                 {
-					Bag.PutAway(obj);
+					BagManager.Instance.GetManager.PutAway(obj);
                 }
+				return;
             }
 
 			//罠チェック
@@ -136,32 +188,8 @@ public class CharaMove: Chara
 		}
     }
 
-	protected void Moving()
+	public void FinishTurn()
     {
-		if(IsMoving == false)
-        {
-			return;
-        }
-		MoveObject.transform.position = Vector3.MoveTowards(MoveObject.transform.position, DestinationPos, Time.deltaTime * 3);
-
-		if ((MoveObject.transform.position - DestinationPos).magnitude <= 0.01f)
-        {
-			FinishMove();
-		}
-	}
-
-	private void FinishMove()
-    {
-		IsMoving = false;
-		IsActing = false;
-		CharaAnimator.SetBool("IsRunning", false);
-		MoveObject.transform.position = Position;
-
-		CheckCurrentGrid();
-	}
-
-    private void Update()
-    {
-		Moving();
+		CharaTurn.IsFinishTurn = true;
     }
 }

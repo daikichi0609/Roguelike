@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using UniRx;
 
-//https://note.com/motibe_tsukuru/n/nbe75bb690bcc
+/// <summary>
+/// https://note.com/motibe_tsukuru/n/nbe75bb690bcc
+/// </summary>
 
 public class DungeonTerrain: SingletonMonoBehaviour<DungeonTerrain>
 {
@@ -91,6 +94,13 @@ public class DungeonTerrain: SingletonMonoBehaviour<DungeonTerrain>
     z
      x → → →
     */
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        GameManager.Instance.GetInit.Subscribe(_ => DeployDungeon());
+    }
 
     public void DeployDungeon()
     {

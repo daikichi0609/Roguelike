@@ -34,16 +34,20 @@ public abstract class PlayerBattle : CharaBattle
         switch (action)
         {
             case ACTION.ATTACK:
-                if (TurnManager.Instance.IsActing == true)
+                if (TurnManager.Instance.IsCanAttack == false)
                 {
                     return;
                 }
-                CharaMove.IsActing = true;
+                TurnManager.Instance.IsCanAttack = true;
                 NormalAttack();
                 break;
 
             case ACTION.SKILL:
-                CharaMove.IsActing = true;
+                if (TurnManager.Instance.IsCanAttack == false)
+                {
+                    return;
+                }
+                TurnManager.Instance.IsCanAttack = true;
                 Skill();
                 break;
         }

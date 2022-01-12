@@ -19,18 +19,25 @@ public class Bag
         InventoryCount = inventoryCount;
     }
 
-    public void PutAway(GameObject obj)
+    public bool PutAway(GameObject obj)
     {
         Item item = obj.GetComponent<Item>();
         if(item == null)
         {
             Debug.Log("不正なアイテムです");
+            return false;
         }
 
         if(ItemList.Count < InventoryCount)
         {
             ItemList.Add(item);
             ObjectPool.Instance.SetObject(item.Name.ToString(), obj);
+            return true;
+        }
+        else
+        {
+            Debug.Log("アイテムがいっぱいです");
+            return false;
         }
     }
 }

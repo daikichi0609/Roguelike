@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using UniRx;
+using UniRx.Triggers;
+using System;
 
 public class GameManager : SingletonMonoBehaviour<GameManager>
 {
@@ -41,12 +44,6 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         get; set;
     } = true;
 
-    //ダンジョン生成済みかどうか
-    private bool IsFinishToBuildDungeon
-    {
-        get; set;
-    } = false;
-
     //リーダーキャラの名前
     [SerializeField] private Define.CHARA_NAME m_LeaderName;
     public Define.CHARA_NAME LeaderName
@@ -54,23 +51,69 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         get { return m_LeaderName; }
     }
 
-    //初期化処理呼び出し
-    private void Awake()
+    /// <summary>
+    /// 初期化処理メソッドまとめ
+    /// </summary>
+    private Subject<Unit> m_Initialize = new Subject<Unit>();
+
+    public IObservable<Unit> GetInit
     {
-        Initialize();
+        get { return m_Initialize; }
     }
 
-    //初期化処理
-    private void Initialize()
+    /// <summary>
+    /// ダンジョン再構築メソッドまとめ
+    /// </summary>
+    private Subject<Unit> m_ReInitialize = new Subject<Unit>();
+
+    public IObservable<Unit> GetReInit
     {
-        m_LeaderName = Define.CHARA_NAME.BOXMAN;
+        get { return m_ReInitialize; }
+    }
 
-        SoundManager.Instance.BlueCrossBGM.Play();
-        //SoundManager.Instance.BossBGM.Play();
-        //SoundManager.Instance.KD.Play();
+    /// <summary>
+    /// 毎F処理メソッドまとめ
+    /// </summary>
+    private Subject<Unit> m_Update = new Subject<Unit>();
 
-        DungeonTerrain.Instance.DeployDungeon();
-        DungeonContents.Instance.DeployDungeonContents();
+    public IObservable<Unit> GetUpdate
+    {
+        get { return m_Update; }
+    }
+
+    protected override void Awake()
+    {
+        m_Initialize.Subscribe(_ =>
+        {
+            //暫定処理たくさん
+            m_LeaderName = Define.CHARA_NAME.BOXMAN;
+
+            SoundManager.Instance.BlueCrossBGM.Play();
+
+            DungeonTerrain.Instance.DeployDungeon();
+            DungeonContents.Instance.DeployDungeonContents();
+        }).AddTo(this);
+
+        //暗転終了通知
+        MessageBroker.Default.Receive<Message.IsFinishBlackPanel>()
+            .Where(_ => _.IsDark == true)
+            .Subscribe(_ => ReInitialize()).AddTo(this);
+
+        //明転終了通知
+        MessageBroker.Default.Receive<Message.IsFinishBlackPanel>()
+            .Where(_ => _.IsDark == false)
+            .Subscribe(_ => ReStartGame()).AddTo(this);
+
+        //ダンジョン再構築終了通知
+        MessageBroker.Default.Receive<Message.IsFinishFloorText>()
+            .Subscribe(_ =>  MessageBroker.Default
+                .Publish(new Message.RequestBlackPanel { IsDark = false }));
+    }
+
+    //初期化処理呼び出し
+    private void Start()
+    {
+        m_Initialize.OnNext(Unit.Default);
     }
 
     //次の階に行くときの初期化
@@ -79,32 +122,14 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         Debug.Log("再初期化");
         RemoveDungeon();
         RebuildDungeon();
-        TurnManager.Instance.InitializeTurn();
+        TurnManager.Instance.AllCharaActionable();
+        BlackPanelManager.Instance.ControllText();
     }
 
     //Update関数は基本的にここだけ
     private void Update()
     {
-        //暗転・明転時に呼ばれる
-        if(CurrentGameState == InternalDefine.GAME_STATE.LOADING)
-        {
-            switch(IsFinishToBuildDungeon)
-            {
-                case false:
-                    IndicateNextFloorUi();
-                    break;
-
-                case true:
-                    HideNextFloorUi();
-                    break;
-            }
-            
-            return;
-        }
-
-        TurnManager.Instance.UpdateTurn();
-        InputManager.Instance.DetectInput();
-        CharaUiManager.Instance.UpdateCharaUi();
+        m_Update.OnNext(Unit.Default);
     }
 
     //ダンジョン再構築
@@ -113,7 +138,6 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         Debug.Log("Rebuild");
         DungeonTerrain.Instance.DeployDungeon();
         DungeonContents.Instance.RedeployDungeonContents();
-        TurnManager.Instance.InitializeTurn();
     }
 
     //ダンジョン破壊
@@ -128,35 +152,12 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     {
         FloorNum++;
         CurrentGameState = InternalDefine.GAME_STATE.LOADING;
-        IsFinishToBuildDungeon = false;
-    }
-
-    //暗転してダンジョン生成
-    private void IndicateNextFloorUi()
-    {
-        BlackPanelManager.Instance.Indicate();
-        if(BlackPanelManager.Instance.IsFinish == true)
-        {
-            IsFinishToBuildDungeon = true;
-
-            //初回は既にダンジョン生成済みなので再初期化はスキップ
-            if (IsFirstTime == true)
-            {
-                IsFirstTime = false;
-                return;
-            }
-            
-            ReInitialize();
-        }
+        MessageBroker.Default.Publish(new Message.RequestBlackPanel { IsDark = true　});
     }
 
     //明転
-    private void HideNextFloorUi()
+    private void ReStartGame()
     {
-        BlackPanelManager.Instance.Hide();
-        if (BlackPanelManager.Instance.IsFinish == true)
-        {
-            CurrentGameState = InternalDefine.GAME_STATE.PLAYING;
-        }
+         CurrentGameState = InternalDefine.GAME_STATE.PLAYING;
     }
 }

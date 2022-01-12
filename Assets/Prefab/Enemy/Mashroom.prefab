@@ -107,6 +107,7 @@ GameObject:
   - component: {fileID: 2431376900803508528}
   - component: {fileID: 6365759817544455909}
   - component: {fileID: 7293646533253710922}
+  - component: {fileID: 3311249493831154698}
   m_Layer: 0
   m_Name: Mashroom
   m_TagString: Untagged
@@ -185,6 +186,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9cabfefd215eb4bbf914d4d1f9208152, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TargetObject: {fileID: 0}
+--- !u!114 &3311249493831154698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3135674774238795827}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 603c1a10ac7ee47d5bb61aa2603b93fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &3135674774238809845

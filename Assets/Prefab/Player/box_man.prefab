@@ -95,6 +95,7 @@ GameObject:
   - component: {fileID: 6085993997747994854}
   - component: {fileID: 6601931608217137191}
   - component: {fileID: -2829387636216562551}
+  - component: {fileID: -3478033662524825469}
   m_Layer: 0
   m_Name: Box_man
   m_TagString: Untagged
@@ -130,7 +131,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c797bbdf6fbf14c8fb7555f7fd8fa4bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_CharaName: 0
 --- !u!114 &6601931608217137191
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -155,6 +155,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4cd27c42f9a3c4391a978bd1e98c2f6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-3478033662524825469
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8497573164149189218}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 603c1a10ac7ee47d5bb61aa2603b93fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &7437906401129877234

@@ -1,33 +1,65 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UniRx;
+using System;
+using UnityEngine.UI;
 
 /// <summary>
-/// 選択肢と説明のUi
+/// 左上メニューと説明のUi
 /// </summary>
 
 public class MenuManager : SingletonMonoBehaviour<MenuManager>
 {
-    //何のMenu表示中か示す
-    public InternalDefine.MENU_STATE CurentKey
+    private MenuManager.Manager m_Manager = new Manager();
+    public Manager GetManager
     {
-        get;
-        set;
+        get => m_Manager;
     }
 
-    [SerializeField]
-    private Dictionary<InternalDefine.MENU_STATE, LogInfo> m_LogInfo = new Dictionary<InternalDefine.MENU_STATE, LogInfo>()
+    public class Manager : UiManager
     {
-        {InternalDefine.MENU_STATE.MENU, new StairsLog() }
-    };
-    public Dictionary<InternalDefine.MENU_STATE, LogInfo> LogInfo
-    {
-        get { return m_LogInfo; }
-        set { m_LogInfo = value; }
-    }
+        /// <summary>
+        /// 選択肢の数
+        /// </summary>
+        protected override int OptionCount => 2;
 
-    public void Indicate()
-    {
-        UiHolder.Instance.MenuUi.SetActive(true);
+        /// <summary>
+        /// 選択肢のメソッド
+        /// </summary>
+        protected override List<Action> OptionMethods => new List<Action>
+        {
+            () => OpenBag(),
+            () => CheckStatus(),
+        };
+
+        /// <summary>
+        /// 操作するUi
+        /// </summary>
+        protected override GameObject Ui => UiHolder.Instance.MenuUi;
+
+        /// <summary>
+        /// 操作するテキストUi
+        /// </summary>
+        protected override List<Text> Texts => UiHolder.Instance.MenuText;
+
+
+        protected override void Awake()
+        {
+            base.Awake();
+        }
+
+        /// <summary>
+        /// バッグを開く
+        /// </summary>
+        private void OpenBag()
+        {
+            BagManager.Instance.GetManager.IsActive = true;
+        }
+
+        private void CheckStatus()
+        {
+
+        }
     }
 }
