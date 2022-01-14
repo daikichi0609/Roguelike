@@ -11,12 +11,7 @@ public class Bag
 
     public int InventoryCount
     {
-        get;
-    }
-
-    public Bag(int inventoryCount)
-    {
-        InventoryCount = inventoryCount;
+        get => BagManager.Instance.InventryCount;
     }
 
     public bool PutAway(GameObject obj)

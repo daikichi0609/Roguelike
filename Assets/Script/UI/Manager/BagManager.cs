@@ -7,36 +7,56 @@ using UnityEngine.UI;
 
 public class BagManager : SingletonMonoBehaviour<BagManager>
 {
-    private BagManager.Manager m_Manager = new Manager();
-    public Manager GetManager
+    private BagManager.BagUi m_Manager = new BagUi();
+    public BagUi GetManager
     {
         get => m_Manager;
     }
 
-    public class Manager : UiManager
+    /// <summary>
+    /// 参照しているバッグ
+    /// </summary>
+    private Bag m_Bag = new Bag();
+
+    public Bag Bag
     {
-        /// <summary>
-        /// 参照しているバッグ
-        /// </summary>
-        private Bag m_Bag;
+        get => m_Bag;
+        set => m_Bag = value;
+    }
 
-        public Bag Bag
-        {
-            get => m_Bag;
-            set => m_Bag = value;
-        }
+    /// <summary>
+    /// バッグの要素数
+    /// </summary>
+    private int m_InventoryCount = 9;
+    public int InventryCount
+    {
+        get => m_InventoryCount;
+        set => m_InventoryCount = value;
+    }
 
+    protected override void Awake()
+    {
+        GameManager.Instance.GetUpdate
+            .Subscribe(_ => GetManager.DetectInput());
+
+        GetManager.IsActiveChanged.Subscribe(_ => GetManager.SwitchUi());
+
+        GetManager.GetOptionId.Subscribe(_ => GetManager.UpdateText());
+    }
+
+    public class BagUi : UiBase
+    {
         /// <summary>
         /// 選択肢の数
         /// </summary>
-        protected override int OptionCount => Bag.ItemList.Count;
+        protected override int OptionCount => BagManager.Instance.Bag.ItemList.Count;
 
         /// <summary>
         /// 選択肢のメソッド
         /// </summary>
         protected override List<Action> OptionMethods => new List<Action>
         {
-            () => SelectItem(Bag.ItemList[OptionId])
+            () => SelectItem(BagManager.Instance.Bag.ItemList[OptionId])
         };
 
         /// <summary>
@@ -49,12 +69,7 @@ public class BagManager : SingletonMonoBehaviour<BagManager>
         /// </summary>
         protected override List<Text> Texts => UiHolder.Instance.ItemTexts;
 
-        protected override void Awake()
-        {
-            base.Awake();
-        }
-
-        protected override void DetectInput()
+        public override void DetectInput()
         {
             //Ui表示中じゃないなら受け付けない
             if (IsActive == false)
@@ -62,32 +77,49 @@ public class BagManager : SingletonMonoBehaviour<BagManager>
                 return;
             }
 
+            if (InputManager.Instance.IsProhibitDuplicateInput == true)
+            {
+                InputManager.Instance.IsProhibitDuplicateInput = false;
+                return;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                CloseUi();
+                return;
+            }
+
+            //ココが変更点
             //決定ボタン 該当メソッド実行
             if (Input.GetKeyDown(KeyCode.Return))
             {
-                SelectItem(Bag.ItemList[OptionId]);
+                SelectItem(BagManager.Instance.Bag.ItemList[OptionId]);
                 return;
             }
 
             //上にカーソル移動
             if (Input.GetKeyDown(KeyCode.W))
             {
-                OptionId--;
-                if (OptionId < 0)
+                if (OptionId >= 1)
                 {
-                    OptionId = 0;
+                    OptionId--;
                 }
             }
 
             //下にカーソル移動
             if (Input.GetKeyDown(KeyCode.S))
             {
-                OptionId++;
-                if (OptionId > OptionCount)
+                if (OptionId <= Texts.Count - 2)
                 {
-                    OptionId = OptionCount;
+                    OptionId++;
                 }
             }
+        }
+
+        protected override void CloseUi()
+        {
+            base.CloseUi();
+            MenuManager.Instance.GetManager.IsActive = true;
         }
 
         public void SelectItem(Item item)
@@ -97,7 +129,7 @@ public class BagManager : SingletonMonoBehaviour<BagManager>
 
         public void PutAway(GameObject item)
         {
-            bool success = Bag.PutAway(item);
+            bool success = BagManager.Instance.Bag.PutAway(item);
 
             if (success == false)
             {

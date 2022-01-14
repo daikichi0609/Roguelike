@@ -38,12 +38,6 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         set { m_FloorNum = value; }
     }
 
-    //初回ダンジョン生成かどうか
-    private bool IsFirstTime
-    {
-        get; set;
-    } = true;
-
     //リーダーキャラの名前
     [SerializeField] private Define.CHARA_NAME m_LeaderName;
     public Define.CHARA_NAME LeaderName

@@ -1,24 +1,23 @@
 ﻿<Properties StartupConfiguration="{3B4D7A7B-B193-C7B8-731F-3F701A73DF6D}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Script/Character/Base/CharaBattle/CharaTurn.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Script/Manager/ObjectManager.cs">
     <Files>
-      <File FileName="Assets/Script/Character/Base/CharaMove/CharaMove.cs" Line="217" Column="9" />
-      <File FileName="Assets/Script/Manager/TurnManager.cs" Line="33" Column="36" />
-      <File FileName="Assets/Script/Manager/InputManager.cs" Line="1" Column="1" />
-      <File FileName="Assets/Script/Character/Base/CharaBattle/EnemyBattle.cs" Line="60" Column="54" />
-      <File FileName="Assets/Script/Character/Base/CharaBattle/CharaBattle.cs" Line="56" Column="6" />
-      <File FileName="Assets/Script/Character/Base/CharaBattle/CharaTurn.cs" Line="11" Column="39" />
+      <File FileName="Assets/Script/Character/Base/CharaBattle/CharaBattle.cs" Line="213" Column="25" />
+      <File FileName="Assets/Script/Character/Base/CharaBattle/EnemyBattle.cs" Line="31" Column="39" />
+      <File FileName="Assets/Script/Manager/TurnManager.cs" Line="98" Column="14" />
+      <File FileName="Assets/Script/Character/Player/Boxman.cs" Line="14" Column="36" />
+      <File FileName="Assets/Script/Character/Enemy/Mashroom.cs" Line="17" Column="1" />
+      <File FileName="Assets/Script/Character/Base/CharaBattle/CharaTurn.cs" Line="46" Column="27" />
+      <File FileName="Assets/Script/Character/Base/CharaMove/CharaMove.cs" Line="194" Column="23" />
+      <File FileName="Assets/Script/Manager/InputManager.cs" Line="111" Column="4" />
+      <File FileName="Assets/Script/Utility/Utility.cs" Line="154" Column="39" />
+      <File FileName="Assets/Script/Utility/Define.cs" Line="140" Column="10" />
+      <File FileName="Assets/Script/Dungeon/DungeonContents.cs" Line="131" Column="32" />
+      <File FileName="Assets/Script/Manager/ObjectManager.cs" Line="1" Column="1" />
     </Files>
-    <Pads>
-      <Pad Id="ProjectPad">
-        <State name="__root__">
-          <Node name="Roguelike" expanded="True" selected="True" />
-        </State>
-      </Pad>
-    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="e201ca18-69c9-4721-829e-b990104f3dc0" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="7398bde4-5b40-4c32-aa91-970ba4d6e8e0" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

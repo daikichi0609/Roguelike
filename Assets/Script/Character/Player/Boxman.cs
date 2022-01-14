@@ -15,7 +15,7 @@ public class Boxman: PlayerBattle
     {
         base.NormalAttack();
         Vector3 attackPos = CharaMove.Position + CharaMove.Direction;
-        Attack(attackPos, TARGET.ENEMY);
+        Attack(attackPos, InternalDefine.TARGET.ENEMY);
     }
 
     protected override void Skill()

@@ -1,23 +1,30 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UniRx;
 
 public abstract class CharaBattle : MonoBehaviour
 {
-    public enum ACTION
-    {
-        ATTACK,
-        SKILL,
-        MOVE,
-    }
-
+    /// <summary>
+    /// 同じオブジェクトのCharaMove
+    /// </summary>
     private CharaMove m_CharaMove;
     protected CharaMove CharaMove
     {
-        get { return m_CharaMove; }
-        set { m_CharaMove = value; }
+        get => m_CharaMove;
+        set => m_CharaMove = value;
     }
 
+    private CharaTurn m_CharaTurn;
+    protected CharaTurn CharaTurn
+    {
+        get => m_CharaTurn;
+        set => m_CharaTurn = value;
+    }
+
+    /// <summary>
+    /// パラメータ
+    /// </summary>
     [SerializeField] private BattleStatus.Parameter m_Parameter;
     public BattleStatus.Parameter Parameter
     {
@@ -25,6 +32,9 @@ public abstract class CharaBattle : MonoBehaviour
         set { m_Parameter = value; }
     }
 
+    /// <summary>
+    /// 状態異常
+    /// </summary>
     protected CharaCondition m_Condition;
     protected CharaCondition Condition
     {
@@ -32,11 +42,17 @@ public abstract class CharaBattle : MonoBehaviour
         set { m_Condition = value; }
     }
 
+    /// <summary>
+    /// レベル
+    /// </summary>
     public int Lv
     {
         private get; set;
     }
 
+    /// <summary>
+    /// HP最大値
+    /// </summary>
     public int MaxHp
     {
         get;
@@ -45,67 +61,63 @@ public abstract class CharaBattle : MonoBehaviour
 
     public virtual void Initialize()
     {
-        CharaMove = this.gameObject.GetComponent<CharaMove>();
-        Condition = this.gameObject.GetComponent<CharaCondition>();
+        CharaMove = GetComponent<CharaMove>();
+        CharaTurn = GetComponent<CharaTurn>();
+        Condition = GetComponent<CharaCondition>();
         MaxHp = Parameter.Hp;
+
+        //ダメージ処理が終わったら制限解除
+        MessageBroker.Default.Receive<Message.MFinishDamage>().Subscribe(_ =>
+        {
+            if(_.Chara == this)
+            {
+                CharaTurn.CAN_ACTION = true;
+                CharaTurn.FinishTurn();
+            }
+        });
     }
 
+    /// <summary>
+    /// 通常攻撃情報
+    /// </summary>
     protected virtual AttackInfo AttackInfo { get; }
 
+    /// <summary>
+    /// 通常攻撃 共通部分
+    /// </summary>
     protected virtual void NormalAttack()
     {
-        CharaMove.FinishTurn();
-        //ステート操作＆アニメーション再生
+        //他キャラの行動禁止
+        CharaTurn.CAN_ACTION = false;
+
+        //モーション終わりにターンを返す
         SwitchIsAttacking(AttackInfo.ActFrame);
+
+        //アニメーション再生
         PlayAnimation("IsAttacking");
     }
 
-    public enum TARGET
+    /// <summary>
+    /// 攻撃 空振り考慮のプレイヤー用
+    /// </summary>
+    /// <param name="attackPos"></param>
+    /// <param name="target"></param>
+    protected virtual void Attack(Vector3 attackPos, InternalDefine.TARGET target)
     {
-        PLAYER,
-        ENEMY,
-        NONE
-    }
-
-    protected virtual void Attack(Vector3 attackPos, TARGET target)
-    {
-        if (AttackInfo.IsPossibleToDiagonal == false)
+        //攻撃対象がいるか
+        bool isSuccess = ConfirmAttack(attackPos, target);
+        if(isSuccess == false)
         {
-            if(DungeonTerrain.Instance.IsPossibleToMoveDiagonal((int)CharaMove.Position.x, (int)CharaMove.Position.z, (int)CharaMove.Direction.x, (int)CharaMove.Direction.z) == false)
+            StartCoroutine(Coroutine.DelayCoroutine(AttackInfo.AnimFrame, () =>
             {
-                PlaySound(true, AttackInfo.AnimFrame, SoundManager.Instance.Miss);
-                return;
-            }
+               PlaySound(false, null);
+               CharaTurn.CAN_ACTION = true;
+               CharaTurn.FinishTurn();
+            }));
+            return;
         }
 
-        //攻撃範囲に攻撃対象がいるか確認
-        switch (target)
-        {
-            case TARGET.PLAYER:
-                if (Positional.IsPlayerOn(attackPos) == false)
-                {
-                    PlaySound(true, AttackInfo.AnimFrame, SoundManager.Instance.Miss);
-                    return;
-                }
-                break;
-
-            case TARGET.ENEMY:
-                if (Positional.IsEnemyOn(attackPos) == false)
-                {
-                    PlaySound(true, AttackInfo.AnimFrame, SoundManager.Instance.Miss);
-                    return;
-                }
-                break;
-
-            case TARGET.NONE:
-                if (Positional.IsCharacterOn(attackPos) == false)
-                {
-                    PlaySound(true, AttackInfo.AnimFrame, SoundManager.Instance.Miss);
-                    return;
-                }
-                break;
-        }
-
+        //ターゲットの情報取得
         CharaBattle targetBattle = ObjectManager.Instance.SpecifiedPositionCharacterObject(attackPos).GetComponent<CharaBattle>();
         BattleStatus.Parameter targetParam = targetBattle.Parameter;
 
@@ -116,45 +128,96 @@ public abstract class CharaBattle : MonoBehaviour
         //音再生は剣のヒット時
         StartCoroutine(Coroutine.DelayCoroutine(AttackInfo.AnimFrame, () =>
         {
-            PlaySound(true, AttackInfo.AnimFrame, SoundManager.Instance.Attack_Sword);
+            PlaySound(true, SoundManager.Instance.Attack_Sword);
         }));
 
-        //ダメージはモーション終わり
+        //ダメージはモーション終わりに実行
         StartCoroutine(Coroutine.DelayCoroutine(AttackInfo.AnimFrame, () =>
         {
-            targetBattle.Damage(power, Parameter.Dex);
+            targetBattle.Damage(this, power, Parameter.Dex);
         }));
     }
 
+    private bool ConfirmAttack(Vector3 attackPos, InternalDefine.TARGET target)
+    {
+        //壁抜け不可能ならできなくする
+        if (AttackInfo.IsPossibleToDiagonal == false)
+        {
+            if (DungeonTerrain.Instance.IsPossibleToMoveDiagonal((int)CharaMove.Position.x, (int)CharaMove.Position.z, (int)CharaMove.Direction.x, (int)CharaMove.Direction.z) == false)
+            {
+                return false;
+            }
+        }
+
+        //攻撃範囲に攻撃対象がいるか確認
+        switch (target)
+        {
+            case InternalDefine.TARGET.PLAYER:
+                if (Positional.IsPlayerOn(attackPos) == false)
+                {
+                    return false;
+                }
+                break;
+
+            case InternalDefine.TARGET.ENEMY:
+                if (Positional.IsEnemyOn(attackPos) == false)
+                {
+                    return false;
+                }
+                break;
+
+            case InternalDefine.TARGET.NONE:
+                if (Positional.IsCharacterOn(attackPos) == false)
+                {
+                    return false;
+                }
+                break;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// スキル
+    /// </summary>
     protected virtual void Skill()
     {
 
     }
 
-    public void Damage(int power, float dex)
+    /// <summary>
+    /// 被ダメージ
+    /// </summary>
+    /// <param name="power"></param>
+    /// <param name="dex"></param>
+    public void Damage(CharaBattle opponentChara, int power, float dex)
     {
-        TurnManager.Instance.IsCanAction = false;
         //ヒットorノット判定
         if (Calculator.JudgeHit(dex, Parameter.Eva) == false)
         {
-            PlaySound(false, 0f, null);
+            PlaySound(false, null);
+            MessageBroker.Default.Publish(new Message.MFinishDamage(opponentChara, false, true));
             return;
         }
 
+        //ダメージ処理
         int damage = Calculator.CalculateDamage(power, Parameter.Def);
         Parameter.Hp = Calculator.CalculateRemainingHp(Parameter.Hp, damage);
 
         SoundManager.Instance.Damage_Small.Play();
         PlayAnimation("IsDamaging");
-        StartCoroutine(Coroutine.DelayCoroutine(0.1f, () =>
+        StartCoroutine(Coroutine.DelayCoroutine(1f, () =>
         {
-            TurnManager.Instance.IsCanAction = true;
+            if (Parameter.Hp <= 0)
+            {
+                Death();
+                MessageBroker.Default.Publish(new Message.MFinishDamage(opponentChara, true, true));
+            }
+            else
+            {
+                MessageBroker.Default.Publish(new Message.MFinishDamage(opponentChara, true, false));
+            }
         }));
-
-        if (Parameter.Hp <= 0)
-        {
-            Death();
-        }
     }
 
     protected virtual void Death()
@@ -162,7 +225,11 @@ public abstract class CharaBattle : MonoBehaviour
         
     }
 
-    protected void PlayAnimation(string name) //アニメーション一回流す
+    /// <summary>
+    /// アニメーションを一回流す
+    /// </summary>
+    /// <param name="name"></param>
+    protected void PlayAnimation(string name)
     {
         CharaMove.CharaAnimator.SetBool(name, true);
         StartCoroutine(Coroutine.DelayCoroutine(0.1f, () =>
@@ -171,35 +238,42 @@ public abstract class CharaBattle : MonoBehaviour
         }));
     }
 
-    protected void SwitchIsAttacking(float actFrame) //攻撃の全体フレーム
+    /// <summary>
+    /// 攻撃の全体フレームに合わせてAction中にする
+    /// </summary>
+    /// <param name="actFrame"></param>
+    protected void SwitchIsAttacking(float actFrame)
     {
+        CharaTurn.StartAction();
+        
         StartCoroutine(Coroutine.DelayCoroutine(actFrame, () =>
         {
-            TurnManager.Instance.IsCanAction = true;
+            CharaTurn.FinishAction();
         }));
     }
 
-    protected void PlaySound(bool hit, float delayFrame, AudioSource sound) //攻撃サウンド
+    /// <summary>
+    /// ヒット音を鳴らす
+    /// </summary>
+    /// <param name="hit"></param>
+    /// <param name="delayFrame"></param>
+    /// <param name="sound"></param>
+    protected void PlaySound(bool hit, AudioSource sound) //攻撃サウンド
     {
         if (hit == false)
         {
-            StartCoroutine(Coroutine.DelayCoroutine(delayFrame, () =>
-            {
-                SoundManager.Instance.Miss.Play();
-                TurnManager.Instance.IsCanAction = true;
-            }));
+            SoundManager.Instance.Miss.Play();
         }
         else if (hit == true)
         {
-            StartCoroutine(Coroutine.DelayCoroutine(delayFrame, () =>
-            {
-                sound.Play();
-                TurnManager.Instance.IsCanAction = true;
-            }));
+             sound.Play();
         }
     }
 }
 
+/// <summary>
+/// 通常攻撃基底クラス
+/// </summary>
 public abstract class AttackInfo
 {
     public virtual string Name { get; } //技名

@@ -26,10 +26,21 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
 		set;
     }
 
-	//UI表示中かどうか
-	public bool IsUiPopUp => LogManager.Instance.GetManager.IsActive || MenuManager.Instance.GetManager.IsActive;
+	/// <summary>
+	/// UI表示中かどうか
+	/// </summary>
+	public bool IsUiPopUp => LogManager.Instance.GetManager.IsActive || MenuManager.Instance.GetManager.IsActive || BagManager.Instance.GetManager.IsActive;
 
-    protected override void Awake()
+	/// <summary>
+	/// 重複入力を禁止するためのフラグ
+	/// </summary>
+	public bool IsProhibitDuplicateInput
+	{
+		get;
+		set;
+	}
+
+	protected override void Awake()
     {
         base.Awake();
 
@@ -40,6 +51,13 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
     //入力受付メソッド
     private void DetectInput()
     {
+		//入力禁止中なら入力を受け付けない
+		if (IsProhibitDuplicateInput == true)
+		{
+			IsProhibitDuplicateInput = false;
+			return;
+		}
+
 		//プレイヤーキャラ取得
 		GameObject chara = ObjectManager.Instance.PlayerObject(0);
 		CharaMove playerMove = chara.GetComponent<CharaMove>();
@@ -52,9 +70,10 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
 			return;
         }
 
-		//バッグを開く STATEも合わせて変更
-		if (Input.GetKey(KeyCode.Q))
+		//メニューを開く
+		if (Input.GetKeyDown(KeyCode.Q))
 		{
+			IsProhibitDuplicateInput = true;
 			MenuManager.Instance.GetManager.IsActive = true;
 			return;
 		}
@@ -93,9 +112,9 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
 			return;
 		}
 
-		if (Input.GetKeyDown(KeyCode.E))
+		if (Input.GetKeyDown(KeyCode.E)　&& TurnManager.Instance.IsCanAttack == true)
 		{
-			playerBattle.Act(CharaBattle.ACTION.ATTACK);
+			playerBattle.Act(InternalDefine.ACTION.ATTACK);
 		}		
 	}
 

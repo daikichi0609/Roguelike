@@ -44,7 +44,7 @@ public static class Utility
 
     //敵AI
 
-    public static EnemyActionAndTarget CreateActionAndTarget(EnemyAI.ENEMY_STATE action, List<GameObject> targetList)
+    public static EnemyActionAndTarget CreateActionAndTarget(InternalDefine.ENEMY_STATE action, List<GameObject> targetList)
     {
         return new EnemyActionAndTarget(action, targetList);
     }
@@ -54,17 +54,17 @@ public static class Utility
         List<GameObject> targetList = CreateTargetList_Attack(attackPosList);
         if (targetList.Count >= 1)
         {
-            return CreateActionAndTarget(EnemyAI.ENEMY_STATE.ATTACKING, targetList);
+            return CreateActionAndTarget(InternalDefine.ENEMY_STATE.ATTACKING, targetList);
         }
 
         targetList = CreateTargetList_Chase(pos);
         if (targetList.Count >= 1)
         {
-            return CreateActionAndTarget(EnemyAI.ENEMY_STATE.CHASING, targetList);
+            return CreateActionAndTarget(InternalDefine.ENEMY_STATE.CHASING, targetList);
         }
 
         targetList = CreateTargetList_Search();
-        return CreateActionAndTarget(EnemyAI.ENEMY_STATE.SEARCHING, targetList);
+        return CreateActionAndTarget(InternalDefine.ENEMY_STATE.SEARCHING, targetList);
     }
 
     private static List<GameObject> CreateTargetList_Attack(List<Vector3> attackPosList)
@@ -163,19 +163,17 @@ public static class Calculator
     {
         if(UnityEngine.Random.Range(1,101) >= dex * 100)
         {
-            Debug.Log("外す");
             return false;
         }
         if(UnityEngine.Random.Range(1, 101) <= eva * 100)
         {
-            Debug.Log("回避");
             return false;
         }
         return true;
     }
 }
 
-public class Coroutine
+public static class Coroutine
 {
     public static IEnumerator DelayCoroutine(float seconds, Action action)
     {

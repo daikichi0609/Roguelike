@@ -29,25 +29,23 @@ public abstract class PlayerBattle : CharaBattle
         base.Initialize();
     }
 
-    public void Act(ACTION action)
+    public void Act(InternalDefine.ACTION action)
     {
         switch (action)
         {
-            case ACTION.ATTACK:
+            case InternalDefine.ACTION.ATTACK:
                 if (TurnManager.Instance.IsCanAttack == false)
                 {
                     return;
                 }
-                TurnManager.Instance.IsCanAttack = true;
                 NormalAttack();
                 break;
 
-            case ACTION.SKILL:
+            case InternalDefine.ACTION.SKILL:
                 if (TurnManager.Instance.IsCanAttack == false)
                 {
                     return;
                 }
-                TurnManager.Instance.IsCanAttack = true;
                 Skill();
                 break;
         }

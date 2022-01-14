@@ -20,7 +20,15 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
     {
         base.Awake();
 
-        GetPlayerObs.Subscribe(_ => MessageBroker.Default.Publish(new Message.MChangedPlayerList()));
+        GetPlayerObs.Subscribe(_ =>
+        {
+            Debug.Log("プレイヤーリスト操作");
+        });
+
+        GetEnemyObs.Subscribe(_ =>
+        {
+            Debug.Log("敵リスト操作");
+        });
     }
 
     /// <summary>
@@ -49,6 +57,11 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
         return m_PlayerList[i];
     }
 
+    /// <summary>
+    /// 特定の座標のプレイヤーを取得
+    /// </summary>
+    /// <param name="pos"></param>
+    /// <returns></returns>
     public GameObject SpecifiedPositionPlayerObject(Vector3 pos)
     {
         foreach (GameObject player in m_PlayerList)
@@ -62,6 +75,11 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
         return null;
     }
 
+    /// <summary>
+    /// 特定の部屋にいるプレイヤーを取得
+    /// </summary>
+    /// <param name="roomId"></param>
+    /// <returns></returns>
     public List<GameObject> SpecifiedRoomPlayerObjectList(int roomId)
     {
         if(roomId <= 0)
@@ -102,11 +120,21 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
     [SerializeField]
     public List<GameObject> EnemyValueList => m_EnemyList.ToList();
 
+    /// <summary>
+    /// Enemyオブジェクト取得
+    /// </summary>
+    /// <param name="i"></param>
+    /// <returns></returns>
     public GameObject EnemyObject(int i)
     {
         return m_EnemyList[i];
     }
 
+    /// <summary>
+    /// 特定の座標の敵を取得
+    /// </summary>
+    /// <param name="pos"></param>
+    /// <returns></returns>
     public GameObject SpecifiedPositionEnemyObject(Vector3 pos)
     {
         foreach (GameObject enemy in m_EnemyList)
@@ -120,6 +148,11 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
         return null;
     }
 
+    /// <summary>
+    /// 特定の部屋の敵を取得
+    /// </summary>
+    /// <param name="pos"></param>
+    /// <returns></returns>
     public GameObject SpecifiedPositionCharacterObject(Vector3 pos)
     {
         foreach (GameObject player in m_PlayerList)
@@ -142,6 +175,9 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
         return null;
     }
 
+    /// <summary>
+    /// 落ちているアイテムリスト
+    /// </summary>
     [SerializeField] private List<GameObject> m_ItemList = new List<GameObject>();
     public List<GameObject> ItemList
     {
@@ -149,6 +185,11 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
         set { m_ItemList = value; }
     }
 
+    /// <summary>
+    /// 特定の座標のアイテムを取得
+    /// </summary>
+    /// <param name="pos"></param>
+    /// <returns></returns>
     public GameObject SpecifiedPositionItemObject(Vector3 pos)
     {
         foreach (GameObject player in m_PlayerList)
@@ -171,6 +212,11 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>
         return null;
     }
 
+    /// <summary>
+    /// 特定の部屋の出入り口を取得
+    /// </summary>
+    /// <param name="roomId"></param>
+    /// <returns></returns>
     public List<GameObject> GateWayObjectList(int roomId)
     {
         List<GameObject> roomList = DungeonTerrain.Instance.GetRoomList(roomId);

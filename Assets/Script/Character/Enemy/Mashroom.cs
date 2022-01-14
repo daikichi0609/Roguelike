@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class Mashroom : EnemyAI
+public class Mashroom : EnemyBattle
 {
     public override void Initialize()
     {
@@ -14,8 +14,9 @@ public class Mashroom : EnemyAI
     protected override void NormalAttack()
     {
         base.NormalAttack();
+
         Vector3 attackPos = CharaMove.Position + CharaMove.Direction;
-        Attack(attackPos, TARGET.PLAYER);
+        Attack(attackPos, InternalDefine.TARGET.PLAYER);
     }
 
     protected override void Skill(List<GameObject> targetList)

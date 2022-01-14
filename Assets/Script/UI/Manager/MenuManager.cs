@@ -11,13 +11,39 @@ using UnityEngine.UI;
 
 public class MenuManager : SingletonMonoBehaviour<MenuManager>
 {
-    private MenuManager.Manager m_Manager = new Manager();
-    public Manager GetManager
+    private MenuManager.MenuUi m_Manager = new MenuUi();
+    public MenuUi GetManager
     {
         get => m_Manager;
     }
 
-    public class Manager : UiManager
+    protected override void Awake()
+    {
+        GameManager.Instance.GetUpdate
+            .Subscribe(_ => GetManager.DetectInput());
+
+        GetManager.IsActiveChanged.Subscribe(_ => GetManager.SwitchUi());
+
+        GetManager.GetOptionId.Subscribe(_ => GetManager.UpdateText());
+    }
+
+    /// <summary>
+    /// バッグを開く
+    /// </summary>
+    private void OpenBag()
+    {
+        BagManager.Instance.GetManager.IsActive = true;
+    }
+
+    /// <summary>
+    /// ステータスの確認
+    /// </summary>
+    private void CheckStatus()
+    {
+
+    }
+
+    public class MenuUi : UiBase
     {
         /// <summary>
         /// 選択肢の数
@@ -29,8 +55,8 @@ public class MenuManager : SingletonMonoBehaviour<MenuManager>
         /// </summary>
         protected override List<Action> OptionMethods => new List<Action>
         {
-            () => OpenBag(),
-            () => CheckStatus(),
+            () => MenuManager.Instance.OpenBag(),
+            () => MenuManager.Instance.CheckStatus(),
         };
 
         /// <summary>
@@ -42,24 +68,5 @@ public class MenuManager : SingletonMonoBehaviour<MenuManager>
         /// 操作するテキストUi
         /// </summary>
         protected override List<Text> Texts => UiHolder.Instance.MenuText;
-
-
-        protected override void Awake()
-        {
-            base.Awake();
-        }
-
-        /// <summary>
-        /// バッグを開く
-        /// </summary>
-        private void OpenBag()
-        {
-            BagManager.Instance.GetManager.IsActive = true;
-        }
-
-        private void CheckStatus()
-        {
-
-        }
     }
 }

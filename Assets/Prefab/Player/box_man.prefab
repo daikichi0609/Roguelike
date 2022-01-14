@@ -143,6 +143,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00eeaf891829f4842aa302d57a42f197, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DEBUG: 1
   m_MoveObject: {fileID: 8497573164149189218}
   m_CharaObject: {fileID: 7437906401129777486}
 --- !u!114 &-2829387636216562551
@@ -169,6 +170,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 603c1a10ac7ee47d5bb61aa2603b93fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_IsFinishTurn: 0
+  m_IsActing: 0
 --- !u!1001 &7437906401129877234
 PrefabInstance:
   m_ObjectHideFlags: 0

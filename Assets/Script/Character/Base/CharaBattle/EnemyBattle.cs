@@ -1,18 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UniRx;
 
-public abstract class EnemyAI : CharaBattle
+public abstract class EnemyBattle : CharaBattle
 {
-    public enum ENEMY_STATE
-    {
-        NONE,
-        SEARCHING,
-        CHASING,
-        ATTACKING
-    }
-
-    protected ENEMY_STATE CurrentState
+    protected InternalDefine.ENEMY_STATE CurrentState
     {
         get;
         set;
@@ -30,44 +23,58 @@ public abstract class EnemyAI : CharaBattle
         base.Initialize();
     }
 
+    /// <summary>
+    /// 死亡
+    /// </summary>
     protected override void Death()
     {
         DungeonContents.Instance.RemoveEnemyObject(gameObject);
     }
 
-    public void DecideAndExcuteAction()
+    /// <summary>
+    /// 行動を決めて実行する
+    /// </summary>
+    public void DecideAndExecuteAction()
     {
         List<Vector3> attackPosList = AttackPosList(CharaMove.Position);
         EnemyActionAndTarget enemyActionAndTarget = Utility.DecideActionAndTarget(attackPosList, CharaMove.Position);
         switch (enemyActionAndTarget.NextState)
         {
-            case ENEMY_STATE.ATTACKING:
+            case InternalDefine.ENEMY_STATE.ATTACKING:
+                //攻撃禁止なら
                 if(TurnManager.Instance.IsCanAttack == false)
                 {
-                    return;
+                    StartCoroutine(TurnManager.Instance.WaitForIsCanAttack());
                 }
                 Face(enemyActionAndTarget.TargetList);
                 NormalAttack();
                 break;
 
-            case ENEMY_STATE.CHASING:
+            case InternalDefine.ENEMY_STATE.CHASING:
                 Chase(enemyActionAndTarget.TargetList);
-                CurrentState = ENEMY_STATE.CHASING;
+                CurrentState = InternalDefine.ENEMY_STATE.CHASING;
                 break;
 
-            case ENEMY_STATE.SEARCHING:
+            case InternalDefine.ENEMY_STATE.SEARCHING:
                 Search();
-                CurrentState = ENEMY_STATE.SEARCHING;
+                CurrentState = InternalDefine.ENEMY_STATE.SEARCHING;
                 break;
         }
     }
 
+    /// <summary>
+    /// 攻撃 ステート変更もする
+    /// </summary>
     protected override void NormalAttack()
     {
-        CurrentState = ENEMY_STATE.ATTACKING;
+        CurrentState = InternalDefine.ENEMY_STATE.ATTACKING;
         base.NormalAttack();
     }
 
+    /// <summary>
+    /// ターゲットの方を向く 主に攻撃前
+    /// </summary>
+    /// <param name="targetList"></param>
     protected void Face(List<GameObject> targetList)
     {
         //ターゲットをランダムに絞って向く
@@ -92,29 +99,22 @@ public abstract class EnemyAI : CharaBattle
         CompromiseMove(targetList[0].GetComponent<Chara>().Position);
     }
 
+    /// <summary>
+    /// スキル
+    /// </summary>
+    /// <param name="targetList"></param>
     protected virtual void Skill(List<GameObject> targetList)
     {
-        CurrentState = ENEMY_STATE.ATTACKING;
+        CurrentState = InternalDefine.ENEMY_STATE.ATTACKING;
     }
 
-    protected void CompromiseMove(Vector3 targetPos)
-    {
-        Vector3 direction = targetPos - CharaMove.Position;
-        direction = Utility.Direction(direction);
-        if(direction.x != 0 && direction.z != 0)
-        {
-            
-        }
-
-        if(direction.x == 0)
-        {
-            
-        }
-    }
-
+    /// <summary>
+    /// ターゲットに向かって進む
+    /// </summary>
+    /// <param name="targetList"></param>
     protected virtual void Chase(List<GameObject> targetList)
     {
-        if (CurrentState != ENEMY_STATE.CHASING)
+        if (CurrentState != InternalDefine.ENEMY_STATE.CHASING)
         {
             int num = Random.Range(0, targetList.Count);
             TargetObject = targetList[num];
@@ -130,6 +130,9 @@ public abstract class EnemyAI : CharaBattle
         }
     }
 
+    /// <summary>
+    /// プレイヤーを探して歩く
+    /// </summary>
     protected virtual void Search()
     {
         int currentRoomId = Positional.IsOnRoomID(CharaMove.Position);
@@ -176,13 +179,14 @@ public abstract class EnemyAI : CharaBattle
             int num = Random.Range(0, directionList.Count);
             if(CharaMove.Move(directionList[num]) == false)
             {
-                CharaMove.Move(oppositeDirection);
+                if (CharaMove.Move(oppositeDirection) == false)
+                    CharaMove.Wait();
             }
             return;
         }
 
         //新しくSEARCHINGステートになった場合、目標となる部屋の入り口を設定する
-        if (CurrentState != ENEMY_STATE.SEARCHING) 
+        if (CurrentState != InternalDefine.ENEMY_STATE.SEARCHING) 
         {
             List<GameObject> gateWayObjectList = ObjectManager.Instance.GateWayObjectList(Positional.IsOnRoomID(CharaMove.Position));
             int num = Random.Range(0, gateWayObjectList.Count);
@@ -192,28 +196,29 @@ public abstract class EnemyAI : CharaBattle
         //入り口についた場合、部屋を出る
         if(CharaMove.Position.x == TargetObject.transform.position.x && CharaMove.Position.z == TargetObject.transform.position.z)
         {
-            Debug.Log("部屋を出る");
             AroundGridID aroundGridID = DungeonTerrain.Instance.CreateAroundGrid((int)CharaMove.Position.x, (int)CharaMove.Position.z);
             if(aroundGridID.UpGrid == (int)DungeonTerrain.GRID_ID.PATH_WAY)
             {
-                CharaMove.Move(new Vector3(0f, 0f, 1f));
+                if (CharaMove.Move(new Vector3(0f, 0f, 1f)) == true)
                 return;
             }
             if (aroundGridID.UnderGrid == (int)DungeonTerrain.GRID_ID.PATH_WAY)
             {
-                CharaMove.Move(new Vector3(0f, 0f, -1f));
+                if (CharaMove.Move(new Vector3(0f, 0f, -1f)) == true)
                 return;
             }
             if (aroundGridID.LeftGrid == (int)DungeonTerrain.GRID_ID.PATH_WAY)
             {
-                CharaMove.Move(new Vector3(-1f, 0f, 0f));
+                if (CharaMove.Move(new Vector3(-1f, 0f, 0f)) == true)
                 return;
             }
             if (aroundGridID.RightGrid == (int)DungeonTerrain.GRID_ID.PATH_WAY)
             {
-                CharaMove.Move(new Vector3(1f, 0f, 0f));
+                if (CharaMove.Move(new Vector3(1f, 0f, 0f)) == true)
                 return;
             }
+
+            CharaMove.Wait();
             return;
         }
 
@@ -227,6 +232,33 @@ public abstract class EnemyAI : CharaBattle
         }
     }
 
+    /// <summary>
+    /// 妥協した移動
+    /// </summary>
+    /// <param name="targetPos"></param>
+    protected void CompromiseMove(Vector3 targetPos)
+    {
+        CharaMove.Wait();
+        return;
+
+        Vector3 direction = targetPos - CharaMove.Position;
+        direction = Utility.Direction(direction);
+        if (direction.x != 0 && direction.z != 0)
+        {
+
+        }
+
+        if (direction.x == 0)
+        {
+
+        }
+    }
+
+    /// <summary>
+    /// キャラ別通常攻撃範囲
+    /// </summary>
+    /// <param name="pos"></param>
+    /// <returns></returns>
     protected virtual List<Vector3> AttackPosList(Vector3 pos)
     {
         return null;
@@ -235,7 +267,7 @@ public abstract class EnemyAI : CharaBattle
 
 public struct EnemyActionAndTarget
 {
-    public EnemyAI.ENEMY_STATE NextState
+    public InternalDefine.ENEMY_STATE NextState
     {
         get; set;
     }
@@ -244,7 +276,7 @@ public struct EnemyActionAndTarget
         get;
     }
 
-    public EnemyActionAndTarget(EnemyAI.ENEMY_STATE state, List<GameObject> targetList)
+    public EnemyActionAndTarget(InternalDefine.ENEMY_STATE state, List<GameObject> targetList)
     {
         NextState = state;
         TargetList = targetList;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
+using System;
 
 public class TurnManager : SingletonMonoBehaviour<TurnManager>
 {
@@ -9,22 +10,58 @@ public class TurnManager : SingletonMonoBehaviour<TurnManager>
     /// 全キャラに行動を禁止させるフラグ
     /// </summary>
     [SerializeField]
-    private bool m_IsCanAction = true;
+    private bool m_IsCanAction => IsCanAction;
     public bool IsCanAction
     {
-        get { return m_IsCanAction; }
-        set { m_IsCanAction = value; }
+        get
+        {
+            foreach(GameObject obj in ObjectManager.Instance.m_PlayerList)
+            {
+                if(obj.GetComponent<CharaTurn>().CAN_ACTION == false)
+                {
+                    return false;
+                }
+            }
+
+            foreach (GameObject obj in ObjectManager.Instance.m_EnemyList)
+            {
+                if (obj.GetComponent<CharaTurn>().CAN_ACTION == false)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
     }
 
     /// <summary>
     /// 全キャラに攻撃を禁止させるフラグ
     /// </summary>
     [SerializeField]
-    private bool m_IsCanAttack = true;
+    private bool m_IsCanAttack => IsCanAttack;
     public bool IsCanAttack
     {
-        get { return m_IsCanAction; }
-        set { m_IsCanAction = value; }
+        get
+        {
+            foreach (GameObject obj in ObjectManager.Instance.m_PlayerList)
+            {
+                if (obj.GetComponent<CharaTurn>().CAN_ATTACK == false)
+                {
+                    return false;
+                }
+            }
+
+            foreach (GameObject obj in ObjectManager.Instance.m_EnemyList)
+            {
+                if (obj.GetComponent<CharaTurn>().CAN_ATTACK == false)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
     }
 
     protected override void Awake()
@@ -38,21 +75,29 @@ public class TurnManager : SingletonMonoBehaviour<TurnManager>
     /// </summary>
     private void NextAction()
     {
+        //行動禁止中なら受け付けない
+        if(IsCanAction == false)
+        {
+            Debug.Log("禁止中");
+            return;
+        }
+
+        //プレイヤーから回す
         foreach(GameObject obj in ObjectManager.Instance.m_PlayerList)
         {
             if(obj.GetComponent<CharaTurn>().IsFinishTurn == false)
             {
-                Debug.Log("自分の行動まち");
                 return;
             }
         }
 
+        //敵
         foreach(GameObject obj in ObjectManager.Instance.m_EnemyList)
         {
             if (obj.GetComponent<CharaTurn>().IsFinishTurn == false)
             {
-                Debug.Log("敵の行動");
-                EnemyAct(obj);
+                EnemyBattle enemyBattle = obj.GetComponent<EnemyBattle>();
+                enemyBattle.DecideAndExecuteAction();
                 return;
             }
         }
@@ -61,10 +106,15 @@ public class TurnManager : SingletonMonoBehaviour<TurnManager>
         AllCharaActionable();
     }
 
-    private void EnemyAct(GameObject enemy)
+    public IEnumerator WaitForIsCanAttack()
     {
-        EnemyAI enemyAI = enemy.GetComponent<EnemyAI>();
-        enemyAI.DecideAndExcuteAction();
+        yield return new WaitUntil(() => IsCanAttack == true);
+    }
+
+    public IEnumerator WaitForIsCanAttack(Action action)
+    {
+        yield return new WaitUntil(() => IsCanAttack == true);
+        action?.Invoke();
     }
 
     public void AllCharaActionable()
@@ -78,7 +128,7 @@ public class TurnManager : SingletonMonoBehaviour<TurnManager>
         foreach (GameObject player in ObjectManager.Instance.m_PlayerList)
         {
             CharaTurn chara = player.GetComponent<CharaTurn>();
-            chara.IsFinishTurn = false;
+            chara.StartTurn();
         }
     }
 
@@ -86,9 +136,8 @@ public class TurnManager : SingletonMonoBehaviour<TurnManager>
     {
         foreach (GameObject enemy in ObjectManager.Instance.m_EnemyList)
         {
-            Debug.Log("再起処理");
             CharaTurn chara = enemy.GetComponent<CharaTurn>();
-            chara.IsFinishTurn = false;
+            chara.StartTurn();
         }
     }
 }

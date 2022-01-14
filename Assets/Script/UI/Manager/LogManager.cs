@@ -11,39 +11,49 @@ using System;
 
 public class LogManager :SingletonMonoBehaviour<LogManager>
 {
-    private LogManager.Manager m_Manager = new Manager();
-    public Manager GetManager
+    private LogManager.LogUi m_Manager = new LogUi();
+    public LogUi GetManager
     {
         get => m_Manager;
     }
 
-    public class Manager : UiManager
+    /// <summary>
+    /// Logテキスト情報
+    /// </summary>
+    private ReactiveProperty<LogInfo> m_Log = new ReactiveProperty<LogInfo>();
+
+    public IObservable<LogInfo> LogChanged
     {
-        /// <summary>
-        /// Logテキスト情報
-        /// </summary>
-        private ReactiveProperty<LogInfo> m_Log = new ReactiveProperty<LogInfo>();
+        get { return m_Log.Skip(1); }
+    }
 
-        public IObservable<LogInfo> LogChanged
-        {
-            get { return m_Log.Skip(1); }
-        }
+    public LogInfo Log
+    {
+        private get => m_Log.Value;
+        set => m_Log.Value = value;
+    }
 
-        public LogInfo Log
-        {
-            private get => m_Log.Value;
-            set => m_Log.Value = value;
-        }
+    protected override void Awake()
+    {
+        GameManager.Instance.GetUpdate
+            .Subscribe(_ => GetManager.DetectInput());
 
+        GetManager.IsActiveChanged.Subscribe(_ => GetManager.SwitchUi());
+
+        GetManager.GetOptionId.Subscribe(_ => GetManager.UpdateText());
+    }
+
+    public class LogUi : UiBase
+    {
         /// <summary>
         /// 選択肢の数
         /// </summary>
-        protected override int OptionCount => Log.OptionNum;
+        protected override int OptionCount => LogManager.Instance.Log.OptionNum;
 
         /// <summary>
         /// 選択肢のメソッド
         /// </summary>
-        protected override List<Action> OptionMethods => Log.OptionMethod;
+        protected override List<Action> OptionMethods => LogManager.Instance.Log.OptionMethod;
 
         /// <summary>
         /// 操作するUi
@@ -55,20 +65,15 @@ public class LogManager :SingletonMonoBehaviour<LogManager>
         /// </summary>
         protected override List<Text> Texts => UiHolder.Instance.OptionTextList;
 
-        protected override void Awake()
-        {
-            base.Awake();
-        }
-
         /// <summary>
         /// Subscribeする 一回読み込み
         /// </summary>
-        protected override void UpdateText()
+        public override void UpdateText()
         {
             base.UpdateText();
 
             //質問文の更新
-            UiHolder.Instance.QuestionText.text = Log.Question;
+            UiHolder.Instance.QuestionText.text = LogManager.Instance.Log.Question;
         }
     }
 

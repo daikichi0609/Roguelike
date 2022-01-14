@@ -3,6 +3,8 @@ using UniRx;
 
 public abstract class Chara : MonoBehaviour
 {
+	[SerializeField] protected bool DEBUG;
+
 	/// <summary>
     /// 実際に動かすオブジェクト
     /// </summary>
@@ -66,6 +68,14 @@ public abstract class Chara : MonoBehaviour
 		Position = MoveObject.transform.position;
 		CharaTurn = GetComponent<CharaTurn>();
 	}
+
+	/// <summary>
+    /// 行動を確定する
+    /// </summary>
+	public void DecideAction()
+	{
+		CharaTurn.StartAction();
+	}
 }
 
 public class CharaMove: Chara
@@ -112,22 +122,34 @@ public class CharaMove: Chara
     /// <returns></returns>
 	public bool Move(Vector3 direction)
 	{
+		//行動中ならできない
+		if(CharaTurn.IsActing == true)
+        {
+			return false;
+        }
+
+		//向きを変える
 		Face(direction);
 
+		//壁抜けはできない
 		if (Positional.IsPossibleToMoveGrid(Position, direction) == false)
 		{
 			return false;
 		}
+
+		//敵をすり抜けはできない
 		Vector3 destinationPos = Position + direction;
 		if (Positional.IsEnemyOn(destinationPos) == true)
 		{
 			return false;
 		}
 
+		CharaTurn.StartAction();
+
 		//移動開始
 		CharaAnimator.SetBool("IsRunning", true);
 		IsMoving = true;
-		TurnManager.Instance.IsCanAttack = false;
+		CharaTurn.CAN_ATTACK = false;
 
 		//目標座標設定
 		DestinationPos = destinationPos;
@@ -138,8 +160,10 @@ public class CharaMove: Chara
 		//移動終わる前に現在マスチェックを済ませる
 		CheckCurrentGrid();
 
+		//行動確定
+		DecideAction();
 		//ターンを返す
-		FinishTurn();
+		CharaTurn.FinishTurn();
 
 		return true;
 	}
@@ -154,7 +178,6 @@ public class CharaMove: Chara
 			return;
         }
 
-		TurnManager.Instance.IsCanAttack = false;
 		MoveObject.transform.position = Vector3.MoveTowards(MoveObject.transform.position, DestinationPos, Time.deltaTime * 3);
 
 		if ((MoveObject.transform.position - DestinationPos).magnitude <= 0.01f)
@@ -168,12 +191,20 @@ public class CharaMove: Chara
     /// </summary>
 	private void FinishMove()
 	{
-		Debug.Log("移動終了");
-		TurnManager.Instance.IsCanAttack = true;
+		CharaTurn.CAN_ATTACK = true;
+		CharaTurn.FinishAction();
 		IsMoving = false;
 		CharaAnimator.SetBool("IsRunning", false);
 		MoveObject.transform.position = Position;
 	}
+
+	/// <summary>
+    /// 待機 ターン終了するだけ
+    /// </summary>
+	public void Wait()
+    {
+		CharaTurn.FinishTurn();
+    }
 
 	/// <summary>
     /// 現在地マスのイベント処理
@@ -186,7 +217,7 @@ public class CharaMove: Chara
 			//階段チェック
 			if (DungeonTerrain.Instance.GridID((int)Position.x, (int)Position.z) == (int)DungeonTerrain.GRID_ID.STAIRS)
 			{
-				LogManager.Instance.GetManager.Log = new StairsLog();
+				LogManager.Instance.Log = new StairsLog();
 				LogManager.Instance.GetManager.IsActive = true;
 				return;
 			}
@@ -206,15 +237,5 @@ public class CharaMove: Chara
 			//罠チェック
 
 		}
-    }
-
-	/// <summary>
-    /// 行動済み状態になる
-    /// </summary>
-	public void FinishTurn()
-    {
-		Debug.Log("ターン終了");
-		CharaTurn.FinishTurn();
-		MessageBroker.Default.Publish(new Message.MFinishTurn());
     }
 }

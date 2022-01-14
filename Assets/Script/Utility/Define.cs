@@ -45,6 +45,35 @@ public static class InternalDefine
 		LOADING,
 		PLAYING
 	}
+
+	//実行する行動タイプ
+	public enum ACTION
+	{
+		ATTACK,
+		SKILL,
+		MOVE,
+	}
+
+	/// <summary>
+    /// 目標にするターゲット
+    /// </summary>
+	public enum TARGET
+	{
+		PLAYER,
+		ENEMY,
+		NONE
+	}
+
+	/// <summary>
+    /// 敵の行動タイプ
+    /// </summary>
+	public enum ENEMY_STATE
+	{
+		NONE,
+		SEARCHING,
+		CHASING,
+		ATTACKING
+	}
 }
 
 public static class Message
@@ -68,7 +97,8 @@ public static class Message
     {
 		public bool IsDark
         {
-			get; set;
+			get;
+			set;
         }
     }
 
@@ -90,10 +120,39 @@ public static class Message
     }
 
 	/// <summary>
-    /// プレイヤーのListに変更があった通知
+    /// ダメージ終了
     /// </summary>
-	public struct MChangedPlayerList
+	public struct MFinishDamage
     {
+		public MFinishDamage(CharaBattle chara, bool isHit, bool isDead)
+        {
+			Chara = chara;
+			IsHit = isHit;
+			IsDead = isDead;
+        }
 
+		/// <summary>
+        /// 攻撃元のキャラ
+        /// </summary>
+		public CharaBattle Chara
+        {
+			get;
+        }
+
+		/// <summary>
+        /// 攻撃がヒットしたかどうか
+        /// </summary>
+        public bool IsHit
+        {
+			get;
+        }
+
+		/// <summary>
+        /// 死亡したかどうか
+        /// </summary>
+		public bool IsDead
+        {
+			get;
+        }
     }
 }
