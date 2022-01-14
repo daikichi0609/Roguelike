@@ -109,10 +109,36 @@ public class BagManager : SingletonMonoBehaviour<BagManager>
             //下にカーソル移動
             if (Input.GetKeyDown(KeyCode.S))
             {
-                if (OptionId <= Texts.Count - 2)
+                if (OptionId <= BagManager.Instance.Bag.ItemList.Count - 2)
                 {
                     OptionId++;
                 }
+            }
+        }
+
+        public override void UpdateText()
+        {
+            //選択肢の文字色を一旦透明にする
+            for (int i = 0; i <= Texts.Count - 1; i++)
+            {
+                Color color = Texts[i].color;
+                color.a = 0f;
+                Texts[i].color = color;
+            }
+
+            //選択肢の文字色更新
+            for (int i = 0; i <= BagManager.Instance.Bag.ItemList.Count - 1; i++)
+            {
+                Texts[i].color = Color.white;
+            }
+
+            //選択中の文字色更新
+            Texts[OptionId].color = Color.yellow;
+
+            //選択肢の文字色更新
+            for (int i = 0; i <= BagManager.Instance.Bag.ItemList.Count - 1; i++)
+            {
+                Texts[i].text = BagManager.Instance.Bag.ItemList[i].Name.ToString();
             }
         }
 

@@ -30,12 +30,13 @@ public abstract class Chara : MonoBehaviour
     }
 
 	/// <summary>
-    /// 位置
-    /// </summary>
+	/// 位置
+	/// </summary>
+    [SerializeField] private Vector3 m_Position;
 	public Vector3 Position
 	{
-		get;
-		set;
+		get => m_Position;
+		set => m_Position = value;
 	}
 
 	/// <summary>
@@ -230,8 +231,8 @@ public class CharaMove: Chara
 				if(pos.x == Position.x && pos.z == Position.z)
                 {
 					BagManager.Instance.GetManager.PutAway(obj);
+					return;
                 }
-				return;
             }
 
 			//罠チェック

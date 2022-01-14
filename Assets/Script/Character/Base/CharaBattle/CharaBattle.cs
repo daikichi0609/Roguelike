@@ -206,7 +206,7 @@ public abstract class CharaBattle : MonoBehaviour
 
         SoundManager.Instance.Damage_Small.Play();
         PlayAnimation("IsDamaging");
-        StartCoroutine(Coroutine.DelayCoroutine(1f, () =>
+        StartCoroutine(Coroutine.DelayCoroutine(0.5f, () =>
         {
             if (Parameter.Hp <= 0)
             {

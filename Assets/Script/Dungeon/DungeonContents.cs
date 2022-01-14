@@ -157,11 +157,13 @@ public class DungeonContents : SingletonMonoBehaviour<DungeonContents>
 
         int[,] map = DungeonTerrain.Instance.Map;
 
-        for (int num = 1; num <= itemNum; num++)
+        for (int num = 0; num <= itemNum - 1; num++)
         {
             int[] coord = ChooseEmptyRandomRoomGrid(map);
             GameObject item = ItemObject(Utility.RandomItemName());
-            item.transform.position = new Vector3(coord[0], 0.51f, coord[1]);
+            item.transform.position = new Vector3(coord[0], 0.75f, coord[1]);
+            item.transform.eulerAngles = new Vector3(45f, 0f, 0f);
+            item.GetComponent<Item>().Position = new Vector3(coord[0], 0f, coord[1]);
             ObjectManager.Instance.ItemList.Add(item);
         }
     }

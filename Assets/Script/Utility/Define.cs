@@ -15,7 +15,7 @@
 	// アイテム名
 	public enum ITEM_NAME
     {
-		APPLE
+		APPLE,
     }
 
 	//ダンジョンテーマ
